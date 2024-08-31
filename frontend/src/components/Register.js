@@ -5,6 +5,9 @@ const Register = ({toggleForm}) => {
   // Define los estados para username, password y message usando el hook useState.
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [repPassword, setRepPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [mail, setMail] = useState('');
   const [message, setMessage] = useState('');
 
   // Función que maneja el envío del formulario.
@@ -54,6 +57,33 @@ const Register = ({toggleForm}) => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)} // Actualiza el estado de password cuando cambia el valor del input.
+                  required
+              />
+            </div>
+            <div className="input-group">
+              <label>Repeat Password:</label>
+              <input
+                  type="password"
+                  value={repPassword}
+                  onChange={(e) => setRepPassword(e.target.value)} // Actualiza el estado de repPassword cuando cambia el valor del input.
+                  required
+              />
+            </div>
+            <div className="input-group">
+              <label>Address:</label>
+              <input
+                  type="text"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)} // Actualiza el estado de address cuando cambia el valor del input.
+                  required
+              />
+            </div>
+            <div className="input-group">
+              <label>Mail:</label>
+              <input
+                  type="email"
+                  value={mail}
+                  onChange={(e) => setMail(e.target.value)} // Actualiza el estado de mail cuando cambia el valor del input.
                   required
               />
             </div>

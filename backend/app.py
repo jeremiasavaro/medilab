@@ -32,12 +32,16 @@ def register():
     data = request.json
     username = data.get('username')
     password = data.get('password')
+    repPassword = data.get('repPassword')
+    mail = data.get('mail')
+    address = data.get('address')
 
-    print(f'Recibido: username={username}, password={password}')
+    print(f'Recibido: username={username}, password={password}, repPassword = {repPassword}, mail = {mail}, address = {address}')
 
+    if(password != repPassword):
+        return jsonify({'error': 'Las contraseñas no son iguales'}), 400
     if not username or not password:
         return jsonify({'error': 'Faltan datos'}), 400
-
     user = users_db.get(username)
     if user:
         return jsonify({'error': 'El usuario ya existe'}), 409
