@@ -1,23 +1,23 @@
 import sqlite3
-from db.init_db import connect
+from datetime import datetime
 
 def connect():
     try:
-        conn = sqlite3.connect('app/db/database.db')
+        conn = sqlite3.connect('db/database.db')
         return conn
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
         return None
 
-def insert_patient(dni, username, password, email, phoneNumber, dateBirth, age, nationality, province, department, 
-                   locality, postalCode, address, imagePatient, gender):
+def insert_patient(dni, firstName, lastName, password, email, phoneNumber, dateBirth, nationality, province,
+                   locality, postalCode, address, gender):
     conn = connect()
     cursor = conn.cursor()
     
-    cursor.execute("""INSERT INTO patient (dni, username, password, email, phoneNumber, dateBirth, age, nationality, province, department, 
-                   locality, postalCode, address, imagePatient, gender) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                   (dni, username, password, email, phoneNumber, dateBirth, age, nationality, province, department, 
-                   locality, postalCode, address, imagePatient, gender))
+    cursor.execute("""INSERT INTO patient (dni, firstName, lastName, password, email, phoneNumber, dateBirth, age, nationality, province, 
+                   locality, postalCode, address, gender) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   (dni, firstName, lastName, password, email, phoneNumber, dateBirth, calculate_age(dateBirth), nationality, province,
+                   locality, postalCode, address, gender))
 
     conn.commit()
     conn.close()
@@ -26,10 +26,16 @@ def get_patient(dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM patient WHERE dni = ?", (dni))
+    cursor.execute("SELECT * FROM patient WHERE dni = (?)", (dni,))
 
     conn.commit()
     conn.close()
+
+def calculate_age(dateBirth):
+    today = datetime.today()
+    birth_date = datetime.strptime(dateBirth, "%Y-%m-%d")
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    return age
 
 #Faltaria modificar paciente
 # def modify_patient():

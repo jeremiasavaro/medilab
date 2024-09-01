@@ -19,20 +19,19 @@ def create_tables(conn):
 
     c.execute('''
         CREATE TABLE IF NOT EXISTS patient (
-            dni INTEGER PRIMARY KEY,
-            username TEXT NOT NULL,
+            dni INTEGER PRIMARY KEY check (dni > 0),
+            firstName TEXT NOT NULL, 
+            lastName TEXT NOT NULL,
             password TEXT NOT NULL,
             email TEXT NOT NULL,
-            phoneNumber INTEGER NOT NULL,
-            dateBirth DATE NOT NULL,
-            age INTEGER NOT NULL,
+            phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
+            dateBirth DATE NOT NULL check (dateBirth > 0 and dateBirth < CURRENT_DATE),
+            age INTEGER NOT NULL check (age > 0),
             nationality TEXT NOT NULL,
             province TEXT NOT NULL,
-            department TEXT NOT NULL,
             locality TEXT NOT NULL,
             postalCode INTEGER NOT NULL,
             address TEXT NOT NULL,
-            imagePatient TEXT NOT NULL,
             gender TEXT NOT NULL
         )
     ''')
