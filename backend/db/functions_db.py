@@ -9,6 +9,7 @@ def connect():
         print(f"Error connecting to database: {e}")
         return None
 
+
 def insert_patient(dni, firstName, lastName, password, email, phoneNumber, dateBirth, nationality, province,
                    locality, postalCode, address, gender):
     conn = connect()
@@ -21,15 +22,29 @@ def insert_patient(dni, firstName, lastName, password, email, phoneNumber, dateB
 
     conn.commit()
     conn.close()
-    
+
+
 def get_patient(dni):
     conn = connect()
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM patient WHERE dni = (?)", (dni,))
+    patient_data = cursor.fetchone()
 
-    conn.commit()
     conn.close()
+    return patient_data
+
+
+def get_password(dni):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT password FROM patient WHERE dni = (?)", (dni,))
+    password_data = cursor.fetchone()
+
+    conn.close()
+    return password_data[0]
+
 
 def calculate_age(dateBirth):
     today = datetime.today()
@@ -49,6 +64,7 @@ def insert_diagnostic(cod, result, description, imageDiagnostic, dni):
 
     conn.commit()
     conn.close()
+
 
 def get_diagnostics(dni):
     

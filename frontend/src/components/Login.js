@@ -3,7 +3,7 @@ import '../assets/css/Login.css';
 
 const Login = ({toggleForm}) => {
   // Define los estados para username, password y message usando el hook useState.
-  const [username, setUsername] = useState('');
+  const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
@@ -18,7 +18,7 @@ const Login = ({toggleForm}) => {
         headers: {
           'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
         },
-        body: JSON.stringify({ username, password }), // Convierte los valores de username y password a JSON.
+        body: JSON.stringify({ dni, password }), // Convierte los valores de username y password a JSON.
       });
 
       const data = await response.json(); // Parsea la respuesta del servidor como JSON.
@@ -40,11 +40,11 @@ const Login = ({toggleForm}) => {
           <h2>Login</h2>
           <form onSubmit={handleLogin}>
             <div className="input-group">
-              <label>Username:</label>
+              <label>Dni:</label>
               <input
                   type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)} // Actualiza el estado de username cuando cambia el valor del input.
+                  value={dni}
+                  onChange={(e) => setDni(e.target.value)} // Actualiza el estado de DNI cuando cambia el valor del input.
                   required
               />
             </div>

@@ -1,15 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
-from db.functions_db import get_patient, insert_patient
+from db.functions_db import get_patient, insert_patient, get_password
 
 app = Flask(__name__)
 CORS(app)
-
-# Simulación de base de datos de usuarios
-users_db = {
-    "testuser": {"password": "testpassword"}
-}
 
 @app.route('/login', methods = ['POST'])
 def login():
@@ -21,12 +15,13 @@ def login():
 
     if not dni or not password:
         return jsonify({'error': 'Faltan datos'}), 400
-
-    user = users_db.get(dni)
-    if user and user["password"] == password:
-        return jsonify({'message': 'Login exitoso'}), 200
-    else:
+    user = get_patient(dni)
+    if user is None:
+        return jsonify({'error': 'No hay un usuario registrado con ese DNI'}), 401
+    if password != get_password(dni):
         return jsonify({'error': 'Credenciales incorrectas'}), 401
+    else:
+        return jsonify({'message': 'Login exitoso'}), 200
 
 
 @app.route('/register', methods=['POST'])
