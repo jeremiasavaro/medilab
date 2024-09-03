@@ -5,6 +5,16 @@ import AOS from 'aos';
 import GLightbox from 'glightbox';
 import PureCounter from '@srexi/purecounterjs';
 import Swiper, { Navigation, Pagination } from 'swiper';
+import About from './components/about';
+import Appointment from './components/appointment';
+import Contact from './components/contact';
+import Doctors from './components/doctors';
+import Faq from './components/faq';
+import Footer from './components/footer';
+import Gallery from './components/gallery';
+import HeroSection from './components/heroSection';
+import ServicesSection from './components/servicesSection';
+import Header from "./components/header";
 import './assets/css/styles.css';
 import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,8 +29,9 @@ import 'aos/dist/aos';
 import 'glightbox/dist/js/glightbox.min';
 import '@srexi/purecounterjs/dist/purecounter_vanilla';
 
+
 function App() {
-  const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   const toggleForm = () => {
     setShowLogin(!showLogin); // Alterna entre mostrar Login y Register
@@ -145,7 +156,29 @@ function App() {
       {showLogin ? (
         <Login toggleForm={toggleForm} />
       ) : (
-        <Register toggleForm={toggleForm} />
+          <div>
+            <main className="main">
+              <Header/>
+              <HeroSection/>
+              <About/>
+              <ServicesSection/>
+              <Doctors/>
+              <Gallery/>
+              <Faq/>
+              <Contact/>
+              <Appointment/>
+            </main>
+            <Footer/>
+
+            {/* Scroll Top */}
+            <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
+              <i className="bi bi-arrow-up-short"></i>
+            </a>
+
+            {/* Preloader */}
+            <div id="preloader"></div>
+          </div>
+          //<Register toggleForm={toggleForm} />
       )}
     </div>
   );

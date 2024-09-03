@@ -330,7 +330,51 @@ html {
     visibility: hidden;
     overflow: hidden;
   }
-  
+
+  .navmenu .dropdown {
+  position: relative;
+}
+
+
+.navmenu .dropdown-menu li a {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.navmenu .dropdown-menu li a i {
+  margin-right: 8px;
+}
+
+.navmenu .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: block;
+  width: 200px;
+}
+
+.navmenu .dropdown-menu li {
+  padding: 10px;
+}
+
+.navmenu .dropdown-menu li a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+.navmenu .dropdown-menu li a:hover {
+  background-color: #f8f9fa;
+}
+
   /*--------------------------------------------------------------
   # Navigation Menu
   --------------------------------------------------------------*/
