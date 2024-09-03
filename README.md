@@ -2,8 +2,7 @@
 
 ## Overview
 
-This is a simple yet powerful web application that integrates an AI engine to provide enhanced functionalities. The application is designed to demonstrate the seamless integration of AI within a web environment, using a modern tech stack that includes a Python/Flask backend, a React frontend, and various AI/ML frameworks.
-
+This project aims to develop a web application in the field of medicine, specialized in the analysis and diagnosis of X-ray images. The application will use artificial intelligence to process and evaluate medical images, providing fast and accurate diagnoses that can assist patients. health professionals in clinical decision making.
 ## Features
 
 - **AI-Driven Backend:** 
@@ -13,7 +12,9 @@ This is a simple yet powerful web application that integrates an AI engine to pr
   - The frontend is developed using React, providing a responsive and interactive user interface. It communicates with the backend to fetch AI-powered insights and present them to the user.
   
 - **AI Engine:**
-  - Idk wich framework use yet
+  - TensorFlow
+  - Keras
+  - numPY
 
 ## Installation
 
@@ -48,9 +49,15 @@ This is a simple yet powerful web application that integrates an AI engine to pr
 2. Install the required dependencies:
    ```bash
    npm install
-3. Start the development server:
+3. Install serve
    ```bash
-   npm start
+   npm install -g serve
+4. Create the build:
+   ```bash
+   npm run build
+5. Run the build
+    ```bash
+   serve -s build
 
 ## Contact
 For any questions or inquiries, please contact jeremiasavaro7@gmail.com.
