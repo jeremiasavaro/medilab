@@ -37,6 +37,8 @@ function Header() {
                 <li><a href="#gallery" className="active">Gallery</a></li>
                 <li><a href="#faq" className="active">FAQ</a></li>
                 <li><a href="#contact" className="active">Contact</a></li>
+                <li><a href="#" className="active">Account</a></li>
+
               </ul>
               <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

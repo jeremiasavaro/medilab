@@ -44,7 +44,7 @@ const Contact = () => {
             </div>
           </div>
           <div className="col-lg-8">
-            <form action="../forms/contact.php" method="post" className="php-email-form" data-aos="fade-up" data-aos-delay="200">
+            <form action="../forms/contact.js" method="post" className="php-email-form" data-aos="fade-up" data-aos-delay="200">
               <div className="row gy-4">
                 <div className="col-md-6">
                   <input type="text" name="name" className="form-control" placeholder="Your Name" required />

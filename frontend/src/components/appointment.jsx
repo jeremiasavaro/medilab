@@ -11,7 +11,7 @@ function Appointment() {
       </div>
 
       <div className="container" data-aos="fade-up" data-aos-delay="100">
-        <form action="../forms/appointment.php" method="post" role="form" className="php-email-form">
+        <form action="../forms/appointment.js" method="post" role="form" className="php-email-form">
           <div className="row">
             <div className="col-md-4 form-group">
               <input type="text" name="name" className="form-control" id="name" placeholder="Your Name" required />
