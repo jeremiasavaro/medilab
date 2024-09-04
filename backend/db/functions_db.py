@@ -27,10 +27,13 @@ def delete_patient(dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM patient WHERE dni = ?", (dni))
+    cursor.execute("DELETE FROM patient WHERE dni = ?", (dni,))
+    print(f"patient with DNI {dni} successfully removed")
     
     conn.commit()
     conn.close()
+
+#Faltaria arreglar que si se elimina un paciente se deberian eliminar sus diagnosticos correspondientes
 
 #Faltaria modificar paciente
 # def modify_patient()
@@ -75,7 +78,6 @@ def insert_diagnostic(cod, result, description, imageDiagnostic, dateResult, dni
 
 
 def get_diagnostics(dni):
-    
     conn = connect()
     cursor = conn.cursor()
 
