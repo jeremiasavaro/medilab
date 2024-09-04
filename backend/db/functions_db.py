@@ -23,12 +23,23 @@ def insert_patient(dni, firstName, lastName, password, email, phoneNumber, dateB
     conn.commit()
     conn.close()
 
+def delete_patient(dni):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM patient WHERE dni = ?", (dni))
+    
+    conn.commit()
+    conn.close()
+
+#Faltaria modificar paciente
+# def modify_patient()
 
 def get_patient(dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM patient WHERE dni = (?)", (dni,))
+    cursor.execute("SELECT * FROM patient WHERE dni = ?", (dni,))
     patient_data = cursor.fetchone()
 
     conn.close()
@@ -52,15 +63,12 @@ def calculate_age(dateBirth):
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     return age
 
-#Faltaria modificar paciente
-# def modify_patient():
-
-def insert_diagnostic(cod, result, description, imageDiagnostic, dni):
+def insert_diagnostic(cod, result, description, imageDiagnostic, dateResult, dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("""INSERT INTO patient (cod, result, description, imageDiagnostic, dni) VALUES 
-                  (?,?,?,?, ?)""", (cod, result, description, imageDiagnostic, dni))
+    cursor.execute("""INSERT INTO diagnostic (cod, result, description, imageDiagnostic, dateResult,dni) VALUES 
+                  (?,?,?,?,?,?)""", (cod, result, description, dateResult,imageDiagnostic, dni))
 
     conn.commit()
     conn.close()
@@ -71,9 +79,42 @@ def get_diagnostics(dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM diagnostic WHERE dni = ?", (dni))
+    cursor.execute("SELECT * FROM diagnostic WHERE dni = ?", (dni,))
+    patient_data = cursor.fetchall()
 
     conn.commit()
     conn.close()
+    return patient_data
 
-#Faltaria tener otras funciones que permitan obtener diagnosticos que tengan x descrpicion, x resultado o x codigo.
+def get_diagnostics_by_code(cod):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM diagnostic WHERE cod = ?", (cod,))
+    patient_data = cursor.fetchall()
+
+    conn.commit()
+    conn.close()
+    return patient_data
+
+def get_diagnostics_by_result(dni, result):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM diagnostic WHERE (dni,result) = (?,?)", (dni, result))
+    patient_data = cursor.fetchall()
+
+    conn.commit()
+    conn.close()
+    return patient_data
+
+def get_diagnostics_by_description(dni, description):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM diagnostic WHERE (dni,description) = (?,?) ", (dni, description))
+    patient_data = cursor.fetchall()
+    
+    conn.commit()
+    conn.close()
+    return patient_data
