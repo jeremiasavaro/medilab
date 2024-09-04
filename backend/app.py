@@ -60,5 +60,17 @@ def register():
         return jsonify({'message': 'Registro completado correctamente'}), 200
 
 
+@app.route('/contact', methods = ['POST'])
+def contact():
+    data = request.json
+    name = data.get('name')
+    email = data.get('email')
+    subject = data.get('subject')
+    message = data.get('userMessage')
+
+    print(f'Recibido: name = {name}, email = {email}, subject = {subject}, message = {message}')
+    # we should save this data in the database and think what are we going to do with it after
+
+
 if __name__ == '__main__':
     app.run(debug=False)
