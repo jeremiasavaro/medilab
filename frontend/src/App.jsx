@@ -30,10 +30,11 @@ import '@srexi/purecounterjs/dist/purecounter_vanilla';
 
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
+  const [view, setView] = useState("home");
 
-  const toggleForm = () => {
-    setShowLogin(!showLogin); // Alterna entre mostrar Login y Register
+  //Para ir cambiando las vistas que vamos a mostrar dependiendo su valor
+  const toggleForm = (formName) => {
+    setView(formName); //
   };
 
   useEffect(() => {
@@ -152,12 +153,14 @@ function App() {
 
   return (
     <div className="App">
-      {showLogin ? (
-        <Login toggleForm={toggleForm} />
-      ) : (
+      {view === "login" ? (
+        <Login setView={setView} />
+      ) : view === "register" ?(
+          <Register setView={setView} />  //Si no queremos que se recargue la pagina, usar: toggleForm={toggleForm}
+          ) : (
           <div>
             <main className="main">
-              <Header/>
+              <Header setView={setView}/>
               <HeroSection/>
               <About/>
               <ServicesSection/>
@@ -176,7 +179,6 @@ function App() {
             {/* Preloader */}
             <div id="preloader"></div>
           </div>
-          //<Register toggleForm={toggleForm} />
       )}
     </div>
   );

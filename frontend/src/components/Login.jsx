@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Login.css';
 
-const Login = ({toggleForm}) => {
+const Login = ({toggleForm, setView}) => {
   // Define los estados para username, password y message usando el hook useState.
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +63,7 @@ const Login = ({toggleForm}) => {
           <p>
           If you're not registered,{' '}
           <span
-            onClick={toggleForm}
+            onClick={() => setView("register")}
             className="hover-link"
           >
             click here

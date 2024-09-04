@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Header() {
+function Header( {setView} ) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -50,13 +50,13 @@ function Header() {
                   {isDropdownOpen && (
                     <ul className="dropdown-menu">
                       <li>
-                        <a href="#login" onClick={() => alert('Go to Login')}>
+                        <a href="#login" onClick={() => setView("login")}>>
                           <i className="bi bi-box-arrow-in-right me-2"></i>
                           Login
                         </a>
                       </li>
                       <li>
-                        <a href="#register" onClick={() => alert('Go to Register')}>
+                        <a href="#register" onClick={() => setView("register")}>
                           <i className="bi bi-person-plus me-2"></i>
                           Register
                         </a>

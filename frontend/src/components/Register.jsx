@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Register.css';
 
-const Register = ({ toggleForm }) => {
+const Register = ({ toggleForm, setView }) => {
   // Define los estados para todos los campos del formulario.
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -116,7 +116,7 @@ const Register = ({ toggleForm }) => {
           {message && <p className="message">{message}</p>}
           <p>
             Already have an account?{' '}
-            <span onClick={toggleForm} className="hover-link">click here</span>.
+            <span onClick={() => setView("login")} className="hover-link">click here</span>.
           </p>
         </div>
       </div>
