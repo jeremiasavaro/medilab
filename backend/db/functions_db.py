@@ -66,12 +66,12 @@ def calculate_age(dateBirth):
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     return age
 
-def insert_diagnostic(cod, result, description, imageDiagnostic, dateResult, dni):
+def insert_diagnostic(cod, result, description, imageDiagnostic, dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("""INSERT INTO diagnostic (cod, result, description, imageDiagnostic, dateResult,dni) VALUES 
-                  (?,?,?,?,?,?)""", (cod, result, description, dateResult,imageDiagnostic, dni))
+    cursor.execute("""INSERT INTO diagnostic (cod, result, description, imageDiagnostic,dni) VALUES 
+                  (?,?,?,?,?,?)""", (cod, result, description, imageDiagnostic, dni))
 
     conn.commit()
     conn.close()
