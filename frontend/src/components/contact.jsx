@@ -1,6 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
+  const [userMessage, setUserMessage] = useState('');
+  const [message, setMessage] = useState('');
+
+  // Función que maneja el envío del formulario.
+  const handleContact = async (e) => {
+    e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
+
+    try {
+      // Realiza una solicitud POST al servidor.
+      const response = await fetch('http://127.0.0.1:5000/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
+        },
+        body: JSON.stringify({ name, email, subject, userMessage }),
+      });
+
+      const data = await response.json(); // Parsea la respuesta del servidor como JSON.
+
+      if (response.ok) {
+        setMessage(data.message);
+      } else {
+        setMessage(data.error);
+      }
+    } catch (error) {
+      setMessage('Error en la conexión');
+    }
+  };
+
   return (
     <section id="contact" className="contact section">
       <div className="container section-title" data-aos="fade-up">
@@ -44,19 +76,31 @@ const Contact = () => {
             </div>
           </div>
           <div className="col-lg-8">
-            <form action="../forms/contact.js" method="post" className="php-email-form" data-aos="fade-up" data-aos-delay="200">
+            <form onSubmit={handleContact}>
               <div className="row gy-4">
                 <div className="col-md-6">
-                  <input type="text" name="name" className="form-control" placeholder="Your Name" required />
+                  <input type="text"
+                         value={name}
+                         onChange={(e) => setName(e.target.value)}
+                         className="form-control" placeholder="Your Name" required />
                 </div>
                 <div className="col-md-6">
-                  <input type="email" className="form-control" name="email" placeholder="Your Email" required />
+                  <input type="email"
+                         value={email}
+                         onChange={(e) => setEmail(e.target.value)}
+                         className="form-control" name="email" placeholder="Your Email" required />
                 </div>
                 <div className="col-md-12">
-                  <input type="text" className="form-control" name="subject" placeholder="Subject" required />
+                  <input type="text"
+                         value={subject}
+                         onChange={(e) => setSubject(e.target.value)}
+                         className="form-control" name="subject" placeholder="Subject" required />
                 </div>
                 <div className="col-md-12">
-                  <textarea className="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                  <textarea
+                      value={userMessage}
+                      onChange={(e) => setUserMessage(e.target.value)}
+                      className="form-control" name="message" rows="6" placeholder="Message" required></textarea>
                 </div>
                 <div className="col-md-12 text-center">
                   <button type="submit">Send Message</button>

@@ -6,7 +6,6 @@ import GLightbox from 'glightbox';
 import PureCounter from '@srexi/purecounterjs';
 import Swiper, { Navigation, Pagination } from 'swiper';
 import About from './components/about';
-import Appointment from './components/appointment';
 import Contact from './components/contact';
 import Doctors from './components/doctors';
 import Faq from './components/faq';
@@ -166,7 +165,6 @@ function App() {
               <Gallery/>
               <Faq/>
               <Contact/>
-              <Appointment/>
             </main>
             <Footer/>
 
