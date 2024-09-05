@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
+import Account from "./components/account";
 import AOS from 'aos';
 import GLightbox from 'glightbox';
 import PureCounter from '@srexi/purecounterjs';
@@ -36,6 +37,14 @@ function App() {
   const toggleForm = (formName) => {
     setView(formName); //
   };
+
+  //Si el usuario esta logeado esta variable esta en True, sirve para mostrar el login y el register o no.
+  const [isLoged, setIsLoged] = useState(true);
+
+  const toggleLoginState = () => {
+    setIsLoged(!isLoged); // Alterna entre mostrar Login y Register
+  };
+
 
   useEffect(() => {
     window.onload = function() {
@@ -157,28 +166,30 @@ function App() {
         <Login setView={setView} />
       ) : view === "register" ?(
           <Register setView={setView} />  //Si no queremos que se recargue la pagina, usar: toggleForm={toggleForm}
+          ) : view === "account" ? (
+              <Account setView={setView}/>
           ) : (
-          <div>
-            <main className="main">
-              <Header setView={setView}/>
-              <HeroSection/>
-              <About/>
-              <ServicesSection/>
-              <Doctors/>
-              <Gallery/>
-              <Faq/>
-              <Contact/>
-            </main>
-            <Footer/>
+            <div>
+              <main className="main">
+                <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged}/>
+                <HeroSection/>
+                <About/>
+                <ServicesSection/>
+                <Doctors/>
+                <Gallery/>
+                <Faq/>
+                <Contact/>
+              </main>
+              <Footer/>
 
-            {/* Scroll Top */}
-            <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
-              <i className="bi bi-arrow-up-short"></i>
-            </a>
+              {/* Scroll Top */}
+              <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
+                <i className="bi bi-arrow-up-short"></i>
+              </a>
 
-            {/* Preloader */}
-            <div id="preloader"></div>
-          </div>
+              {/* Preloader */}
+              <div id="preloader"></div>
+            </div>
       )}
     </div>
   );

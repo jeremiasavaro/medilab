@@ -8,7 +8,7 @@ function HeroSection() {
       <div className="container position-relative">
         <div className="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
           <h2>WELCOME TO MEDILAB</h2>
-          <p>We are team of talented designers making websites with Bootstrap</p>
+          <p></p>
         </div>
 
         <div className="content row gy-4">
