@@ -163,7 +163,7 @@ function App() {
   return (
     <div className="App">
       {view === "login" ? (
-        <Login setView={setView} />
+        <Login setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
       ) : view === "register" ?(
           <Register setView={setView} />  //Si no queremos que se recargue la pagina, usar: toggleForm={toggleForm}
           ) : view === "account" ? (

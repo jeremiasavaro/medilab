@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Login.css';
 
-const Login = ({toggleForm, setView}) => {
+const Login = ({setView, isLoged, setIsLoged}) => {
   // Define los estados para username, password y message usando el hook useState.
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
@@ -18,13 +18,14 @@ const Login = ({toggleForm, setView}) => {
         headers: {
           'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
         },
-        body: JSON.stringify({ dni, password }), // Convierte los valores de username y password a JSON.
+        body: JSON.stringify({ dni, password }), // Convierte los valores de dni y password a JSON.
       });
 
       const data = await response.json(); // Parsea la respuesta del servidor como JSON.
 
       if (response.ok) {
         setMessage(data.message);
+        setIsLoged(!isLoged);      //Si esta logeado cambia el valor a true para que se muestre la otra vista
       } else {
         setMessage(data.error);
       }
@@ -35,21 +36,22 @@ const Login = ({toggleForm, setView}) => {
 
   // JSX que define la estructura y el contenido del formulario de login.
   return (
-    <div className = "gen">
+    <div className='gen'>
       <div className="login-container">
-      <br></br>
-      <h2><b>Welcome to Medilab</b></h2>
-      <br></br>
-      <form onSubmit={handleLogin}>
+        <div className="login-form">
+        <br></br>
+        <h2><b>Welcome to Medilab</b></h2>
+        <br></br>
+        <form onSubmit={handleLogin}>
         <div className="input-group">
-          <label htmlFor="dni">DNI</label>
-          <input
-            type = "text"
-            id="dni"
-            value={dni}
-            onChange={(e) => setDni(e.target.value)}
-            required
-          />
+        <label htmlFor="dni">DNI</label>
+        <input
+          type = "text"
+          id="dni"
+          value={dni}
+          onChange={(e) => setDni(e.target.value)}
+          required
+        />
         </div>
         <div className="input-group">
           <label htmlFor="password">Password</label>
@@ -63,19 +65,20 @@ const Login = ({toggleForm, setView}) => {
         <button type="submit" className="login-btn">Login</button>
         {message && <p className="message">{message}</p>} {}
       </form>
-      <br></br>
-      <p>
-        If you're not registered,{' '}
-        <span
-          onClick={() => setView("register")}
-          className="hover-link"
-        >
-          click here
-        </span>
-      </p>
+          <p>
+          If you're not registered,{' '}
+          <span
+            onClick={() => setView("register")}
+            className="hover-link"
+          >
+            click here
+          </span>
+          .
+        </p>
+        </div>
+      </div>
     </div>
-  </div>
-);
-}
+  );
+};
 
 export default Login;
