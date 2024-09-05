@@ -46,80 +46,168 @@ const Register = ({ toggleForm, setView }) => {
   };
 
   return (
+    <div className="gen">
       <div className="register-container">
-        <div className="register-form">
-          <h2>Register</h2>
-          <form onSubmit={handleRegister} className="horizontal-form">
-            <div className="input-group">
-              <label>First Name:</label>
-              <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
+        <h2><b>Create your account</b></h2>
+        <br></br>
+        <form className="horizontal-form" onSubmit={handleRegister}>
+          <div className="input-group">
+            <label htmlFor="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="dni">DNI</label>
+            <input
+              type="text"
+              id="dni"
+              name="dni"
+              value={dni}
+              onChange={(e) => setDni(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="phone">Phone</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+              <label htmlFor='birthDate'>Birth Date:</label>
+              <input 
+              type="date" 
+              id="birthDate"
+              value={birthDate} 
+              onChange={(e) => setBirthDate(e.target.value)} required/>
+          </div>
+          <div className="input-group">
+              <label htmlFor='nationality'>Nationality:</label>
+              <input 
+              type="text" 
+              id="nationality"
+              value={nationality} 
+              onChange={(e) => setNationality(e.target.value)} required/>
             </div>
             <div className="input-group">
-              <label>Last Name:</label>
-              <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
+              <label htmlFor='province'>Province:</label>
+              <input 
+              type="text" 
+              id = "province"
+              value={province} 
+              onChange={(e) => setProvince(e.target.value)} required/>
             </div>
             <div className="input-group">
-              <label>Password:</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+              <label htmlFor='locality'>Locality:</label>
+              <input 
+              type="text" 
+              id = "locality"
+              value={locality} 
+              onChange={(e) => setLocality(e.target.value)} required/>
             </div>
             <div className="input-group">
-              <label>Repeat Password:</label>
-              <input type="password" value={repPassword} onChange={(e) => setRepPassword(e.target.value)} required/>
+              <label htmlFor='postalCode'>Postal Code:</label>
+              <input 
+              type="text" 
+              value={postalCode} 
+              onChange={(e) => setPostalCode(e.target.value)} required/>
             </div>
             <div className="input-group">
-              <label>Address:</label>
-              <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Mail:</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>DNI:</label>
-              <input type="text" value={dni} onChange={(e) => setDni(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Phone:</label>
-              <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Birth Date:</label>
-              <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Nationality:</label>
-              <input type="text" value={nationality} onChange={(e) => setNationality(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Province:</label>
-              <input type="text" value={province} onChange={(e) => setProvince(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Locality:</label>
-              <input type="text" value={locality} onChange={(e) => setLocality(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Postal Code:</label>
-              <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} required/>
-            </div>
-            <div className="input-group">
-              <label>Gender:</label>
-              <select value={gender} onChange={(e) => setGender(e.target.value)} required>
+              <label htmlFor='gender'>Gender:</label>
+              <select 
+              value={gender} 
+              onChange={(e) => setGender(e.target.value)} required>
                 <option value="">Select</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
             </div>
-            <button type="submit">Register</button>
-          </form>
-          {message && <p className="message">{message}</p>}
-          <p>
-            Already have an account?{' '}
-            <span onClick={() => setView("login")} className="hover-link">click here</span>.
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="repPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="repPassword"
+              name="repPassword"
+              value={repPassword}
+              onChange={(e) => setRepPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit">Register</button>
+        </form>
+        <p>
+          <br></br>
+          Already have an account?,{' '}
+          <span
+            onClick={() => setView("login")}
+            className="hover-link"
+          >
+            click here
+          </span>
+          .
+        </p>
+        <p>
+            {' '}
+            <span
+              onClick={() => {
+                setView("home");
+              }}
+              className="hover-link"
+            >
+              Back to main page
+            </span>
           </p>
-        </div>
+        {message && <p className="message">{message}</p>}
       </div>
+    </div>
   );
 };
 

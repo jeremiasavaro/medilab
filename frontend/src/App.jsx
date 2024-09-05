@@ -29,51 +29,42 @@ import 'aos/dist/aos';
 import 'glightbox/dist/js/glightbox.min';
 import '@srexi/purecounterjs/dist/purecounter_vanilla';
 
-
 function App() {
   const [view, setView] = useState("home");
 
-  //Para ir cambiando las vistas que vamos a mostrar dependiendo su valor
   const toggleForm = (formName) => {
-    setView(formName); //
+    setView(formName);
   };
 
-  //Si el usuario esta logeado esta variable esta en True, sirve para mostrar el login y el register o no.
   const [isLoged, setIsLoged] = useState(false);
 
   const toggleLoginState = () => {
-    setIsLoged(!isLoged); // Alterna entre mostrar Login y Register
+    setIsLoged(!isLoged);
   };
-
 
   useEffect(() => {
     window.onload = function() {
       const toggleScrolled = () => {
         const selectBody = document.querySelector('body');
         const selectHeader = document.querySelector('#header');
-        if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
-        window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
+
+        // Verifica si selectHeader existe
+        if (selectHeader && (selectHeader.classList.contains('scroll-up-sticky') || selectHeader.classList.contains('sticky-top') || selectHeader.classList.contains('fixed-top'))) {
+          window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
+        }
       };
 
       document.addEventListener('scroll', toggleScrolled);
-      toggleScrolled(); // Inicializa el estado en la carga
 
       const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
-      const mobileNavToogle = () => {
-        document.querySelector('body').classList.toggle('mobile-nav-active');
-        mobileNavToggleBtn.classList.toggle('bi-list');
-        mobileNavToggleBtn.classList.toggle('bi-x');
-      };
-      mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
-
-      document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-        navmenu.addEventListener('click', function (e) {
-          e.preventDefault();
-          this.parentNode.classList.toggle('active');
-          this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
-          e.stopImmediatePropagation();
-        });
-      });
+      if (mobileNavToggleBtn) {
+        const mobileNavToogle = () => {
+          document.querySelector('body').classList.toggle('mobile-nav-active');
+          mobileNavToggleBtn.classList.toggle('bi-list');
+          mobileNavToggleBtn.classList.toggle('bi-x');
+        };
+        mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
+      }
 
       const preloader = document.querySelector('#preloader');
       if (preloader) {
@@ -81,44 +72,37 @@ function App() {
       }
 
       const scrollTop = document.querySelector('.scroll-top');
-      const toggleScrollTop = () => {
-        if (scrollTop) {
-          window.scrollY > 100 ? scrollTop.classList.add('active') : scrollTop.classList.remove('active');
-        }
-      };
-      scrollTop.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
+      if (scrollTop) {
+        scrollTop.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
         });
-      });
-
-      toggleScrollTop(); // Inicializa el estado en la carga
+      }
 
       AOS.init({
         duration: 600,
         easing: 'ease-in-out',
         once: true,
-        mirror: false
+        mirror: false,
       });
 
       GLightbox({
-        selector: '.glightbox'
+        selector: '.glightbox',
       });
 
       new PureCounter();
 
       const initSwiper = () => {
         document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
-          let config = JSON.parse(
-            swiperElement.querySelector(".swiper-config").innerHTML.trim()
-          );
+          let config = JSON.parse(swiperElement.querySelector(".swiper-config").innerHTML.trim());
 
           new Swiper(swiperElement, config);
         });
       };
-      initSwiper(); // Inicializa Swiper
+      initSwiper();
 
       if (window.location.hash) {
         if (document.querySelector(window.location.hash)) {
@@ -127,7 +111,7 @@ function App() {
             let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
             window.scrollTo({
               top: section.offsetTop - parseInt(scrollMarginTop),
-              behavior: 'smooth'
+              behavior: 'smooth',
             });
           }, 100);
         }
@@ -149,12 +133,11 @@ function App() {
           }
         });
       };
-      navmenuScrollspy(); // Inicializa Scrollspy
+      navmenuScrollspy();
 
       document.addEventListener('scroll', navmenuScrollspy);
     };
 
-    // Cleanup en unmount para evitar fugas de memoria
     return () => {
       window.onload = null;
     };
@@ -164,32 +147,30 @@ function App() {
     <div className="App">
       {view === "login" ? (
         <Login setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
-      ) : view === "register" ?(
-          <Register setView={setView} />  //Si no queremos que se recargue la pagina, usar: toggleForm={toggleForm}
-          ) : view === "account" ? (
-              <Account setView={setView}/>
-          ) : (
-            <div>
-              <main className="main">
-                <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged}/>
-                <HeroSection/>
-                <About/>
-                <ServicesSection/>
-                <Doctors/>
-                <Gallery/>
-                <Faq/>
-                <Contact/>
-              </main>
-              <Footer/>
+      ) : view === "register" ? (
+        <Register setView={setView} />
+      ) : view === "account" ? (
+        <Account setView={setView} />
+      ) : (
+        <div>
+          <main className="main">
+            <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
+            <HeroSection />
+            <About />
+            <ServicesSection />
+            <Doctors />
+            <Gallery />
+            <Faq />
+            <Contact />
+          </main>
+          <Footer />
 
-              {/* Scroll Top */}
-              <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
-                <i className="bi bi-arrow-up-short"></i>
-              </a>
+          <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
+            <i className="bi bi-arrow-up-short"></i>
+          </a>
 
-              {/* Preloader */}
-              <div id="preloader"></div>
-            </div>
+          <div id="preloader"></div>
+        </div>
       )}
     </div>
   );

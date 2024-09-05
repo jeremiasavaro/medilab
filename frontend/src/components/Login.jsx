@@ -1,31 +1,28 @@
 import React, { useState } from 'react';
 import '../assets/css/Login.css';
 
-const Login = ({setView, isLoged, setIsLoged}) => {
-  // Define los estados para username, password y message usando el hook useState.
+const Login = ({ view, setView, isLoged, setIsLoged }) => {
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  // Función que maneja el envío del formulario.
   const handleLogin = async (e) => {
-    e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
+    e.preventDefault();
 
     try {
-      // Realiza una solicitud POST al servidor para autenticar al usuario.
       const response = await fetch('http://127.0.0.1:5000/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ dni, password }), // Convierte los valores de dni y password a JSON.
+        body: JSON.stringify({ dni, password }),
       });
 
-      const data = await response.json(); // Parsea la respuesta del servidor como JSON.
+      const data = await response.json();
 
       if (response.ok) {
         setMessage(data.message);
-        setIsLoged(!isLoged);      //Si esta logeado cambia el valor a true para que se muestre la otra vista
+        setIsLoged(true);  // Cambia a true si el login es exitoso
       } else {
         setMessage(data.error);
       }
@@ -34,47 +31,58 @@ const Login = ({setView, isLoged, setIsLoged}) => {
     }
   };
 
-  // JSX que define la estructura y el contenido del formulario de login.
   return (
     <div className='gen'>
       <div className="login-container">
         <div className="login-form">
-        <br></br>
-        <h2><b>Welcome to Medilab</b></h2>
-        <br></br>
-        <form onSubmit={handleLogin}>
-        <div className="input-group">
-        <label htmlFor="dni">DNI</label>
-        <input
-          type = "text"
-          id="dni"
-          value={dni}
-          onChange={(e) => setDni(e.target.value)}
-          required
-        />
-        </div>
-        <div className="input-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="login-btn">Login</button>
-        {message && <p className="message">{message}</p>} {}
-      </form>
+          <br />
+          <h2><b>Welcome to Medilab</b></h2>
+          <br />
+          <form onSubmit={handleLogin}>
+            <div className="input-group">
+              <label htmlFor="dni">DNI</label>
+              <input
+                type="text"
+                id="dni"
+                value={dni}
+                onChange={(e) => setDni(e.target.value)}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="login-btn">Login</button>
+            {message && <p className="message">{message}</p>}
+          </form>
           <p>
-          If you're not registered,{' '}
-          <span
-            onClick={() => setView("register")}
-            className="hover-link"
-          >
-            click here
-          </span>
-          .
-        </p>
+            <br />
+            If you're not registered,{' '}
+            <span
+              onClick={() => setView("register")}
+              className="hover-link"
+            >
+              click here
+            </span>
+            .
+          </p>
+          <p>
+            {' '}
+            <span
+              onClick={() => {
+                setView("home");
+              }}
+              className="hover-link"
+            >
+              Back to main page
+            </span>
+          </p>
         </div>
       </div>
     </div>
