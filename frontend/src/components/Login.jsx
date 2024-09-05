@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Login.css';
 
-const Login = ({toggleForm, setView}, setIsLoged) => {
+const Login = ({toggleForm, setView}) => {
   // Define los estados para username, password y message usando el hook useState.
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +25,6 @@ const Login = ({toggleForm, setView}, setIsLoged) => {
 
       if (response.ok) {
         setMessage(data.message);
-         setIsLoged(true);      //Si esta logeado cambia el valor a true para que se muestre la otra vista
       } else {
         setMessage(data.error);
       }
@@ -36,44 +35,47 @@ const Login = ({toggleForm, setView}, setIsLoged) => {
 
   // JSX que define la estructura y el contenido del formulario de login.
   return (
+    <div className = "gen">
       <div className="login-container">
-        <div className="login-form">
-          <h2>Login</h2>
-          <form onSubmit={handleLogin}>
-            <div className="input-group">
-              <label>Dni:</label>
-              <input
-                  type="text"
-                  value={dni}
-                  onChange={(e) => setDni(e.target.value)} // Actualiza el estado de DNI cuando cambia el valor del input.
-                  required
-              />
-            </div>
-            <div className="input-group">
-              <label>Password:</label>
-              <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)} // Actualiza el estado de password cuando cambia el valor del input.
-                  required
-              />
-            </div>
-            <button type="submit">Login</button> {}
-            {message && <p className="message">{message}</p>} {}
-          </form>
-          <p>
-          If you're not registered,{' '}
-          <span
-            onClick={() => setView("register")}
-            className="hover-link"
-          >
-            click here
-          </span>
-          .
-        </p>
+      <br></br>
+      <h2><b>Welcome to Medilab</b></h2>
+      <br></br>
+      <form onSubmit={handleLogin}>
+        <div className="input-group">
+          <label htmlFor="dni">DNI</label>
+          <input
+            type = "text"
+            id="dni"
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            required
+          />
         </div>
-      </div>
-  );
-};
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="login-btn">Login</button>
+        {message && <p className="message">{message}</p>} {}
+      </form>
+      <br></br>
+      <p>
+        If you're not registered,{' '}
+        <span
+          onClick={() => setView("register")}
+          className="hover-link"
+        >
+          click here
+        </span>
+      </p>
+    </div>
+  </div>
+);
+}
 
 export default Login;
