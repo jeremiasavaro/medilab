@@ -39,7 +39,7 @@ function App() {
   };
 
   //Si el usuario esta logeado esta variable esta en True, sirve para mostrar el login y el register o no.
-  const [isLoged, setIsLoged] = useState(true);
+  const [isLoged, setIsLoged] = useState(false);
 
   const toggleLoginState = () => {
     setIsLoged(!isLoged); // Alterna entre mostrar Login y Register

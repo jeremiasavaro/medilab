@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Login.css';
 
-const Login = ({toggleForm, setView}) => {
+const Login = ({toggleForm, setView}, setIsLoged) => {
   // Define los estados para username, password y message usando el hook useState.
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +25,7 @@ const Login = ({toggleForm, setView}) => {
 
       if (response.ok) {
         setMessage(data.message);
+         setIsLoged(true);      //Si esta logeado cambia el valor a true para que se muestre la otra vista
       } else {
         setMessage(data.error);
       }
