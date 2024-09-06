@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Register.css';
 
-const Register = ({ toggleForm, setView }) => {
+const Register = ({ setView }) => {
   // Define los estados para todos los campos del formulario.
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

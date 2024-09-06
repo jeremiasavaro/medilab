@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+.account-container {
+  display: flex;
+  font-family: 'Poppins', sans-serif;
+  height: 130vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+  margin: 0; /* Elimina márgenes que puedan afectar la alineación */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #0580df;
+  padding: 20px;
+  color: white;
+  height: 100%; /* Asegura que la barra lateral ocupe toda la altura del contenedor */
+  position: fixed; /* Fija la barra lateral en su lugar */
+  top: 10px; /* Alinea la barra lateral con la parte superior del contenedor */
+  left: 10px; /* Alinea la barra lateral con la parte izquierda del contenedor */
+}
+
+/* Estilo para los ítems de la barra lateral */
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; /* Elimina márgenes adicionales */
+}
+
+.sidebar ul li {
+  padding: 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  /* No se centra el contenido dentro del li */
+  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+.sidebar ul li i {
+  margin-right: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.sidebar ul li .fa-chevron-down, 
+.sidebar ul li .fa-chevron-up {
+  margin-left: auto; /* Desplaza la flecha hacia la derecha */
+  transition: transform 0.3s; /* Transición suave para la rotación */
+}
+
+/* Estilo del contenido principal */
+.account-content {
+  margin-left: 200px; /* Alinea el contenido principal a la derecha de la barra lateral */
+  width: calc(100% - 200px); /* Ajusta el ancho del contenido principal */
+  flex-grow: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Centramos el contenido de la sección */
+}
+
+h1 {
+    font-size: 48px; /* Tamaño más grande */
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center; /* Centramos el título */
+}
+
+.profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.account-form {
+    width: 100%;
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
+    gap: 20px; /* Espacio entre los elementos */
+}
+
+.profile-info {
+    text-align: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+ul li {
+    padding: 10px 0;
+    cursor: pointer;
+    text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+.upgrade-btn {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Para los inputs de una sola columna, como el textarea */
+.form-group.full-width {
+    grid-column: span 2; /* Hace que ocupe las dos columnas */
+}

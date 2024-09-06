@@ -36,7 +36,7 @@ function App() {
     setView(formName);
   };
 
-  const [isLoged, setIsLoged] = useState(false);
+  const [isLoged, setIsLoged] = useState(true);
 
   const toggleLoginState = () => {
     setIsLoged(!isLoged);
