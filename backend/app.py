@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from db.functions_db import get_patient, insert_patient, get_password
+from db.functions_db import get_patient, insert_patient, get_password, modify_patient
 
 app = Flask(__name__)
 CORS(app)
@@ -70,6 +70,36 @@ def contact():
 
     print(f'Recibido: name = {name}, email = {email}, subject = {subject}, message = {message}')
     # we should save this data in the database and think what are we going to do with it after
+
+@app.route('/account', methods = ['POST'])
+def account():
+    data = request.json
+    newFirstName = data.get('firstName')
+    newLastName = data.get('lastName')
+    newAddress = data.get('address')
+    newEmail = data.get('email')
+    newDni = data.get('dni')
+    newPhone = data.get('phone')
+    newBirthDate = data.get('birthDate')
+    newAge = data.get('age')
+    newNationality = data.get('nationality')
+    newProvince = data.get('province')
+    newLocality = data.get('locality')
+    newPostalCode = data.get('postalCode')
+    newGender = data.get('gender')
+
+
+    print(f'Recibido: firstname = {newFirstName}, lastname = {newLastName}, '
+          f' address = {newAddress}, email = {newEmail}, phone = {newPhone}, birthDate = {newBirthDate}, '
+          f' nationality = {newNationality},province = {newProvince}, locality = {newLocality}, postalCode = {newPostalCode}, gender = {newGender}')
+
+
+    user = get_patient(newDni)
+
+    if user:
+        modify_patient(newDni, newFirstName, newLastName, newEmail, newPhone, newBirthDate, newAge,
+                       newNationality, newProvince, newLocality, newPostalCode, newAddress, newGender)
+        return jsonify({'message': 'Datos modificados correctamente'}), 200
 
 
 if __name__ == '__main__':

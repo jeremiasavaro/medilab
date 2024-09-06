@@ -60,17 +60,17 @@ def modify_password(dni, newPassword):
     conn.commit()
     conn.close()
 
-def modify_patient(dni, firstName, lastName, password, email, phoneNumber, dateBirth, age, nationality, province, locality, postalCode, address, gender):
+def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, age, nationality, province, locality, postalCode, address, gender):
     conn = connect()
     cursor = conn.cursor()
 
     query = """
         UPDATE patient 
-        SET firstName = ?, lastName = ?, password = ?, email = ?, phoneNumber = ?, dateBirth = ?, 
+        SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateBirth = ?, 
             age = ?, nationality = ?, province = ?, locality = ?, postalCode = ?, address = ?, gender = ?
         WHERE dni = ?
     """
-    cursor.execute(query, (firstName, lastName, password, email, phoneNumber, dateBirth, age, nationality, province, locality, postalCode, address, gender, dni))
+    cursor.execute(query, (firstName, lastName, email, phoneNumber, dateBirth, age, nationality, province, locality, postalCode, address, gender, dni))
 
     conn.commit()
     conn.close()
