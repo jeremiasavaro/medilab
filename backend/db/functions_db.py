@@ -48,6 +48,15 @@ def get_patient(dni):
     conn.close()
     return patient_data
 
+def modify_patient(dni, fieldToChange, value):
+    conn = connect()
+    cursor = conn.cursor()
+
+    query = f"UPDATE patient SET {fieldToChange} = ? WHERE dni = ?"
+    cursor.execute(query, (value, dni))
+
+    conn.commit()
+    conn.close()
 
 def get_password(dni):
     conn = connect()
