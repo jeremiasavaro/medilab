@@ -1,14 +1,14 @@
 import React from 'react';
 
 const galleryImages = [
-  'assets/img/gallery/gallery-1.jpg',
-  'assets/img/gallery/gallery-2.jpg',
-  'assets/img/gallery/gallery-3.jpg',
-  'assets/img/gallery/gallery-4.jpg',
-  'assets/img/gallery/gallery-5.jpg',
-  'assets/img/gallery/gallery-6.jpg',
-  'assets/img/gallery/gallery-7.jpg',
-  'assets/img/gallery/gallery-8.jpg'
+  require('../assets/img/gallery/gallery-1.jpg'),
+  require('../assets/img/gallery/gallery-2.jpg'),
+  require('../assets/img/gallery/gallery-3.jpg'),
+  require('../assets/img/gallery/gallery-4.jpg'),
+  require('../assets/img/gallery/gallery-5.jpg'),
+  require('../assets/img/gallery/gallery-6.jpg'),
+  require('../assets/img/gallery/gallery-7.jpg'),
+  require('../assets/img/gallery/gallery-8.jpg')
 ];
 
 const Gallery = () => {
@@ -16,7 +16,7 @@ const Gallery = () => {
     <section id="gallery" className="gallery section">
       <div className="container section-title" data-aos="fade-up">
         <h2>Gallery</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p></p>
       </div>
       <div className="container-fluid" data-aos="fade-up" data-aos-delay="100">
         <div className="row g-0">
