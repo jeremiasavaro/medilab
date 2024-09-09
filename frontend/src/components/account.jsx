@@ -3,7 +3,7 @@ import '../assets/css/Account.css';
 import ChangePassword from './ChangePassword';
 
 const Account = () => {
-    
+
   const [name, setName] = useState('Mateo');
   const [lastName, setLastName] = useState('Cornejo');
   const [dni, setDni] = useState('45701678');
@@ -96,7 +96,7 @@ const Account = () => {
                   <option value="Other">Other</option>
                 </select>
               </div>
-              <button type="submit">Guardar cambios</button>
+              <button type="submit" className="submit-button">Guardar cambios</button>
             </div>
           </div>
         </div>

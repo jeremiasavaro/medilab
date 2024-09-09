@@ -80,11 +80,47 @@ h1 {
 }
 
 .account-form {
-    width: 100%;
-    max-width: 600px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
-    gap: 20px; /* Espacio entre los elementos */
+  width: 100%;
+  max-width: 600px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual tamaño */
+  gap: 20px; /* Espacio entre los elementos */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Nueva clase para el botón */
+.submit-button {
+  grid-column: span 2; /* Hace que el botón ocupe ambas columnas */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0580df;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  justify-self: center; /* Centra el botón dentro del espacio asignado */
+}
+
+.submit-button:hover {
+  background-color: #0462c3; /* Color de fondo en hover */
 }
 
 .profile-info {
@@ -111,13 +147,10 @@ ul li {
 }
 
 .upgrade-btn {
-    background-color: #f39c12;
-    color: white;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    cursor: pointer;
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .form-group {
