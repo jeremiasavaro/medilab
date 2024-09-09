@@ -26,10 +26,9 @@ function Header({ setView, isLoged, setIsLoged }) {
             </i>
           </div>
           <div className="social-links d-none d-md-flex align-items-center">
-            <a href="#" className="twitter"><i className="bi bi-twitter"></i></a>
-            <a href="#" className="facebook"><i className="bi bi-facebook"></i></a>
-            <a href="#" className="instagram"><i className="bi bi-instagram"></i></a>
-            <a href="#" className="linkedin"><i className="bi bi-linkedin"></i></a>
+            <a href="https://www.facebook.com/jeremiasjose.avaro?mibextid=ZbWKwL" className="facebook"><i className="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/baachi13?igsh=MWZ4Mzd2OXFyYW92dQ==" className="instagram"><i className="bi bi-instagram"></i></a>
+            <a href="https://github.com/jeremiasavaro/proyecto-UNRC-2024" className="bi-github"><i className="bi bi-github"></i></a>
           </div>
         </div>
       </div>
@@ -92,8 +91,6 @@ function Header({ setView, isLoged, setIsLoged }) {
             </ul>
             <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
           </nav>
-
-          <a className="cta-btn d-none d-sm-block" href="../appointment">Make an Appointment</a>
         </div>
       </div>
     </header>

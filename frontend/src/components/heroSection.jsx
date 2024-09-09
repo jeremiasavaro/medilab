@@ -14,10 +14,10 @@ function HeroSection() {
         <div className="content row gy-4">
           <div className="col-lg-4 d-flex align-items-stretch">
             <div className="why-box" data-aos="zoom-out" data-aos-delay="200">
-              <h3>Servicio de diagnostico bajo rayos-x</h3>
-              <p>El servicio de rayos X proporciona una manera de diagnostico a partir del escaneo de una radiografía mediante la utilizacion AI.</p>
+              <h3>X-ray diagnostic service</h3>
+              <p>The X-ray service provides a way of diagnosis from the scanning of an X-ray by using AI.</p>
               <div className="text-center">
-                <a href="#image-upload" className="more-btn"><span>Acceder al servicio</span> <i className="bi bi-chevron-right"></i></a>
+                <a href="#image-upload" className="more-btn"><span>Access the service</span> <i className="bi bi-chevron-right"></i></a>
               </div>
             </div>
           </div>
@@ -28,24 +28,24 @@ function HeroSection() {
                 <div className="col-xl-4 d-flex align-items-stretch">
                   <div className="icon-box" data-aos="zoom-out" data-aos-delay="300">
                     <i className="bi bi-clipboard-data"></i>
-                    <h4>Corporis voluptates officia eiusmod</h4>
-                    <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
+                    <h4>High reliability</h4>
+                    <p>The Probee X-ray service helps the patient by shortening times and providing a more comfortable experience.</p>
                   </div>
                 </div>
 
                 <div className="col-xl-4 d-flex align-items-stretch">
                   <div className="icon-box" data-aos="zoom-out" data-aos-delay="400">
                     <i className="bi bi-gem"></i>
-                    <h4>Ullamco laboris ladore pan</h4>
-                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
+                    <h4>Rapid Diagnosis</h4>
+                    <p>Thanks to the speed and accuracy of our AI, scan results are available within minutes, optimizing waiting time for patients.</p>
                   </div>
                 </div>
 
                 <div className="col-xl-4 d-flex align-items-stretch">
                   <div className="icon-box" data-aos="zoom-out" data-aos-delay="500">
                     <i className="bi bi-inboxes"></i>
-                    <h4>Labore consequatur incidid dolore</h4>
-                    <p>Aut suscipit aut cum nemo deleniti aut omnis. Doloribus ut maiores omnis facere</p>
+                    <h4>Friendly Interface</h4>
+                    <p>An easy and intuitive experience, designed with the user in mind, allows healthcare professionals to access diagnoses quickly and without complications.</p>
                   </div>
                 </div>
               </div>
