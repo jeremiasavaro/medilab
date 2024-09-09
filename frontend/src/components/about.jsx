@@ -15,28 +15,28 @@ function About() {
           <div className="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
             <h3>About Us</h3>
             <p>
-              Dolor iure expedita id fuga asperiores qui sunt consequatur minima. Quidem voluptas deleniti. Sit quia molestiae quia quas qui magnam itaque veritatis dolores. Corrupti totam ut eius incidunt reiciendis veritatis asperiores placeat.
+              A team of students from the National University of Rio Cuarto. With the aim of improving people's health, implementing automatic and simple diagnoses.
             </p>
             <ul>
               <li>
                 <i className="fa-solid fa-vial-circle-check"></i>
                 <div>
-                  <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                  <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                  <h5>Innovation and Precision</h5>
+                  <p>We use the most advanced artificial intelligence to offer fast and accurate results, improving the quality of life of our patients.</p>
                 </div>
               </li>
               <li>
                 <i className="fa-solid fa-pump-medical"></i>
                 <div>
-                  <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                  <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                  <h5>Commitment to Care</h5>
+                  <p>Our dedication to healthcare goes beyond technology. We are committed to supporting medical professionals with reliable tools that enhance patient care, ensuring that every diagnosis is delivered with the utmost care.</p>
                 </div>
               </li>
               <li>
                 <i className="fa-solid fa-heart-circle-xmark"></i>
                 <div>
-                  <h5>Voluptatem et qui exercitationem</h5>
-                  <p>Et velit et eos maiores est tempora et quos dolorem autem tempora incidunt maxime veniam</p>
+                  <h5>Compassionate Expertise</h5>
+                  <p>At the heart of our mission is a deep compassion for our patients. We combine cutting-edge technology with a human touch, providing expert diagnostics with empathy and understanding.</p>
                 </div>
               </li>
             </ul>

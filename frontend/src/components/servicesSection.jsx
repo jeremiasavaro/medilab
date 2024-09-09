@@ -8,7 +8,7 @@ function Services() {
       {/* Section Title */}
       <div className="container section-title" data-aos="fade-up">
         <h2>Services</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>At Medilab, we offer a range of cutting-edge services designed to streamline the diagnostic process and enhance patient care.</p>
       </div>
 
       <div className="container">
@@ -19,12 +19,12 @@ function Services() {
                 <i className="fas fa-heartbeat"></i>
               </div>
               <a href="#" className="stretched-link">
-                <h3>Nesciunt Mete</h3>
+                <h3>Automated X-ray Diagnostics</h3>
               </a>
-              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis tempore et consequatur.</p>
+              <p>Receive accurate diagnostics from your X-ray images within minutes. Our AI analyzes radiographs to detect potential anomalies with exceptional precision.</p>
             </div>
           </div>
-          <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+          {/*<div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">  Pensar otra funcionalidad acá
             <div className="service-item position-relative">
               <div className="icon">
                 <i className="fas fa-pills"></i>
@@ -34,16 +34,16 @@ function Services() {
               </a>
               <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
             </div>
-          </div>
+          </div>*/}
           <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
             <div className="service-item position-relative">
               <div className="icon">
                 <i className="fas fa-hospital-user"></i>
               </div>
               <a href="#" className="stretched-link">
-                <h3>Ledo Markt</h3>
+                <h3>Personalized Medical Recommendations</h3>
               </a>
-              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci eos earum corrupti.</p>
+              <p>Automatically connect with the most suitable specialists based on your diagnosis. We provide a curated list of recommended doctors to continue your treatment seamlessly.</p>
             </div>
           </div>
           <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
@@ -52,13 +52,13 @@ function Services() {
                 <i className="fas fa-dna"></i>
               </div>
               <a href="#" className="stretched-link">
-                <h3>Asperiores Commodit</h3>
+                <h3>Cranial X-ray Diagnostics</h3>
               </a>
-              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
+              <p>Specializing in cranial radiography, our technology identifies any irregularities, from fractures to signs of neurological disorders, ensuring comprehensive care.</p>
               <a href="#" className="stretched-link"></a>
             </div>
           </div>
-          <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+          {/*<div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500"> Pensar otra funcionalidad acá
             <div className="service-item position-relative">
               <div className="icon">
                 <i className="fas fa-wheelchair"></i>
@@ -69,16 +69,16 @@ function Services() {
               <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
               <a href="#" className="stretched-link"></a>
             </div>
-          </div>
+          </div>*/}
           <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
             <div className="service-item position-relative">
               <div className="icon">
                 <i className="fas fa-notes-medical"></i>
               </div>
               <a href="#" className="stretched-link">
-                <h3>Dolori Architecto</h3>
+                <h3>Professional PDF Report Generation</h3>
               </a>
-              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
+              <p>Receive a detailed and professional report in PDF format with your X-ray diagnosis. Ideal for sharing with other healthcare professionals or for your personal records.</p>
               <a href="#" className="stretched-link"></a>
             </div>
           </div>
