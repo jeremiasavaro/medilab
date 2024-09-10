@@ -3,9 +3,9 @@ import axios from 'axios';
 import '../assets/css/Account.css';
 import ChangePassword from './changePassword';
 
-const Account = () => {
+const Account = ({setView}) => {
 
-  const [name, setName] = useState('Mateo');
+  const [firstName, setFirstName] = useState('Mateo');
   const [lastName, setLastName] = useState('Cornejo');
   const [dni, setDni] = useState('45701678');
   const [email, setEmail] = useState('ccornejomateo@gmail.com');
@@ -17,6 +17,7 @@ const Account = () => {
   const [locality, setLocality] = useState('Rio Cuarto');
   const [postalCode, setPostalCode] = useState('X5800');
   const [gender, setGender] = useState('Male');
+  const [message, setMessage] = useState('');
 
   // Estado para controlar la visibilidad del modal
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
@@ -41,6 +42,32 @@ const Account = () => {
       }
     }
   };
+  
+  const handleAccount = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://127.0.0.1:5000/account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName, lastName, address, email, dni, phone, birthDate,
+          nationality, province, locality, postalCode, gender,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(data.message);
+      } else {
+        setMessage(data.error);
+      }
+    } catch (error) {
+      setMessage('Los datos no pudieron modificarse');
+    }
+  };
 
   return (
     <section id="account">
@@ -51,6 +78,9 @@ const Account = () => {
           <li onClick={() => setChangePasswordModalOpen(true)}>
             <i className="fa-solid fa-key"></i> Change password
           </li>
+        </ul>
+        <ul>
+          <li onClick={() => setView('home')}><i class="fa-solid fa-right-to-bracket"></i>  Back to main page</li>
         </ul>
       </div>
       <div className="account-container">
@@ -68,11 +98,12 @@ const Account = () => {
               <h3>Mateo Cornejo</h3>
               <br/>
             </div>
+            <form className="horizontal-form" onSubmit={handleAccount}>
             <div className="account-form">
               {/* Campos del formulario */}
               <div className="form-group">
                 <label>Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)}/>
+                <input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className="form-group">
                 <label>Last name</label>
@@ -125,6 +156,7 @@ const Account = () => {
               </div>
               <button type="submit" className="submit-button">Guardar cambios</button>
             </div>
+          </form>
           </div>
         </div>
       </div>

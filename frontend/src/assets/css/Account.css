@@ -12,10 +12,26 @@
   background-color: #0580df;
   padding: 20px;
   color: white;
-  height: 100%; /* Asegura que la barra lateral ocupe toda la altura del contenedor */
-  position: fixed; /* Fija la barra lateral en su lugar */
-  top: 10px; /* Alinea la barra lateral con la parte superior del contenedor */
-  left: 10px; /* Alinea la barra lateral con la parte izquierda del contenedor */
+  height: calc(100% - 20px); /* Deja un espacio en blanco de 50px en la parte inferior */
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  box-sizing: border-box; /* Asegura que el padding no afecte el cálculo de la altura */
+}
+
+
+.sidebar ul:last-child {
+  position: absolute;
+  bottom: 20px; /* Ajusta el espacio entre el botón y la parte inferior */
+  width: 100%;
+}
+
+.sidebar ul li {
+  padding: 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
 }
 
 /* Estilo para los ítems de la barra lateral */
