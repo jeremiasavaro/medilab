@@ -29,10 +29,11 @@ def create_tables(conn):
             age INTEGER NOT NULL check (age > 0),
             nationality TEXT NOT NULL,
             province TEXT NOT NULL,
-            city TEXT NOT NULL,
+            locality TEXT NOT NULL,
             postalCode INTEGER NOT NULL,
             address TEXT NOT NULL,
-            gender TEXT NOT NULL
+            gender TEXT NOT NULL,
+            imagePatient TEXT
         );
     ''')
 

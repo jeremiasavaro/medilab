@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import bcrypt
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password
 
 app = Flask(__name__)
@@ -18,10 +19,11 @@ def login():
     user = get_patient(dni)
     if user is None:
         return jsonify({'error': 'No hay un usuario registrado con ese DNI'}), 401
-    if password != get_password(dni):
-        return jsonify({'error': 'Credenciales incorrectas'}), 401
-    else:
+    passwordDelUser = bytes(get_password(dni))
+    if bcrypt.checkpw(password.encode('utf-8'), passwordDelUser):
         return jsonify({'message': 'Login exitoso'}), 200
+    else:
+        return jsonify({'error': 'Credenciales incorrectas'}), 401
 
 
 @app.route('/register', methods=['POST'])
@@ -29,7 +31,7 @@ def register():
     data = request.json
     firstName = data.get('firstName')
     lastName = data.get('lastName')
-    password = data.get('password')
+    passwordSinEncr = data.get('password')
     repPassword = data.get('repPassword')
     address = data.get('address')
     email = data.get('email')
@@ -42,19 +44,22 @@ def register():
     postalCode = data.get('postalCode')
     gender = data.get('gender')
 
-    print(f'Recibido: firstName = {firstName}, lastName = {lastName}, password = {password}, repPassword = {repPassword}, '
+    print(f'Recibido: firstName = {firstName}, lastName = {lastName}, password = {passwordSinEncr}, repPassword = {repPassword}, '
           f'address = {address}, email = {email}, dni = {dni}, phone = {phone}, birthDate = {birthDate}, nationality = {nationality}, '
           f'province = {province}, locality = {locality}, postalCode = {postalCode}, gender = {gender}')
 
-    if password != repPassword:
+    if passwordSinEncr != repPassword:
         return jsonify({'error': 'Las contraseñas no son iguales'}), 400
-    if (not firstName or not lastName or not password or not repPassword or not address or not email or not dni or not phone
+    if (not firstName or not lastName or not passwordSinEncr or not repPassword or not address or not email or not dni or not phone
         or not birthDate or not nationality or not province or not locality or not postalCode or not gender):
         return jsonify({'error': 'Faltan datos'}), 400
     user = get_patient(dni)
     if user:
         return jsonify({'error': 'El usuario ya existe'}), 409
     else:
+        pswd = passwordSinEncr.encode('utf-8')
+        aux = bcrypt.gensalt()
+        password = bcrypt.hashpw(pswd, aux)
         insert_patient(dni, firstName, lastName, password, email, phone, birthDate, nationality, province,
                        locality, postalCode, address, gender)
         return jsonify({'message': 'Registro completado correctamente'}), 200
@@ -107,24 +112,35 @@ def account():
 @app.route('/change_password', methods = ['POST'])
 def change_password():
     data = request.json
-    dni = data.get('dni')
-    newPassword = data.get('password')
-    newRepPassword = data.get('repPassword')
+    dni = 45  # Supongo que deberías recibir el DNI en el JSON de la petición
+    currentPassword = data.get('currentPassword')
+    newPassword = data.get('newPassword')
+    newRepPassword = data.get('repNewPassword')
 
-    print(f'Recibido dni = {dni}, newPassword = {newPassword}, newRepPassword = {newRepPassword}')
+    print(f'dni = {dni}, currentPassword = {currentPassword}, newPassword = {newPassword}, newRepPassword = {newRepPassword}')
 
-    user = get_patient(dni)
-
+    if not dni or not currentPassword or not newPassword or not newRepPassword:
+        return jsonify({'error': 'Faltan datos'}), 400
     if newPassword != newRepPassword:
         return jsonify({'error': 'Las contraseñas no son iguales'}), 400
-    if (not dni or not newPassword or not newRepPassword):
-        return jsonify({'error': 'Faltan datos'}), 400
 
-    user = get_password(dni)
+    user = get_patient(dni)
+    
+    if not user:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
 
-    if user:
-        modify_password(dni, newPassword)
-        return jsonify({'message': 'Contraseña actualiza con exito'}), 200
+    password = bytes(get_password(dni)) 
+    currentPas = currentPassword.encode('utf-8')
+
+    if not bcrypt.checkpw(currentPas, password):
+        return jsonify({'error': 'La contraseña actual ingresada no es correcta'}), 400
+
+    aux = bcrypt.gensalt()
+    pswd = bcrypt.hashpw(newPassword.encode('utf-8'), aux)
+    modify_password(dni, pswd)
+
+    return jsonify({'message': 'Contraseña actualizada con éxito'}), 200
+
 
 
 if __name__ == '__main__':
