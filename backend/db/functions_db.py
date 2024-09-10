@@ -11,17 +11,19 @@ def connect():
 
 
 def insert_patient(dni, firstName, lastName, password, email, phoneNumber, dateBirth, nationality, province,
-                   locality, postalCode, address, gender):
+                   locality, postalCode, address, gender, imagePatient=None):
     conn = connect()
     cursor = conn.cursor()
-    
+
     cursor.execute("""INSERT INTO patient (dni, firstName, lastName, password, email, phoneNumber, dateBirth, age, nationality, province, 
-                   locality, postalCode, address, gender) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                   (dni, firstName, lastName, password, email, phoneNumber, dateBirth, calculate_age(dateBirth), nationality, province,
-                   locality, postalCode, address, gender))
+                   locality, postalCode, address, gender, imagePatient) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   (dni, firstName, lastName, password, email, phoneNumber, dateBirth, calculate_age(dateBirth),
+                    nationality, province,
+                    locality, postalCode, address, gender, imagePatient))
 
     conn.commit()
     conn.close()
+
 
 def delete_patient(dni):
     conn = connect()
@@ -35,8 +37,6 @@ def delete_patient(dni):
 
 #Faltaria arreglar que si se elimina un paciente se deberian eliminar sus diagnosticos correspondientes
 
-#Faltaria modificar paciente
-# def modify_patient()
 
 def get_patient(dni):
     conn = connect()
@@ -47,6 +47,7 @@ def get_patient(dni):
 
     conn.close()
     return patient_data
+
 
 def modify_password(dni, newPassword):
     conn = connect()
@@ -60,20 +61,33 @@ def modify_password(dni, newPassword):
     conn.commit()
     conn.close()
 
-def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, age, nationality, province, locality, postalCode, address, gender):
+def modify_image_patient(dni, imagePatient):
+    conn = connect()
+    cursor = conn.cursor()
+
+    query = """UPDATE patient
+            SET imagePatient = ?
+            WHERE dni = ?"""
+    cursor.execute(query, (imagePatient, dni))
+
+    conn.commit()
+    conn.close()
+
+def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
     conn = connect()
     cursor = conn.cursor()
 
     query = """
         UPDATE patient 
         SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateBirth = ?, 
-            age = ?, nationality = ?, province = ?, locality = ?, postalCode = ?, address = ?, gender = ?
+            age = ?, nationality = ?, province = ?, locality = ?, postalCode = ?, address = ?, gender = ?, imagePatient = ?
         WHERE dni = ?
     """
-    cursor.execute(query, (firstName, lastName, email, phoneNumber, dateBirth, age, nationality, province, locality, postalCode, address, gender, dni))
+    cursor.execute(query, (firstName, lastName, email, phoneNumber, dateBirth, calculate_age(dateBirth), nationality, province, locality, postalCode, address, gender, imagePatient, dni))
 
     conn.commit()
     conn.close()
+
 
 
 def get_password(dni):
