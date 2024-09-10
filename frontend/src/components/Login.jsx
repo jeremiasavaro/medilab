@@ -23,6 +23,7 @@ const Login = ({ view, setView, isLoged, setIsLoged }) => {
       if (response.ok) {
         setMessage(data.message);
         setIsLoged(true);  // Cambia a true si el login es exitoso
+        setView('home')
       } else {
         setMessage(data.error);
       }

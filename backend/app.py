@@ -1,10 +1,19 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import bcrypt
+import cloudinary
+import cloudinary.uploader
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password
 
 app = Flask(__name__)
 CORS(app)
+
+#configuracion de cloudinary para guardar imagenes de los pacientes
+cloudinary.config(
+    cloud_name = "djlg5dfjj",
+    api_key = "945298983164966",
+    api_secret = "CRjZQ4M5w6Dp-eYdBzjZZQISgKI"
+)
 
 @app.route('/login', methods = ['POST'])
 def login():
@@ -75,6 +84,24 @@ def contact():
 
     print(f'Recibido: name = {name}, email = {email}, subject = {subject}, message = {message}')
     # we should save this data in the database and think what are we going to do with it after
+
+#ruta para la carga de imagenes
+@app.route('/upload_image', methods = ['POST'])
+def image_upload():
+    # Verifica que se haya recibido un archivo
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    # Sube la imagen a Cloudinary
+    upload_result = cloudinary.uploader.upload(file)
+    image_url = upload_result.get('url')
+
+    return jsonify({'image_url': image_url}), 200
 
 @app.route('/account', methods = ['POST'])
 def account():

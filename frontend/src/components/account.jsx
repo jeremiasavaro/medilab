@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../assets/css/Account.css';
 import ChangePassword from './changePassword';
 
@@ -20,6 +21,27 @@ const Account = () => {
   // Estado para controlar la visibilidad del modal
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
 
+  // Para la carga de imágenes
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await axios.post('http://localhost:5000/upload_image', formData);
+        setImageUrl(response.data.image_url); // Asumiendo que el backend devuelve 'image_url' con la URL de la imagen subida
+      } catch (error) {
+        console.error('Error uploading the image:', error);
+      }
+    }
+  };
+
   return (
     <section id="account">
       <div className="sidebar">
@@ -37,15 +59,20 @@ const Account = () => {
           <br />
           <div className="profile-section">
             <div className="profile-info">
-              <img src="../assets/img/c.jpg" className="profile-pic" alt="Profile" />
+              <div>
+                <input type="file" onChange={handleFileChange} />
+                {imageUrl && (
+                  <img src={imageUrl} className="profile-pic" alt="Uploaded" style={{ maxWidth: '200px', borderRadius: '50%' }}/>
+                )}
+              </div>
               <h3>Mateo Cornejo</h3>
-              <br />
+              <br/>
             </div>
             <div className="account-form">
               {/* Campos del formulario */}
               <div className="form-group">
                 <label>Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} />
+                <input value={name} onChange={(e) => setName(e.target.value)}/>
               </div>
               <div className="form-group">
                 <label>Last name</label>
