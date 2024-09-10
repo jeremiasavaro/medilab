@@ -37,7 +37,7 @@ const Contact = () => {
     <section id="contact" className="contact section">
       <div className="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Contact information below. Contact us</p>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
       </div>
       <div className="mb-5" data-aos="fade-up" data-aos-delay="200">
         <iframe

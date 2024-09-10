@@ -107,24 +107,22 @@ def account():
 @app.route('/change_password', methods = ['POST'])
 def change_password():
     data = request.json
-    dni = 45701678
-    currentPassword = data.get('currentPassword')
-    newPassword = data.get('newPassword')
-    newRepPassword = data.get('repNewPassword')
+    dni = data.get('dni')
+    newPassword = data.get('password')
+    newRepPassword = data.get('repPassword')
 
-    print(f'currentPassword = {currentPassword}, newPassword = {newPassword}, newRepPassword = {newRepPassword}')
+    print(f'Recibido dni = {dni}, newPassword = {newPassword}, newRepPassword = {newRepPassword}')
 
     user = get_patient(dni)
 
-    if (not dni or not newPassword or not newRepPassword):
-        return jsonify({'error': 'Faltan datos'}), 400
     if newPassword != newRepPassword:
         return jsonify({'error': 'Las contraseñas no son iguales'}), 400
+    if (not dni or not newPassword or not newRepPassword):
+        return jsonify({'error': 'Faltan datos'}), 400
+
+    user = get_password(dni)
+
     if user:
-        password = get_password(dni)
-        if password != currentPassword:
-            return jsonify({'error': 'La contraseña actual ingresada no es correcta'}), 400
-        
         modify_password(dni, newPassword)
         return jsonify({'message': 'Contraseña actualiza con exito'}), 200
 

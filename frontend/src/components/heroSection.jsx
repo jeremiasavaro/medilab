@@ -1,10 +1,9 @@
 import React from 'react';
-import heroImg from "../assets/img/hero-bg.jpg"
 
 function HeroSection() {
   return (
     <section id="hero" className="hero section light-background">
-      <img src={heroImg} alt="" data-aos="fade-in" />
+      <img src="../assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
 
       <div className="container position-relative">
         <div className="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
@@ -18,7 +17,7 @@ function HeroSection() {
               <h3>X-ray diagnostic service</h3>
               <p>The X-ray service provides a way of diagnosis from the scanning of an X-ray by using AI.</p>
               <div className="text-center">
-                <a href="#xray" className="more-btn"><span>Access the service</span> <i className="bi bi-chevron-right"></i></a>
+                <a href="#image-upload" className="more-btn"><span>Access the service</span> <i className="bi bi-chevron-right"></i></a>
               </div>
             </div>
           </div>
@@ -30,7 +29,7 @@ function HeroSection() {
                   <div className="icon-box" data-aos="zoom-out" data-aos-delay="300">
                     <i className="bi bi-clipboard-data"></i>
                     <h4>High reliability</h4>
-                    <p>The Medilab X-ray service helps the patient by shortening times and providing a more comfortable experience.</p>
+                    <p>The Probee X-ray service helps the patient by shortening times and providing a more comfortable experience.</p>
                   </div>
                 </div>
 

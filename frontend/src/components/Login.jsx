@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/css/Login.css';
 
-const Login = ({setView, setIsLoged }) => {
+const Login = ({ view, setView, isLoged, setIsLoged }) => {
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -21,9 +21,8 @@ const Login = ({setView, setIsLoged }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setIsLoged(true);  // Cambia a true si el login es exitoso
-        setView('home');
         setMessage(data.message);
+        setIsLoged(true);  // Cambia a true si el login es exitoso
       } else {
         setMessage(data.error);
       }
@@ -76,12 +75,13 @@ const Login = ({setView, setIsLoged }) => {
           <p>
             {' '}
             <span
-              onClick={() => setView("home")}
+              onClick={() => {
+                setView("home");
+              }}
               className="hover-link"
             >
               Back to main page
             </span>
-            .
           </p>
         </div>
       </div>

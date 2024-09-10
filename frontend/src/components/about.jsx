@@ -1,5 +1,5 @@
 // src/components/About.jsx
-import imgAbout from '../assets/img/about.jpg';
+
 import React from 'react';
 
 function About() {
@@ -8,7 +8,8 @@ function About() {
       <div className="container">
         <div className="row gy-4 gx-5">
           <div className="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="200">
-            <img src={imgAbout} className="img-fluid" alt="" />
+            <img src="../assets/img/about.jpg" className="img-fluid" alt="" />
+            <a href="" className="glightbox pulsating-play-btn"></a>
           </div>
 
           <div className="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
