@@ -15,6 +15,7 @@ cloudinary.config(
     api_secret = "CRjZQ4M5w6Dp-eYdBzjZZQISgKI"
 )
 
+
 @app.route('/login', methods = ['POST'])
 def login():
     data = request.json
@@ -28,8 +29,8 @@ def login():
     user = get_patient(dni)
     if user is None:
         return jsonify({'error': 'No hay un usuario registrado con ese DNI'}), 401
-    passwordDelUser = bytes(get_password(dni))
-    if bcrypt.checkpw(password.encode('utf-8'), passwordDelUser):
+    userPassword = bytes(get_password(dni))
+    if bcrypt.checkpw(password.encode('utf-8'), userPassword):
         return jsonify({'message': 'Login exitoso'}), 200
     else:
         return jsonify({'error': 'Credenciales incorrectas'}), 401
@@ -40,7 +41,7 @@ def register():
     data = request.json
     firstName = data.get('firstName')
     lastName = data.get('lastName')
-    passwordSinEncr = data.get('password')
+    nonEncryptedPassword = data.get('password')
     repPassword = data.get('repPassword')
     address = data.get('address')
     email = data.get('email')
@@ -53,23 +54,23 @@ def register():
     postalCode = data.get('postalCode')
     gender = data.get('gender')
 
-    print(f'Recibido: firstName = {firstName}, lastName = {lastName}, password = {passwordSinEncr}, repPassword = {repPassword}, '
+    print(f'Recibido: firstName = {firstName}, lastName = {lastName}, password = {nonEncryptedPassword}, repPassword = {repPassword}, '
           f'address = {address}, email = {email}, dni = {dni}, phone = {phone}, birthDate = {birthDate}, nationality = {nationality}, '
           f'province = {province}, locality = {locality}, postalCode = {postalCode}, gender = {gender}')
 
-    if passwordSinEncr != repPassword:
+    if nonEncryptedPassword != repPassword:
         return jsonify({'error': 'Las contraseñas no son iguales'}), 400
-    if (not firstName or not lastName or not passwordSinEncr or not repPassword or not address or not email or not dni or not phone
+    if (not firstName or not lastName or not nonEncryptedPassword or not repPassword or not address or not email or not dni or not phone
         or not birthDate or not nationality or not province or not locality or not postalCode or not gender):
         return jsonify({'error': 'Faltan datos'}), 400
     user = get_patient(dni)
     if user:
         return jsonify({'error': 'El usuario ya existe'}), 409
     else:
-        pswd = passwordSinEncr.encode('utf-8')
-        aux = bcrypt.gensalt()
-        password = bcrypt.hashpw(pswd, aux)
-        insert_patient(dni, firstName, lastName, password, email, phone, birthDate, nationality, province,
+        encodedPassword = nonEncryptedPassword.encode('utf-8')
+        passwordSalt = bcrypt.gensalt()
+        encryptedPassword = bcrypt.hashpw(encodedPassword, passwordSalt)
+        insert_patient(dni, firstName, lastName, encryptedPassword, email, phone, birthDate, nationality, province,
                        locality, postalCode, address, gender)
         return jsonify({'message': 'Registro completado correctamente'}), 200
 
@@ -85,23 +86,6 @@ def contact():
     print(f'Recibido: name = {name}, email = {email}, subject = {subject}, message = {message}')
     # we should save this data in the database and think what are we going to do with it after
 
-#ruta para la carga de imagenes
-@app.route('/upload_image', methods = ['POST'])
-def image_upload():
-    # Verifica que se haya recibido un archivo
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-
-    file = request.files['file']
-
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-
-    # Sube la imagen a Cloudinary
-    upload_result = cloudinary.uploader.upload(file)
-    image_url = upload_result.get('url')
-
-    return jsonify({'image_url': image_url}), 200
 
 @app.route('/account', methods = ['POST'])
 def account():
@@ -135,6 +119,26 @@ def account():
         modify_patient(newDni, newFirstName, newLastName, newEmail, newPhone, newBirthDate, newAge,
                        newNationality, newProvince, newLocality, newPostalCode, newAddress, newGender)
         return jsonify({'message': 'Datos modificados correctamente'}), 200
+    
+
+#ruta para la carga de imagenes
+@app.route('/upload_image', methods = ['POST'])
+def image_upload():
+    # Verifica que se haya recibido un archivo
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    # Sube la imagen a Cloudinary
+    upload_result = cloudinary.uploader.upload(file)
+    image_url = upload_result.get('url')
+
+    return jsonify({'image_url': image_url}), 200
+
 
 @app.route('/change_password', methods = ['POST'])
 def change_password():
@@ -157,17 +161,16 @@ def change_password():
         return jsonify({'error': 'Usuario no encontrado'}), 404
 
     password = bytes(get_password(dni)) 
-    currentPas = currentPassword.encode('utf-8')
+    currentPasswordEncoded = currentPassword.encode('utf-8')
 
-    if not bcrypt.checkpw(currentPas, password):
+    if not bcrypt.checkpw(currentPasswordEncoded, password):
         return jsonify({'error': 'La contraseña actual ingresada no es correcta'}), 400
 
-    aux = bcrypt.gensalt()
-    pswd = bcrypt.hashpw(newPassword.encode('utf-8'), aux)
-    modify_password(dni, pswd)
+    passwordSalt = bcrypt.gensalt()
+    encodedPassword = bcrypt.hashpw(newPassword.encode('utf-8'), passwordSalt)
+    modify_password(dni, encodedPassword)
 
     return jsonify({'message': 'Contraseña actualizada con éxito'}), 200
-
 
 
 if __name__ == '__main__':

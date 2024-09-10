@@ -16,7 +16,8 @@
     "react-router-dom": "^6.26.1",
     "react-scripts": "^5.0.1",
     "swiper": "^11.1.12",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "axios": "^1.7.7"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
