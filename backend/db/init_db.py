@@ -10,13 +10,13 @@ def connect():
         return None
 
 def create_tables(conn):
-    
     if conn is None:
         print("No connection to the database.")
         return
 
     c = conn.cursor()
 
+    # Patient Table
     c.execute('''
         CREATE TABLE IF NOT EXISTS patient (
             dni INTEGER PRIMARY KEY check (dni > 0),
@@ -29,12 +29,51 @@ def create_tables(conn):
             age INTEGER NOT NULL check (age > 0),
             nationality TEXT NOT NULL,
             province TEXT NOT NULL,
-            locality TEXT NOT NULL,
+            city TEXT NOT NULL,
             postalCode INTEGER NOT NULL,
             address TEXT NOT NULL,
             gender TEXT NOT NULL
-        )
+        );
     ''')
+
+    # Doctor Table
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS doctor (
+            dni INTEGER PRIMARY KEY check (dni > 0),
+            matricule VARCHAR(50),
+            firstName TEXT NOT NULL, 
+            lastName TEXT NOT NULL,
+            phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
+            dateBirth DATE NOT NULL check (dateBirth > 0 and dateBirth < CURRENT_DATE),
+            age INTEGER NOT NULL check (age > 0),
+            gender TEXT NOT NULL
+        );
+    ''')
+
+    # Clinic Table
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS clinic (
+            clinic_number INTEGER PRIMARY KEY,
+            Name TEXT NOT NULL, 
+            phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
+            province TEXT NOT NULL,
+            city TEXT NOT NULL,
+            postalCode INTEGER NOT NULL,
+            address TEXT NOT NULL
+        );
+    ''')
+
+     # WorksAt Table
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS WorksAt (
+        clinic_number INTEGER,
+        doctor_dni INTEGER,
+        PRIMARY KEY (clinic_number, doctor_dni),
+        CONSTRAINT fk_dni FOREIGN KEY (doctor_dni) REFERENCES doctor (dni) ON DELETE CASCADE,
+        CONSTRAINT fk_clinic FOREIGN KEY (clinic_number) REFERENCES clinic (clinic_number) ON DELETE CASCADE
+    );
+    ''')
+
 
     c.execute('''
         CREATE TABLE IF NOT EXISTS diagnostic (
@@ -45,16 +84,24 @@ def create_tables(conn):
             imageDiagnostic TEXT NOT NULL,
             dni INTEGER NOT NULL,
             CONSTRAINT fk_dni FOREIGN KEY (dni) REFERENCES patient (dni) ON DELETE CASCADE
-        )
+        );
     ''')
 
     c.execute('''
         CREATE TRIGGER IF NOT EXISTS triggerDateResult
-            BEFORE INSERT ON diagnostic FOR EACH ROW 
+        BEFORE INSERT ON diagnostic
+        FOR EACH ROW
         BEGIN
             SELECT NEW.dateResult = CURRENT_TIMESTAMP;
-        END;        
+        END;
     ''')
+
+def view_tables():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    print("Tables:", tables)
 
     conn.commit()
     conn.close()
@@ -62,3 +109,4 @@ def create_tables(conn):
 if __name__ == '__main__':
     connection = connect()
     create_tables(connection)
+    view_tables()
