@@ -28,7 +28,7 @@ function Header({ setView, isLoged, setIsLoged }) {
           <div className="social-links d-none d-md-flex align-items-center">
             <a href="https://www.facebook.com/jeremiasjose.avaro?mibextid=ZbWKwL" className="facebook"><i className="bi bi-facebook"></i></a>
             <a href="https://www.instagram.com/baachi13?igsh=MWZ4Mzd2OXFyYW92dQ==" className="instagram"><i className="bi bi-instagram"></i></a>
-            <a href="https://github.com/jeremiasavaro/proyecto-UNRC-2024" className="bi-github"><i className="bi bi-github"></i></a>
+            <a href="https://github.com/jeremiasavaro/proyecto-UNRC-2024" className="github"><i className="bi bi-github"></i></a>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@ function Header({ setView, isLoged, setIsLoged }) {
 
           <nav id="navmenu" className="navmenu">
             <ul>
-              <li><a href="#hero" className="active">Home</a></li>
+              <li><a href="#hero" className="">Home</a></li>
               <li><a href="#about" className="active">About</a></li>
               <li><a href="#services" className="active">Services</a></li>
               <li><a href="#doctors" className="active">Doctors</a></li>

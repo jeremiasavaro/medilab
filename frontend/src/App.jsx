@@ -146,12 +146,12 @@ function App() {
   return (
     <div className="App">
       {view === "login" ? (
-        <Login setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
+        <Login setView={setView} setIsLoged={setIsLoged} />
       ) : view === "register" ? (
         <Register setView={setView} />
       ) : view === "account" ? (
         <Account setView={setView} />
-      ) : (
+      ) : view === "home" ?(
         <div>
           <main className="main">
             <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
@@ -169,8 +169,11 @@ function App() {
             <i className="bi bi-arrow-up-short"></i>
           </a>
 
-          <div id="preloader"></div>
         </div>
+      ):(
+          <div>
+            <p>asd</p>
+          </div>
       )}
     </div>
   );

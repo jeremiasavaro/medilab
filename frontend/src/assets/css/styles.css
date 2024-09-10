@@ -1540,7 +1540,7 @@ html {
   }
   
   .faq .faq-container .faq-item:last-child {
-    margin-bottom: 0;
+    margin-bottom: 15px;
   }
   
   .faq .faq-container .faq-item h3 {

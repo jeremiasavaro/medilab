@@ -37,6 +37,7 @@ const Register = ({ setView }) => {
 
       if (response.ok) {
         setMessage(data.message);
+        setView('login')
       } else {
         setMessage(data.error);
       }
