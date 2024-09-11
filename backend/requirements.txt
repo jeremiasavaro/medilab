@@ -2,3 +2,4 @@ Flask==3.0.3
 Flask-Cors==4.0.1
 cloudinary==1.41.0
 bcrypt==4.2.0
+pyjwt==2.9.0

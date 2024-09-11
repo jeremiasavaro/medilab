@@ -3,9 +3,12 @@ from flask_cors import CORS
 import bcrypt
 import cloudinary
 import cloudinary.uploader
+import jwt
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'xrai'
+
 CORS(app)
 
 #configuracion de cloudinary para guardar imagenes de los pacientes
@@ -15,9 +18,51 @@ cloudinary.config(
     api_secret = "CRjZQ4M5w6Dp-eYdBzjZZQISgKI"
 )
 
+token = "token"
 
-@app.route('/login', methods = ['POST'])
+@app.route('/obtainToken', methods=['GET'])
+def obtainToken():
+    global token
+    return jsonify({'token': token})
+
+
+@app.route('/obtainData', methods=['GET'])
+def obtainUserData():
+    token = request.headers.get('Authorization')
+    
+    if not token:
+        return jsonify({'error': 'Token is missing'}), 401
+    
+
+    try:
+        decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        dni = decoded_token.get('dni')
+
+        patient_data = get_patient(dni)
+        
+        return jsonify({
+            'dni': patient_data[0],
+            'firstName': patient_data[1],
+            'lastName': patient_data[2],
+            'email': patient_data[4],
+            'phone': patient_data[5],
+            'birthDate': patient_data[6],
+            'nationality': patient_data[8],
+            'province': patient_data[9],
+            'locality': patient_data[10],
+            'postalCode': patient_data[11],
+            'gender': patient_data[12]
+        }), 200
+        
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token has expired'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'error': 'Invalid token'}), 401
+
+
+@app.route('/login', methods=['POST'])
 def login():
+    global token
     data = request.json
     dni = data.get('dni')
     password = data.get('password')
@@ -31,7 +76,8 @@ def login():
         return jsonify({'error': 'No hay un usuario registrado con ese DNI'}), 401
     userPassword = bytes(get_password(dni))
     if bcrypt.checkpw(password.encode('utf-8'), userPassword):
-        return jsonify({'message': 'Login exitoso'}), 200
+        token = jwt.encode({'dni': dni}, app.config['SECRET_KEY'])
+        return jsonify({'message': 'Login exitoso', 'token': token}), 200
     else:
         return jsonify({'error': 'Credenciales incorrectas'}), 401
 
