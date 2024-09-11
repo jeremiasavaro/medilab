@@ -31,7 +31,7 @@ def obtainUserData():
     token = request.headers.get('Authorization')
     
     if not token:
-        return jsonify({'error': 'Token is missing'}), 401
+        return jsonify({'error': 'No se encontro el token'}), 401
     
 
     try:
@@ -55,9 +55,9 @@ def obtainUserData():
         }), 200
         
     except jwt.ExpiredSignatureError:
-        return jsonify({'error': 'Token has expired'}), 401
+        return jsonify({'error': 'El token ya expiro'}), 401
     except jwt.InvalidTokenError:
-        return jsonify({'error': 'Invalid token'}), 401
+        return jsonify({'error': 'Token invalido'}), 401
 
 
 @app.route('/login', methods=['POST'])
@@ -167,17 +167,15 @@ def account():
         return jsonify({'message': 'Datos modificados correctamente'}), 200
     
 
-#ruta para la carga de imagenes
 @app.route('/upload_image', methods = ['POST'])
 def image_upload():
-    # Verifica que se haya recibido un archivo
     if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+        return jsonify({'error': 'No se encontro un archivo'}), 400
 
     file = request.files['file']
 
     if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        return jsonify({'error': 'No es un archivo'}), 400
 
     # Sube la imagen a Cloudinary
     upload_result = cloudinary.uploader.upload(file)
