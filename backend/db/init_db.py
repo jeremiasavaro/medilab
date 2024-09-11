@@ -23,7 +23,7 @@ def create_tables(conn):
             firstName TEXT NOT NULL, 
             lastName TEXT NOT NULL,
             password TEXT NOT NULL,
-            email TEXT NOT NULL,
+            email TEXT NOT NULL check (email LIKE '%_@__%.__%'), 
             phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
             dateBirth DATE NOT NULL check (dateBirth > 0 and dateBirth < CURRENT_DATE),
             age INTEGER NOT NULL check (age > 0),
@@ -32,7 +32,7 @@ def create_tables(conn):
             locality TEXT NOT NULL,
             postalCode INTEGER NOT NULL,
             address TEXT NOT NULL,
-            gender TEXT NOT NULL,
+            gender TEXT NOT NULL check (gender IN ('Male', 'Female', 'Other')),
             imagePatient TEXT
         );
     ''')
@@ -41,20 +41,22 @@ def create_tables(conn):
     c.execute('''
         CREATE TABLE IF NOT EXISTS doctor (
             dni INTEGER PRIMARY KEY check (dni > 0),
-            matricule VARCHAR(50),
+            matricule VARCHAR(50) UNIQUE,
             firstName TEXT NOT NULL, 
             lastName TEXT NOT NULL,
+            email TEXT NOT NULL check (email LIKE '%_@__%.__%'), 
             phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
             dateBirth DATE NOT NULL check (dateBirth > 0 and dateBirth < CURRENT_DATE),
             age INTEGER NOT NULL check (age > 0),
-            gender TEXT NOT NULL
+            gender TEXT NOT NULL check (gender IN ('Male', 'Female', 'Other')),
+            imageDoctor TEXT
         );
     ''')
 
     # Clinic Table
     c.execute('''
         CREATE TABLE IF NOT EXISTS clinic (
-            clinic_number INTEGER PRIMARY KEY,
+            clinic_number INTEGER PRIMARY KEY AUTOINCREMENT,
             Name TEXT NOT NULL, 
             phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
             province TEXT NOT NULL,
@@ -75,7 +77,7 @@ def create_tables(conn):
     );
     ''')
 
-
+     # Diagnostics table
     c.execute('''
         CREATE TABLE IF NOT EXISTS diagnostic (
             cod INTEGER PRIMARY KEY,
@@ -88,6 +90,7 @@ def create_tables(conn):
         );
     ''')
 
+     #Trigger to check the date on the insert
     c.execute('''
         CREATE TRIGGER IF NOT EXISTS triggerDateResult
         BEFORE INSERT ON diagnostic

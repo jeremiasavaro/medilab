@@ -36,6 +36,7 @@ def delete_patient(dni):
     conn.close()
 
 #Faltaria arreglar que si se elimina un paciente se deberian eliminar sus diagnosticos correspondientes
+#Ya esta hecho con la foreign key!!
 
 
 def get_patient(dni):
@@ -161,3 +162,51 @@ def get_diagnostics_by_description(dni, description):
     conn.commit()
     conn.close()
     return patient_data
+
+def insert_doctor(dni,matricule, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("""INSERT INTO doctor (dni, matricule, firstName, lastName, email, phoneNumber, dateBirth, age, gender, imageDoctor) 
+                  VALUES (?,?,?,?,?,?,?,?,?,?)""", 
+               (dni, matricule, firstName, lastName, email, phoneNumber, dateBirth, calculate_age(dateBirth), gender, imageDoctor))
+
+    conn.commit()
+    conn.close()
+
+
+def delete_doctor(dni):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM doctor WHERE dni = ?", (dni,))
+    print(f"doctor with DNI {dni} successfully removed")
+    
+    conn.commit()
+    conn.close()
+
+def modify_doctor(dni,matricule, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
+    conn = connect()
+    cursor = conn.cursor()
+
+    query = """
+        UPDATE doctor 
+        SET matricule = ?, firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateBirth = ?, 
+            age = ?, gender = ?, imageDoctor = ?
+        WHERE dni = ?
+    """
+    cursor.execute(query, (matricule,firstName, lastName, email, phoneNumber, dateBirth, calculate_age(dateBirth),gender, imageDoctor, dni))
+
+    conn.commit()
+    conn.close()
+
+def insert_clinic(name, phoneNumber, province, city, postalCode, address):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("""INSERT INTO clinic (Name, phoneNumber, province, city, postalCode, address) 
+                      VALUES (?, ?, ?, ?, ?, ?)""",
+                   (name, phoneNumber, province, city, postalCode, address))
+
+    conn.commit()
+    conn.close()
