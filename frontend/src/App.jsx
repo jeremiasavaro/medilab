@@ -14,6 +14,7 @@ import Footer from './components/footer';
 import Gallery from './components/gallery';
 import HeroSection from './components/heroSection';
 import ServicesSection from './components/servicesSection';
+import XrayService from './components/XrayService';
 import Header from "./components/header";
 import './assets/css/styles.css';
 import 'aos/dist/aos.css';
@@ -149,13 +150,15 @@ function App() {
         <Login setView={setView} setIsLoged={setIsLoged} />
       ) : view === "register" ? (
         <Register setView={setView} />
+      ) :view === "xrayService" ? (
+        <XrayService setView={setView} /> 
       ) : view === "account" ? (
         <Account setView={setView} />
       ) : view === "home" ?(
         <div>
           <main className="main">
             <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
-            <HeroSection />
+            <HeroSection setView={setView}/>
             <About />
             <ServicesSection />
             <Doctors />

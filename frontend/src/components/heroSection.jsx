@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HeroSection() {
+function HeroSection({setView}) {
   return (
     <section id="hero" className="hero section light-background">
       <img src="../assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
@@ -17,7 +17,8 @@ function HeroSection() {
               <h3>X-ray diagnostic service</h3>
               <p>The X-ray service provides a way of diagnosis from the scanning of an X-ray by using AI.</p>
               <div className="text-center">
-                <a href="#image-upload" className="more-btn"><span>Access the service</span> <i className="bi bi-chevron-right"></i></a>
+                <a href="#xrayService" onClick={() => setView("xrayService")} className="more-btn"><span>Access the service</span>
+                  <i className="bi bi-chevron-right"></i></a>
               </div>
             </div>
           </div>
