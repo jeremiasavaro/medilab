@@ -23,7 +23,7 @@ def create_tables(conn):
             firstName TEXT NOT NULL, 
             lastName TEXT NOT NULL,
             password TEXT NOT NULL,
-            email TEXT NOT NULL check (email LIKE '%_@__%.__%'), 
+            email TEXT UNIQUE NOT NULL check (email LIKE '%_@__%.__%'), 
             phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
             dateBirth DATE NOT NULL check (dateBirth > 0 and dateBirth < CURRENT_DATE),
             age INTEGER NOT NULL check (age > 0),
@@ -44,7 +44,7 @@ def create_tables(conn):
             matricule VARCHAR(50) UNIQUE,
             firstName TEXT NOT NULL, 
             lastName TEXT NOT NULL,
-            email TEXT NOT NULL check (email LIKE '%_@__%.__%'), 
+            email TEXT UNIQUE NOT NULL check (email LIKE '%_@__%.__%'), 
             phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
             dateBirth DATE NOT NULL check (dateBirth > 0 and dateBirth < CURRENT_DATE),
             age INTEGER NOT NULL check (age > 0),
@@ -57,7 +57,7 @@ def create_tables(conn):
     c.execute('''
         CREATE TABLE IF NOT EXISTS clinic (
             clinic_number INTEGER PRIMARY KEY AUTOINCREMENT,
-            Name TEXT NOT NULL, 
+            Name TEXT UNIQUE NOT NULL, 
             phoneNumber INTEGER NOT NULL check (phoneNumber > 0),
             province TEXT NOT NULL,
             city TEXT NOT NULL,

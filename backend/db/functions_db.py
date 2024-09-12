@@ -126,7 +126,6 @@ def get_diagnostics(dni):
     cursor.execute("SELECT * FROM diagnostic WHERE dni = ?", (dni,))
     patient_data = cursor.fetchall()
 
-    conn.commit()
     conn.close()
     return patient_data
 
@@ -137,7 +136,6 @@ def get_diagnostics_by_code(cod):
     cursor.execute("SELECT * FROM diagnostic WHERE cod = ?", (cod,))
     patient_data = cursor.fetchall()
 
-    conn.commit()
     conn.close()
     return patient_data
 
@@ -148,7 +146,6 @@ def get_diagnostics_by_result(dni, result):
     cursor.execute("SELECT * FROM diagnostic WHERE (dni,result) = (?,?)", (dni, result))
     patient_data = cursor.fetchall()
 
-    conn.commit()
     conn.close()
     return patient_data
 
@@ -159,10 +156,9 @@ def get_diagnostics_by_description(dni, description):
     cursor.execute("SELECT * FROM diagnostic WHERE (dni,description) = (?,?) ", (dni, description))
     patient_data = cursor.fetchall()
     
-    conn.commit()
     conn.close()
     return patient_data
-
+#-------------------------------------------- Doctor Table functions --------------------------------------------
 def insert_doctor(dni,matricule, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
     conn = connect()
     cursor = conn.cursor()
@@ -200,6 +196,54 @@ def modify_doctor(dni,matricule, firstName, lastName, email, phoneNumber, dateBi
     conn.commit()
     conn.close()
 
+def get_doctors():
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM doctor")
+    doctor_data = cursor.fetchall()
+
+    # Print the result to check if the query returns any data
+    print(f"Doctors fetched: {doctor_data}")
+
+    conn.close()
+
+    return doctor_data
+
+def get_cities_for_doctor(doctor_dni):
+    conn = connect()
+    cursor = conn.cursor()
+
+    # SQL query to get cities where the doctor works
+    query = """
+        SELECT clinic.city 
+        FROM WorksAt 
+        JOIN clinic ON WorksAt.clinic_number = clinic.clinic_number 
+        WHERE WorksAt.doctor_dni = ?
+    """
+    
+    cursor.execute(query, (doctor_dni,))
+    cities = cursor.fetchall()
+
+    # Print the fetched cities to verify if any data is returned
+    print(f"Cities fetched for doctor {doctor_dni}: {cities}")
+
+    conn.close()
+
+    # If no cities are found, return a message
+    if not cities:
+        print(f"No clinics found for doctor with DNI {doctor_dni}")
+        return []
+
+    # Extracting city names from the fetched data
+    city_list = [city[0] for city in cities]
+    
+    # Print the final list of cities
+    print(f"City list for doctor {doctor_dni}: {city_list}")
+    
+    return city_list
+
+#-------------------------------------------- Clinic Table functions --------------------------------------------
 def insert_clinic(name, phoneNumber, province, city, postalCode, address):
     conn = connect()
     cursor = conn.cursor()
@@ -210,3 +254,70 @@ def insert_clinic(name, phoneNumber, province, city, postalCode, address):
 
     conn.commit()
     conn.close()
+
+def modify_clinic(name, phoneNumber, province, city, postalCode, address):
+    conn = connect()
+    cursor = conn.cursor()
+
+    #Find the clinic number based on the  name
+    find_query = "SELECT clinic_number FROM clinic WHERE name = ?"
+    cursor.execute(find_query, (name,))
+    clinic_number = cursor.fetchone()
+
+    if clinic_number is None:
+        print("Clinic not found.")
+        return
+
+    #Update the clinic details using the clinic_number
+    query = """
+        UPDATE clinic 
+        SET phoneNumber = ?, province = ?, city = ?, postalCode = ?, address = ? 
+        WHERE clinic_number = ?
+    """
+    cursor.execute(query, (phoneNumber, province, city, postalCode, address, clinic_number[0]))
+
+    conn.commit()
+    conn.close()
+
+    print(f"Clinic '{name}' has been updated successfully.")
+
+def get_clinics():
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM clinic")
+    clinic_data = cursor.fetchall()
+
+    # Print the result to check if the query returns any data
+    print(f"Clinicss fetched: {clinic_data}")
+
+    conn.close()
+
+    return clinic_data    
+
+
+#-------------------------------------------- WorksAt Table functions --------------------------------------------
+def insert_WorksAt(doctordni, clinicname):
+    conn = connect()
+    cursor = conn.cursor()
+
+    # Find the clinic number based on the name
+    find_query = "SELECT clinic_number FROM clinic WHERE name = ?"
+    cursor.execute(find_query, (clinicname,))
+    clinic_number = cursor.fetchone()
+
+    if clinic_number is None:
+        print("Clinic not found.")
+        return
+
+    # clinic_number is a tuple, so access the first element
+    clinic_number = clinic_number[0]
+
+    # Insert into WorksAt table
+    cursor.execute("""INSERT INTO WorksAt (clinic_number, doctor_dni) 
+                      VALUES (?, ?)""",
+                   (clinic_number, doctordni))
+
+    conn.commit()
+    conn.close()
+    print(f"Doctor {doctordni} is now assigned to clinic '{clinicname}'.")
