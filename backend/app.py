@@ -51,8 +51,9 @@ def obtainUserData():
             'province': patient_data[9],
             'locality': patient_data[10],
             'postalCode': patient_data[11],
-            'gender': patient_data[12],
-            'imagePatient': patient_data[13]
+            'address': patient_data[12],
+            'gender' : patient_data[13],
+            'imagePatient': patient_data[14]
         }), 200
         
     except jwt.ExpiredSignatureError:
@@ -154,7 +155,7 @@ def account():
 
     print(f'Recibido: firstname = {newFirstName}, lastname = {newLastName}, '
           f' address = {newAddress}, email = {newEmail}, phone = {newPhone}, birthDate = {newBirthDate}, '
-          f' nationality = {newNationality},province = {newProvince}, locality = {newLocality}, postalCode = {newPostalCode}, gender = {newGender}')
+          f' nationality = {newNationality}, province = {newProvince}, locality = {newLocality}, postalCode = {newPostalCode}, gender = {newGender}')
 
     if (not newFirstName or not newLastName or not newAddress or not newEmail or not newDni or not newPhone or not newBirthDate
         or not newNationality or not newProvince or not newLocality or not newPostalCode or not newGender):
@@ -163,7 +164,7 @@ def account():
     user = get_patient(newDni)
 
     if user:
-        modify_patient(newDni, newFirstName, newLastName, newEmail, newPhone, newBirthDate, newAge,
+        modify_patient(newDni, newFirstName, newLastName, newEmail, newPhone, newBirthDate,
                        newNationality, newProvince, newLocality, newPostalCode, newAddress, newGender)
         return jsonify({'message': 'Datos modificados correctamente'}), 200
     

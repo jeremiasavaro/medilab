@@ -71,6 +71,7 @@
   justify-content: center;
   align-items: center;
   font-family: 'Poppins', sans-serif;
+  text-align: center; /* Añadido para centrar el contenido del formulario */
 }
 
 .profile-section {
@@ -191,4 +192,12 @@ ul li {
 /* Para los inputs de una sola columna, como el textarea */
 .form-group.full-width {
     grid-column: span 2; /* Hace que ocupe las dos columnas */
+}
+
+.message {
+  margin-top: 15px;
+  color: #e74c3c;
+  width: 100%; /* Asegura que el mensaje ocupe todo el ancho del contenedor */
+  max-width: 300px; /* O el ancho máximo que desees */
+  text-align: center; /* Centra el texto */
 }
