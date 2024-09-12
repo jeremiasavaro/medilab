@@ -157,9 +157,9 @@ const Register = ({ setView }) => {
               value={gender} 
               onChange={(e) => setGender(e.target.value)} required>
                 <option value="">Select</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           <div className="input-group">
