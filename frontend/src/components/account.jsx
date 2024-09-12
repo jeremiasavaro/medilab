@@ -225,6 +225,7 @@ const Account = ({ setView }) => {
                 <button type="submit" className="submit-button">Guardar cambios</button>
               </div>
             </form>
+            {message && <p className = "message">{message}</p>}
           </div>
         </div>
       </div>

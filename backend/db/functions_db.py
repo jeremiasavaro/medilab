@@ -4,6 +4,7 @@ from datetime import datetime
 def connect():
     try:
         conn = sqlite3.connect('db/database.db')
+        
         return conn
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
@@ -77,7 +78,7 @@ def modify_image_patient(dni, imagePatient):
 def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
     conn = connect()
     cursor = conn.cursor()
-
+    print(f"Updating gender to: {gender}")  # Agrega esto para depuración
     query = """
         UPDATE patient 
         SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateBirth = ?, 
