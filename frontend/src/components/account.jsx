@@ -75,6 +75,7 @@ const Account = ({ setView }) => {
             setLocality(data.locality);
             setPostalCode(data.postalCode);
             setGender(data.gender);
+            setImageUrl(data.imagePatient);
           } else {
             setMessage("No se pudo obtener los datos");
           }
@@ -102,14 +103,14 @@ const Account = ({ setView }) => {
         });
 
         const data = await response.json();
-        setImageUrl(data.image_url); // Asumiendo que el backend devuelve 'image_url'
+        setImageUrl(data.image_url);
 
       } catch (error) {
         console.error('Error uploading the image:', error);
       }
     }
   };
-  
+
   const handleAccount = async (e) => {
     e.preventDefault();
     try {

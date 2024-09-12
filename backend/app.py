@@ -4,7 +4,7 @@ import bcrypt
 import cloudinary
 import cloudinary.uploader
 import jwt
-from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password
+from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xrai'
@@ -51,7 +51,8 @@ def obtainUserData():
             'province': patient_data[9],
             'locality': patient_data[10],
             'postalCode': patient_data[11],
-            'gender': patient_data[12]
+            'gender': patient_data[12],
+            'imagePatient': patient_data[13]
         }), 200
         
     except jwt.ExpiredSignatureError:
@@ -177,9 +178,22 @@ def image_upload():
     if file.filename == '':
         return jsonify({'error': 'No es un archivo'}), 400
 
-    # Sube la imagen a Cloudinary
+    #sube la imagen a Cloudinary
     upload_result = cloudinary.uploader.upload(file)
     image_url = upload_result.get('url')
+
+    #obtengo el dni del paciente
+    decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    dni = decoded_token.get('dni')
+
+    #guarda la url de la imagen en la base de datos
+
+    user = get_patient(dni)
+
+    if not user:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
+
+    modify_image_patient(dni, image_url)
 
     return jsonify({'image_url': image_url}), 200
 
@@ -187,7 +201,11 @@ def image_upload():
 @app.route('/change_password', methods = ['POST'])
 def change_password():
     data = request.json
-    dni = 45  # Supongo que deberías recibir el DNI en el JSON de la petición
+
+    # obtengo el dni del paciente
+    decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    dni = decoded_token.get('dni')
+
     currentPassword = data.get('currentPassword')
     newPassword = data.get('newPassword')
     newRepPassword = data.get('repNewPassword')
