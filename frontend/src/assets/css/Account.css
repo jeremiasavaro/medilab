@@ -194,10 +194,10 @@ ul li {
     grid-column: span 2; /* Hace que ocupe las dos columnas */
 }
 
+.delete {
+  color: #872020
+}
+
 .message {
-  margin-top: 15px;
   color: #e74c3c;
-  width: 100%; /* Asegura que el mensaje ocupe todo el ancho del contenedor */
-  max-width: 300px; /* O el ancho máximo que desees */
-  text-align: center; /* Centra el texto */
 }

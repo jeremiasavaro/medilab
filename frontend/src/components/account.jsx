@@ -146,6 +146,7 @@ const Account = ({ setView }) => {
           <li onClick={() => setChangePasswordModalOpen(true)}>
             <i className="fa-solid fa-key"></i> Change password
           </li>
+          <li class = "delete"><i class="fa-solid fa-trash"></i> Delete account</li>
         </ul>
         <ul>
           <li onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back to main page</li>
@@ -163,7 +164,6 @@ const Account = ({ setView }) => {
                   <img src={imageUrl} className="profile-pic" alt="Uploaded" style={{ maxWidth: '200px', borderRadius: '50%' }}/>
                 )}
               </div>
-              <h3>{firstName} {lastName}</h3>
               <br/>
             </div>
             <form className="horizontal-form" onSubmit={handleAccount}>
@@ -179,7 +179,7 @@ const Account = ({ setView }) => {
                 </div>
                 <div className="form-group">
                   <label>DNI</label>
-                  <input value={dni} onChange={(e) => setDni(e.target.value)} />
+                  <input value={dni}/>
                 </div>
                 <div className="form-group">
                   <label>Email</label>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../assets/css/changePassword.css"
 
-const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
+const ChangePassword = ({ setView, isOpen, onClose, setChangePasswordModalOpen }) => {
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -27,6 +27,7 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
 
       if (response.ok) {
         setMessage(data.message);
+        setTimeout(() => onClose(), 1000); // Cierra el modal después de 1 segundo para permitir que el mensaje se lea
       } else {
         setMessage(data.error);
       }
