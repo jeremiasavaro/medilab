@@ -255,6 +255,16 @@ def insert_clinic(name, phoneNumber, province, city, postalCode, address):
     conn.commit()
     conn.close()
 
+def delete_clinic(name):
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM clinic WHERE name = ?", (name,))
+    print(f"clinic with name {name} successfully removed")
+    
+    conn.commit()
+    conn.close()    
+
 def modify_clinic(name, phoneNumber, province, city, postalCode, address):
     conn = connect()
     cursor = conn.cursor()
@@ -281,7 +291,7 @@ def modify_clinic(name, phoneNumber, province, city, postalCode, address):
 
     print(f"Clinic '{name}' has been updated successfully.")
 
-def get_clinics():
+def get_all_clinics():
     conn = connect()
     cursor = conn.cursor()
 
@@ -289,11 +299,28 @@ def get_clinics():
     clinic_data = cursor.fetchall()
 
     # Print the result to check if the query returns any data
-    print(f"Clinicss fetched: {clinic_data}")
+    print(f"Clinics fetched: {clinic_data}")
 
     conn.close()
 
     return clinic_data    
+
+def get_clinics_by_city(cityname):
+    conn = connect()
+    cursor = conn.cursor()
+
+   # Find the clinic number based on the name
+    find_query = "SELECT * FROM clinic WHERE city = ?"
+    cursor.execute(find_query, (cityname,))
+
+    clinic_data = cursor.fetchall()
+
+    # Print the result to check if the query returns any data
+    print(f"Clinics fetched: {clinic_data}")
+
+    conn.close()
+
+    return clinic_data  
 
 
 #-------------------------------------------- WorksAt Table functions --------------------------------------------
@@ -321,3 +348,33 @@ def insert_WorksAt(doctordni, clinicname):
     conn.commit()
     conn.close()
     print(f"Doctor {doctordni} is now assigned to clinic '{clinicname}'.")
+
+def delete_working_doctor(doctordni, clinicname):
+    conn = connect() 
+    cursor = conn.cursor()
+
+    # Find the clinic number based on the name
+    find_query = "SELECT clinic_number FROM clinic WHERE name = ?"
+    cursor.execute(find_query, (clinicname,))
+    clinic_number = cursor.fetchone()
+
+    if clinic_number is None:
+        print(f"Clinic '{clinicname}' not found.")
+        conn.close()
+        return
+
+    # clinic_number is a tuple, so access the first element
+    clinic_number = clinic_number[0]
+
+    # Delete from WorksAt table
+    delete_query = """
+    DELETE FROM WorksAt 
+    WHERE doctor_dni = ? AND clinic_number = ?;
+    """
+    cursor.execute(delete_query, (doctordni, clinic_number))
+
+    # Commit the transaction
+    conn.commit()
+    conn.close()
+
+    print(f"Doctor {doctordni} successfully removed from clinic '{clinicname}'.")
