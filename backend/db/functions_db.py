@@ -78,7 +78,6 @@ def modify_image_patient(dni, imagePatient):
 def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
     conn = connect()
     cursor = conn.cursor()
-    print(f"Updating gender to: {gender}")  # Agrega esto para depuración
     query = """
         UPDATE patient 
         SET firstName = ?, lastName = ?, email = ?, phoneNumber = ?, dateBirth = ?, 

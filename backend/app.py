@@ -145,12 +145,18 @@ def account():
     newDni = data.get('dni')
     newPhone = data.get('phone')
     newBirthDate = data.get('birthDate')
-    newAge = data.get('age')
     newNationality = data.get('nationality')
     newProvince = data.get('province')
     newLocality = data.get('locality')
     newPostalCode = data.get('postalCode')
     newGender = data.get('gender')
+    currentPassword = data.get('currentPassword')
+
+    user = get_patient(newDni)
+    pswd = get_password(newDni)
+    userPassword = bytes(pswd)
+    if not bcrypt.checkpw(currentPassword.encode('utf-8'), userPassword):
+        return jsonify({'message': 'La contraseña actual no es correcta, por lo tanto los datos no fueron modificados'}), 200
 
 
     print(f'Recibido: firstname = {newFirstName}, lastname = {newLastName}, '
@@ -160,8 +166,6 @@ def account():
     if (not newFirstName or not newLastName or not newAddress or not newEmail or not newDni or not newPhone or not newBirthDate
         or not newNationality or not newProvince or not newLocality or not newPostalCode or not newGender):
         return jsonify({'error': 'Faltan datos'}), 400
-
-    user = get_patient(newDni)
 
     if user:
         modify_patient(newDni, newFirstName, newLastName, newEmail, newPhone, newBirthDate,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/Account.css';
 import ChangePassword from './changePassword';
+import ConfirmModifications from './confirmModifications';
 import { useJwt } from "react-jwt";
 
 const Account = ({ setView }) => {
@@ -24,6 +25,7 @@ const Account = ({ setView }) => {
   const { decodedToken, isExpired } = useJwt(token);
 
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
+  const [confirmModifications, setConfirmModifications] = useState(false);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -113,32 +115,10 @@ const Account = ({ setView }) => {
 
   const handleAccount = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://127.0.0.1:5000/account', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName, lastName, address, email, dni, phone, birthDate,
-          nationality, province, locality, postalCode, gender,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage(data.message);
-      } else {
-        setMessage(data.error);
-      }
-    } catch (error) {
-      setMessage('Los datos no pudieron modificarse');
-    }
   };
 
   return (
-    <section id="account">
+    <section id="account" className='content'>
       <div className="sidebar">
         <div className="logo">Your profile</div>
         <ul>
@@ -159,10 +139,21 @@ const Account = ({ setView }) => {
           <div className="profile-section">
             <div className="profile-info">
               <div>
-                <input type="file" onChange={handleFileChange} />
-                {imageUrl && (
-                  <img src={imageUrl} className="profile-pic" alt="Uploaded" style={{ maxWidth: '200px', borderRadius: '50%' }}/>
-                )}
+              <label for="file-upload" class="custom-file-upload">
+                Subir foto de perfil
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              {imageUrl && (
+                <div>
+                  <br></br>
+                  <img src={imageUrl} className = "profile-pic" alt="Uploaded" style={{ maxWidth: '200px', borderRadius: '50%' }} />
+                </div>
+              )}
               </div>
               <br/>
             </div>
@@ -222,17 +213,18 @@ const Account = ({ setView }) => {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                <button type="submit" className="submit-button">Guardar cambios</button>
+                <button type="submit" className="submit-button" onClick={() => setConfirmModifications(true)}>Guardar cambios</button>
               </div>
             </form>
             {message && <p className = "message">{message}</p>}
           </div>
         </div>
       </div>
-      <ChangePassword
-        isOpen={isChangePasswordModalOpen}
-        onClose={() => setChangePasswordModalOpen(false)}
+      <ChangePassword isOpen={isChangePasswordModalOpen} onClose={() => setChangePasswordModalOpen(false)}
       />
+      <ConfirmModifications notConfirmed={confirmModifications} confirmed = {() => setConfirmModifications(false)} firstName = {firstName} lastName = {lastName} 
+      email = {email} phone = {phone} dni = {dni} address = {address} nationality = {nationality} province = {province} locality = {locality} birthDate = {birthDate}
+      postalCode = {postalCode} gender = {gender} message = {message} />
     </section>
   );
 };

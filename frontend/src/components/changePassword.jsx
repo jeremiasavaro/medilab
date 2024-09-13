@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../assets/css/changePassword.css"
 
-const ChangePassword = ({ setView, isOpen, onClose, setChangePasswordModalOpen }) => {
+const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');

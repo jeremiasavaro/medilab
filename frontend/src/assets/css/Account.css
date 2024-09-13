@@ -1,9 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+.content {
+    top: 0;
+    left: 0;
+    width: calc(100% + 60px);
+    height: 100%;
+    background-color: #d7efff;;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
 .account-container {
   display: flex;
   font-family: 'Poppins', sans-serif;
-  height: 130vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+  height: 140vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
   margin: 0; /* Elimina márgenes que puedan afectar la alineación */
 }
 
@@ -18,7 +30,6 @@
   left: 10px;
   box-sizing: border-box; /* Asegura que el padding no afecte el cálculo de la altura */
 }
-
 
 .sidebar ul:last-child {
   position: absolute;
@@ -68,7 +79,6 @@
   padding: 40px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   font-family: 'Poppins', sans-serif;
   text-align: center; /* Añadido para centrar el contenido del formulario */
@@ -117,7 +127,7 @@ h1 {
 .form-group input,
 .form-group textarea,
 .form-group select {
-  width: 100%;
+  width: 80%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -195,9 +205,18 @@ ul li {
 }
 
 .delete {
-  color: #872020
+  color: #8c0606
 }
 
 .message {
   color: #e74c3c;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
 }
