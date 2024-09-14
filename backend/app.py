@@ -4,7 +4,7 @@ import bcrypt
 import cloudinary
 import cloudinary.uploader
 import jwt
-from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient
+from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xrai'
@@ -239,6 +239,28 @@ def change_password():
 
     return jsonify({'message': 'Contraseña actualizada con éxito'}), 200
 
+@app.route('/deleteAccount', methods = ['POST'])
+def delete_account():
+    data = request.json
+
+    # obtengo el dni del paciente
+    decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    dni = decoded_token.get('dni')
+
+    currentPassword = data.get('currentPassword')
+    print(f'dni = {dni}, currentPassword = {currentPassword}')
+
+    if not dni or not currentPassword:
+        return jsonify({'error': 'Faltan datos'}), 400
+    
+    password = bytes(get_password(dni)) 
+    currentPasswordEncoded = currentPassword.encode('utf-8')
+
+    if not bcrypt.checkpw(currentPasswordEncoded, password):
+        return jsonify({'error': 'La contraseña actual ingresada no es correcta'}), 400
+
+    delete_patient(dni)
+    return jsonify({'message': 'Cuenta eliminada con exito'}), 200
 
 if __name__ == '__main__':
     app.run(debug=False)

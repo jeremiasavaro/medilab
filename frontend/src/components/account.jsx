@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../assets/css/Account.css';
 import ChangePassword from './changePassword';
 import ConfirmModifications from './confirmModifications';
+import DeleteAccount from './deleteAccount' 
 import { useJwt } from "react-jwt";
 
 const Account = ({ setView }) => {
@@ -25,6 +26,7 @@ const Account = ({ setView }) => {
   const { decodedToken, isExpired } = useJwt(token);
 
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
+  const [deleteAccount, setDeleteAccount] = useState(false);
   const [confirmModifications, setConfirmModifications] = useState(false);
 
   useEffect(() => {
@@ -118,7 +120,7 @@ const Account = ({ setView }) => {
   };
 
   return (
-    <section id="account" className='content'>
+    <section id="account" className='contentAcount'>
       <div className="sidebar">
         <div className="logo">Your profile</div>
         <ul>
@@ -126,7 +128,7 @@ const Account = ({ setView }) => {
           <li onClick={() => setChangePasswordModalOpen(true)}>
             <i className="fa-solid fa-key"></i> Change password
           </li>
-          <li class = "delete"><i class="fa-solid fa-trash"></i> Delete account</li>
+          <li class = "delete" onClick={() => setDeleteAccount(true)}><i class="fa-solid fa-trash"></i> Delete account</li>
         </ul>
         <ul>
           <li onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back to main page</li>
@@ -231,6 +233,7 @@ const Account = ({ setView }) => {
       <ConfirmModifications notConfirmed={confirmModifications} confirmed = {() => setConfirmModifications(false)} firstName = {firstName} lastName = {lastName} 
       email = {email} phone = {phone} dni = {dni} address = {address} nationality = {nationality} province = {province} locality = {locality} birthDate = {birthDate}
       postalCode = {postalCode} gender = {gender} message = {message} />
+      <DeleteAccount Delete = {deleteAccount} del = {() => setDeleteAccount(false)} />
     </section>
   );
 };

@@ -1,0 +1,47 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% + 60px);
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 30%; 
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+  }
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-buttons button {
+    margin-right: 10px; 
+}
+
+.modal-buttons button:last-child {
+    margin-right: 0; 
+}
+
+.message {
+    margin-top: 15px;
+    color: #e74c3c;
+    width: 100%;
+  }
