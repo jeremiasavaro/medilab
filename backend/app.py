@@ -53,7 +53,7 @@ def obtainUserData():
             'postalCode': patient_data[11],
             'address': patient_data[12],
             'gender' : patient_data[13],
-            'imagePatient': patient_data[14]
+            'imagePatient' : patient_data[14]
         }), 200
         
     except jwt.ExpiredSignatureError:

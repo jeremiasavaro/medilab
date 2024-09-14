@@ -139,22 +139,28 @@ const Account = ({ setView }) => {
           <div className="profile-section">
             <div className="profile-info">
               <div>
-              <label for="file-upload" class="custom-file-upload">
-                Subir foto de perfil
-              </label>
-              <input
-                id="file-upload"
-                type="file"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-              {imageUrl && (
-                <div>
-                  <br></br>
-                  <img src={imageUrl} className = "profile-pic" alt="Uploaded" style={{ maxWidth: '200px', borderRadius: '50%' }} />
-                </div>
-              )}
+                <label htmlFor="file-upload" className="custom-file-upload">
+                  Subir foto de perfil
+                </label>
+                <input
+                    id="file-upload"
+                    type="file"
+                    style={{display: 'none'}}
+                    onChange={handleFileChange}
+                />
+                {imageUrl && (
+                    <div>
+                      <br/>
+                      <img
+                          src={imageUrl}
+                          className="profile-pic"
+                          alt="Uploaded"
+                          style={{maxWidth: '200px', borderRadius: '50%'}}
+                      />
+                    </div>
+                )}
               </div>
+
               <br/>
             </div>
             <form className="horizontal-form" onSubmit={handleAccount}>
@@ -162,7 +168,7 @@ const Account = ({ setView }) => {
                 {/* Campos del formulario */}
                 <div className="form-group">
                   <label>Name</label>
-                  <input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                  <input value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
                 </div>
                 <div className="form-group">
                   <label>Last name</label>
