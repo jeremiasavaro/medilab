@@ -24,7 +24,7 @@ const DeleteAccount = ({ setIsLoged, setView, Delete, del }) => {
                 setMessage(data.message);
                 setTimeout(() => {
                     del();
-                    setView('home');
+                    setView("home");
                     setIsLoged(false);
                 }, 2000);
             } else {

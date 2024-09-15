@@ -153,7 +153,7 @@ function App() {
       ) :view === "xrayService" ? (
         <XrayService setView={setView} /> 
       ) : view === "account" ? (
-        <Account setView={setView} />
+        <Account setView={setView} setIsLoged={setIsLoged} />
       ) : view === "home" ?(
         <div>
           <main className="main">

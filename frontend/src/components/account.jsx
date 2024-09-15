@@ -5,7 +5,7 @@ import ConfirmModifications from './confirmModifications';
 import DeleteAccount from './deleteAccount' 
 import { useJwt } from "react-jwt";
 
-const Account = ({ setView }) => {
+const Account = ({ setView, setIsLoged }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dni, setDni] = useState('');
@@ -120,7 +120,7 @@ const Account = ({ setView }) => {
   };
 
   return (
-    <section id="account" className='contentAcount'>
+    <section id="account" className='contentAccount'>
       <div className="sidebar">
         <div className="logo">Your profile</div>
         <ul>
@@ -233,7 +233,7 @@ const Account = ({ setView }) => {
       <ConfirmModifications notConfirmed={confirmModifications} confirmed = {() => setConfirmModifications(false)} firstName = {firstName} lastName = {lastName} 
       email = {email} phone = {phone} dni = {dni} address = {address} nationality = {nationality} province = {province} locality = {locality} birthDate = {birthDate}
       postalCode = {postalCode} gender = {gender} message = {message} />
-      <DeleteAccount Delete = {deleteAccount} del = {() => setDeleteAccount(false)} />
+      <DeleteAccount setView = {setView} setIsLoged = {setIsLoged} Delete = {deleteAccount} del = {() => setDeleteAccount(false)} />
     </section>
   );
 };
