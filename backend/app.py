@@ -5,6 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import jwt
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic
+from pdfFunctions import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xrai'
@@ -290,17 +291,40 @@ def xray_diagnosis():
     #pneumonia_percentage = result[0] * 100
     #normal_percentage = result[1] * 100
     #if pneumonia_percentage > normal_percentage:
-    #   diag = "PNEUMONIA"
+    #   diag = "PNEUMONIA" + pneumonia_percentage
     #else:
-    #   diag = "NORMAL"
+    #   diag = "NORMAL" + normal_percentage
     #des = {pneumonia_percentage:.2f}% PNEUMONIA, {normal_percentage:.2f}% NORMAL"
     #cod = ???
 
-    #<CODIGO PARA GENERAR PDF>
-    #
 
-    #insert_diagnostic(cod, diag, des, image_url, dni)      Faltaría que la funcion en la base de datos guarde el path del pdf generado
+    #<CODIGO PARA GENERAR PDF USANDO OLLAMA>
 
+    #if not imagen:
+    #   return jsonify({"error": "Por favor, carga una imagen."}), 400
+
+    #imagen_pil = Image.open(image_url)
+    #description_imagen = generar_descripcion_imagen(imagen_pil)
+    #response = generar_respuesta_con_ollama(description_imagen, diag)
+
+    #buffer = io.BytesIO()
+    #pdf = canvas.Canvas(buffer)
+    #text = pdf.beginText(100, 750)
+    #text.setFont("Helvetica", 12)
+    #text.textLines(f"DIAGNOSTICO MEDICO:\n\n{response}")
+    #pdf.drawText(text)
+    #pdf.showPage()
+    #pdf.save()
+
+    #buffer.seek(0)
+
+    ##Ver como hacer que el nombre del archivo contenga: dni-fecha-codigoDiag.pdf
+
+    ##Guardamos en la base de datos
+    ##Faltaría que la funcion en la base de datos guarde el path del pdf generado
+    #insert_diagnostic(cod, diag, des, image_url, dni)
+
+    #return send_file(buffer, as_attachment=True, download_name='nombre.pdf', mimetype='application/pdf')
 
 if __name__ == '__main__':
     app.run(debug=False)
