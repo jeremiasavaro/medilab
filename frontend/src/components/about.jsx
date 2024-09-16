@@ -1,15 +1,30 @@
 // src/components/About.jsx
 
 import React from 'react';
+import aboutBg from "../assets/img/about.jpg";
 
 function About() {
+  // Función para abrir el video en una nueva ventana
+  const openVideo = () => {
+    const videoId = 'LV4YF0JtVpA'; // ID del video de YouTube
+    const url = `https://www.youtube.com/watch?v=${videoId}`;
+    window.open(url, '_blank');
+  };
+
   return (
     <section id="about" className="about section">
       <div className="container">
         <div className="row gy-4 gx-5">
           <div className="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="200">
-            <img src="../assets/img/about.jpg" className="img-fluid" alt="" />
-            <a href="" className="glightbox pulsating-play-btn"></a>
+            {/* Imagen que actúa como botón para abrir el video */}
+            <img 
+              src={aboutBg} 
+              className="img-fluid" 
+              alt="" 
+              onClick={openVideo} 
+              style={{ cursor: 'pointer' }} // Cambia el cursor para indicar que es clickeable
+            />
+            <a href="#" className="glightbox pulsating-play-btn"></a>
           </div>
 
           <div className="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">

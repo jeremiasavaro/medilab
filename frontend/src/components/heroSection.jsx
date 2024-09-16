@@ -1,9 +1,11 @@
 import React from 'react';
+import heroBg from '../assets/img/hero-bg.jpg';
+
 
 function HeroSection({setView}) {
   return (
     <section id="hero" className="hero section light-background">
-      <img src="../assets/img/hero-bg.jpg" alt="" data-aos="fade-in" />
+      <img src={heroBg} alt="" data-aos="fade-in" />
 
       <div className="container position-relative">
         <div className="welcome position-relative" data-aos="fade-down" data-aos-delay="100">

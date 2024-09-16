@@ -1,6 +1,7 @@
 // src/components/Doctors.jsx
 
 import React from 'react';
+import doctorsBg from "../assets/img/doctors/doctors-1.jpg";
 
 function Doctors() {
   return (
@@ -14,7 +15,7 @@ function Doctors() {
         <div className="row gy-4">
           <div className="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <div className="team-member d-flex align-items-start">
-              <div className="pic"><img src="../assets/img/doctors/doctors-1.jpg" className="img-fluid" alt="" /></div>
+              <div className="pic"><img src={doctorsBg} className="img-fluid" alt="" /></div>
               <div className="member-info">
                 <h4>Walter White</h4>
                 <span>Pulmonologist</span>

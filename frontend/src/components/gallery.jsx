@@ -1,14 +1,22 @@
 import React from 'react';
+import pic1 from "../assets/img/gallery/gallery-1.jpg";
+import pic2 from "../assets/img/gallery/gallery-2.jpg";
+import pic3 from "../assets/img/gallery/gallery-3.jpg";
+import pic4 from "../assets/img/gallery/gallery-4.jpg";
+import pic5 from "../assets/img/gallery/gallery-5.jpg";
+import pic6 from "../assets/img/gallery/gallery-6.jpg";
+import pic7 from "../assets/img/gallery/gallery-7.jpg";
+import pic8 from "../assets/img/gallery/gallery-8.jpg";
 
 const galleryImages = [
-  'assets/img/gallery/gallery-1.jpg',
-  'assets/img/gallery/gallery-2.jpg',
-  'assets/img/gallery/gallery-3.jpg',
-  'assets/img/gallery/gallery-4.jpg',
-  'assets/img/gallery/gallery-5.jpg',
-  'assets/img/gallery/gallery-6.jpg',
-  'assets/img/gallery/gallery-7.jpg',
-  'assets/img/gallery/gallery-8.jpg'
+  { src: pic1 },
+  { src: pic2 },
+  { src: pic3 },
+  { src: pic4 },
+  { src: pic5 },
+  { src: pic6 },
+  { src: pic7 },
+  { src: pic8 }
 ];
 
 const Gallery = () => {
@@ -23,8 +31,8 @@ const Gallery = () => {
           {galleryImages.map((image, index) => (
             <div className="col-lg-3 col-md-4" key={index}>
               <div className="gallery-item">
-                <a href={image} className="glightbox" data-gallery="images-gallery">
-                  <img src={image} alt="" className="img-fluid" />
+                <a href={image.src} className="glightbox" data-gallery="images-gallery">
+                  <img src={image.src} alt="" className="img-fluid" />
                 </a>
               </div>
             </div>
