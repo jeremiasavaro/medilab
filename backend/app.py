@@ -4,7 +4,7 @@ import bcrypt
 import cloudinary
 import cloudinary.uploader
 import jwt
-from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient
+from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xrai'
@@ -261,6 +261,46 @@ def delete_account():
 
     delete_patient(dni)
     return jsonify({'message': 'Cuenta eliminada con exito'}), 200
+
+@app.route('/xray_diagnosis', methods = ['POST'])
+def xray_diagnosis():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No se encontro un archivo'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No es un archivo'}), 400
+
+    upload_result = cloudinary.uploader.upload(file)
+    image_url = upload_result.get('url')
+
+    decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    dni = decoded_token.get('dni')
+
+    user = get_patient(dni)
+
+    if not user:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
+
+
+    #Todo esto se comenta, para su posterior implementación, luego de tener el modelo definido
+    #classes = model.predict(x)
+    #result = classes[0]
+    #pneumonia_percentage = result[0] * 100
+    #normal_percentage = result[1] * 100
+    #if pneumonia_percentage > normal_percentage:
+    #   diag = "PNEUMONIA"
+    #else:
+    #   diag = "NORMAL"
+    #des = {pneumonia_percentage:.2f}% PNEUMONIA, {normal_percentage:.2f}% NORMAL"
+    #cod = ???
+
+    #<CODIGO PARA GENERAR PDF>
+    #
+
+    #insert_diagnostic(cod, diag, des, image_url, dni)      Faltaría que la funcion en la base de datos guarde el path del pdf generado
+
 
 if __name__ == '__main__':
     app.run(debug=False)
