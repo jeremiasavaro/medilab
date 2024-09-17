@@ -23,32 +23,20 @@ body, html {
   top: 0;
   left: 0;
   width: calc(100% + 60px);
-  height: 100%;
-  background-color: #d7efff;;
+  height: 200vh;
+  background-color: #d7efff;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-}
-
-
-.xrayServices-content {
-  margin-left: 200px;
-  width: calc(100% - 200px);
-  flex-grow: 1;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
 }
 
 .xrayServices-container {
   display: flex;
-  font-family: 'Poppins', sans-serif;
-  height: 140vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
-  margin: 0; /* Elimina márgenes que puedan afectar la alineación */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 60%;
+  margin-top: -50px;
 }
-
 
 /* Header */
 .title {
@@ -56,7 +44,7 @@ body, html {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Transparencia para más suavidad */
+  background-color: rgba(0, 0, 0, 0.8);
   color: #f9f9f9;
   text-align: center;
   padding: 20px 0;
@@ -88,7 +76,7 @@ body, html {
 }
 
 .side-Bar:hover {
-  transform: translateX(5px); /* Movimiento sutil */
+  transform: translateX(5px);
   background-color: #046bb3;
 }
 
@@ -128,21 +116,7 @@ body, html {
 
 .toggle-button:hover {
   background-color: #555;
-  transform: scale(1.05); /* Efecto suave de aumento */
-}
-
-/* Back button */
-.back {
-  text-align: center;
-  font-size: 14px;
-  cursor: pointer;
-  color: white;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.back:hover {
-  color: #cccccc;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* Overlay section */
@@ -206,34 +180,36 @@ body, html {
   background-color: #555;
 }
 
-.profile-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center; /* Centramos el contenido de la sección */
+/* Image upload button */
+.xray-file-upload {
+  padding: 10px 40px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+/* Image container */
+.xray-pic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 700px;
+  height: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
 }
 
 .xray-pic {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
-
-.profile-info {
-    text-align: center;
-}
-
-.xray-file-upload {
-    padding: 10px 40px;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-

@@ -291,6 +291,10 @@ def upload_xray_photo():
 
 @app.route('/xray_diagnosis', methods = ['POST'])
 def xray_diagnosis():
+    if 'image_url' not in request.form:
+        return jsonify({'error': 'No image_url provided'}), 400
+
+    image_url = request.form['image_url']
 
     #añadir codigo para recuperar URL de la foto (maxi)
 
