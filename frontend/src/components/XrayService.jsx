@@ -4,6 +4,9 @@ import '../assets/css/XrayService.css';
 const XrayService = ({setView}) =>{
     const [message, setMessage] = useState('');
     const [openSection, setOpenSection] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
+
     
     const handleXrayService = async (e) =>{
     try {
@@ -34,50 +37,74 @@ const XrayService = ({setView}) =>{
       setOpenSection('');
     ;}
 
+    const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('http://localhost:5000/upload_xray_photo', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+        setImageUrl(data.image_url);
+
+      } catch (error) {
+        console.error('Error uploading the image:', error);
+      }
+    }
+  };
+
   return (
-    <section id="xray-section" className="contentXray">
-      <header className="title">Faster Diagnostics with X-RAI</header>
-      <div className="side-Bar">
-        <button className="toggle-button" onClick={() => openOverlaySection('Method')}>
-          Method Used
-        </button>
-        <button className="toggle-button" onClick={() => openOverlaySection('Diagnostics')}>
-          Diagnostics Options
-        </button>
-        <button className="toggle-button" onClick={() => openOverlaySection('Fiability')}>
-          Fiability
-        </button>
-        <ul>
-          <li onClick={() => setView('home')}>
-            <span className="back">Back To Main Page</span>
-          </li>
-        </ul>
-      </div>
-
-      {openSection === 'Method' && (
-        <div className="overlay-section active">
-          <div className="overlay-content">
-            <h2>Method</h2>
-            <p>Aca vamos a contar sobre el método usado</p>
-            <button onClick={closeOverlaySection}>Close</button>
+      <section id="xray-section" className="contentXray">
+          <header className="title">Faster Diagnostics with X-RAI</header>
+          <div className="side-Bar">
+              <button className="toggle-button" onClick={() => openOverlaySection('info')}>
+                  <i className="bi-info-circle-fill"> </i>
+                   Info
+              </button>
+              <ul>
+                  <li onClick={() => setView('home')}>
+                      <span className="fa-solid fa-right-to-bracket">Back To Main Page</span>
+                  </li>
+              </ul>
           </div>
-        </div>
-      )}
-
-      {openSection === 'Diagnostics' && (
-        <div className="overlay-section active">
-          <div className="overlay-content">
-            <h2>Diagnostics</h2>
-            <p>Aca deberíamos colocar los distintos diagnósticos que se podrían hacer</p>
-            <button onClick={closeOverlaySection}>Close</button>
+          <div className="xrayServices-container">
+              <div className="xrayServices-content">
+                  <label htmlFor="xray-upload" className="xray-file-upload">
+                      Upload your X-RAY
+                  </label>
+                  <input
+                      id="xray-upload"
+                      type="file"
+                      style={{display: 'none'}}
+                      onChange={handleFileChange}
+                  />
+                  {imageUrl && (
+                      <div>
+                          <br/>
+                          <img
+                              src={imageUrl}
+                              className="xray-pic"
+                              alt="Uploaded"
+                              style={{maxWidth: '200px', borderRadius: '50%'}}
+                          />
+                      </div>
+                  )}
+              </div>
           </div>
-        </div>
-      )}
-
-      {openSection === 'Fiability' && (
-        <div className="overlay-section active">
+    {
+        openSection === 'info' && (
+            <div className="overlay-section active">
           <div className="overlay-content">
-            <h2>Fiability</h2>
+            <h2>
+                <i className="bi bi-info-square-fill"> </i>
+                 INFO</h2>
             <p>Aca podríamos argumentar sobre la fiabilidad del método</p>
             <button onClick={closeOverlaySection}>Close</button>
           </div>

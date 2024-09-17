@@ -16,12 +16,39 @@ body, html {
 .contentXray {
   background-image: url('../img/b.jpg');
   background-size: cover;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: background 0.3s ease-in-out;
+  top: 0;
+  left: 0;
+  width: calc(100% + 60px);
+  height: 100%;
+  background-color: #d7efff;;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
 }
+
+
+.xrayServices-content {
+  margin-left: 200px;
+  width: calc(100% - 200px);
+  flex-grow: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.xrayServices-container {
+  display: flex;
+  font-family: 'Poppins', sans-serif;
+  height: 140vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+  margin: 0; /* Elimina márgenes que puedan afectar la alineación */
+}
+
 
 /* Header */
 .title {
@@ -46,13 +73,13 @@ body, html {
 
 /* Sidebar */
 .side-Bar {
-  width: 180px;
+  width: 170px;
   background-color: #0580df;
   padding: 20px;
   color: white;
-  height: 100vh;
+  height: 90vh;
   position: fixed;
-  top: 0;
+  top: 79px;
   left: 0;
   display: flex;
   flex-direction: column;
@@ -178,3 +205,35 @@ body, html {
 .overlay-content button:hover {
   background-color: #555;
 }
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Centramos el contenido de la sección */
+}
+
+.xray-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    text-align: center;
+}
+
+.xray-file-upload {
+    padding: 10px 40px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+
