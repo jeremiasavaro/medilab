@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.contentXray{
+  background-image: url('../img/b.jpg');
+  background-size: cover;
+  height: 100vh; /* 100% de la altura de la ventana */
+}
+
+.hover-link {
+  color: white;
+  cursor: pointer;
+}
+
+.hover-link:hover {
+  color: rgb(56, 120, 184);
+}
+
+.side-Bar {
+  width: 180px;
+  background-color: #0580df;
+  padding: 20px;
+  color: white;
+  height: calc(100% - 20px); /* Deja un espacio en blanco de 50px en la parte inferior */
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  box-sizing: border-box; /* Asegura que el padding no afecte el cálculo de la altura */
+}
+
+.side-Bar ul:last-child {
+  position: absolute;
+  bottom: 20px; /* Ajusta el espacio entre el botón y la parte inferior */
+  width: 100%;
+}
+
+.side-Bar ul li {
+  padding: 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+/* Estilo para los ítems de la barra lateral */
+.side-Bar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; /* Elimina márgenes adicionales */
+}
+
+.side-Bar ul li {
+  padding: 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  /* No se centra el contenido dentro del li */
+  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+.side-Bar ul li i {
+  margin-right: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.side-Bar ul li .fa-chevron-down, 
+.side-Bar ul li .fa-chevron-up {
+  margin-left: auto; /* Desplaza la flecha hacia la derecha */
+  transition: transform 0.3s; /* Transición suave para la rotación */
+}
+
+.side-Bar:hover{
+  transform: translateX(10px); /* Mueve la barra ligeramente hacia la derecha */
+  background-color: #046bb3;   /* Cambia el color de fondo al pasar el mouse */
+}
+
+.content {
+  margin-left: 20px;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  z-index: 2;
+}
+
+.title {
+  position: fixed;           
+  top: 0;                   
+  left: 10%;  
+  width: 90%;                
+  height: 10%;
+  background-color: #333;     
+  color: #f9f9f9;           
+  text-align: center;       
+  padding: 20px 0;           
+  font-size: 26px;           
+  font-family: 'Arial', sans-serif; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; 
+}
+
+.title:hover {
+  background-color: #444;   
+  color: #e0e0e0;           
+}
+
+.back {
+  text-align: center;       /* Centra el texto horizontalmente */
+  font-size: 14px;          /* Ajusta el tamaño del texto */
+  cursor: pointer;          /* Cambia el cursor al pasar sobre el texto */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.back:hover{
+  color: #cccccc;       
+  transform: scale(1.1);
+}
+
+
+.overlay-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.overlay-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: black;
+  max-width: 500px;
+  text-align: center;
+}
+
+.overlay-content h2 {
+  margin-bottom: 20px;
+}
+
+.overlay-content button {
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.overlay-content button:hover {
+  background-color: #555;
+}
+
+.toggle-button {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  align-self: flex-start; 
+  margin-bottom: 20px; 
+}
+
+.toggle-button:hover {
+  background-color: #555;
+}
+
+
+
