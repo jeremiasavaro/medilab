@@ -262,8 +262,8 @@ def delete_account():
     delete_patient(dni)
     return jsonify({'message': 'Cuenta eliminada con exito'}), 200
 
-@app.route('/xray_diagnosis', methods = ['POST'])
-def xray_diagnosis():
+@app.route('/upload_xray_photo', methods = ['POST'])
+def upload_xray_photo():
     if 'file' not in request.files:
         return jsonify({'error': 'No se encontró un archivo'}), 400
 
@@ -272,19 +272,29 @@ def xray_diagnosis():
     if file.filename == '':
         return jsonify({'error': 'No es un archivo'}), 400
 
+    #sube la imagen a Cloudinary
     upload_result = cloudinary.uploader.upload(file)
     image_url = upload_result.get('url')
 
+    #obtengo el dni del paciente
     decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     dni = decoded_token.get('dni')
+
+    #compruebo que este logeado
 
     user = get_patient(dni)
 
     if not user:
         return jsonify({'error': 'Usuario no encontrado'}), 404
 
+    return jsonify({'image_url': image_url}), 200
 
-    #Todo esto se comenta, para su posterior implementación, luego de tener el modelo definido
+@app.route('/xray_diagnosis', methods = ['POST'])
+def xray_diagnosis():
+
+    #añadir codigo para recuperar URL de la foto (maxi)
+
+    #todo esto se comenta, para su posterior implementación, luego de tener el modelo definido
     #classes = model.predict(x)
     #result = classes[0]
     #pneumonia_percentage = result[0] * 100
@@ -324,6 +334,6 @@ def xray_diagnosis():
     #insert_diagnostic(cod, diag, des, image_url, dni)
 
     #return send_file(buffer, as_attachment=True, download_name='nombre.pdf', mimetype='application/pdf')
-
+    return True
 if __name__ == '__main__':
     app.run(debug=False)
