@@ -128,7 +128,7 @@ const Account = ({ setView, setIsLoged }) => {
           <li onClick={() => setChangePasswordModalOpen(true)}>
             <i className="fa-solid fa-key"></i> Change password
           </li>
-          <li class = "delete" onClick={() => setDeleteAccount(true)}><i class="fa-solid fa-trash"></i> Delete account</li>
+          <li className= "delete" onClick={() => setDeleteAccount(true)}><i className="fa-solid fa-trash"></i> Delete account</li>
         </ul>
         <ul>
           <li onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back to main page</li>

@@ -5,7 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import jwt
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic
-from pdfFunctions import *
+# from pdfFunctions import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xrai'
@@ -22,18 +22,17 @@ cloudinary.config(
 token = "token"
 
 @app.route('/obtainToken', methods=['GET'])
-def obtainToken():
+def obtain_token():
     global token
     return jsonify({'token': token})
 
 
 @app.route('/obtainData', methods=['GET'])
-def obtainUserData():
+def obtain_user_data():
     token = request.headers.get('Authorization')
     
     if not token:
         return jsonify({'error': 'No se encontro el token'}), 401
-    
 
     try:
         decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
@@ -77,8 +76,8 @@ def login():
     user = get_patient(dni)
     if user is None:
         return jsonify({'error': 'No hay un usuario registrado con ese DNI'}), 401
-    userPassword = bytes(get_password(dni))
-    if bcrypt.checkpw(password.encode('utf-8'), userPassword):
+    user_password = bytes(get_password(dni))
+    if bcrypt.checkpw(password.encode('utf-8'), user_password):
         token = jwt.encode({'dni': dni}, app.config['SECRET_KEY'])
         return jsonify({'message': 'Login exitoso', 'token': token}), 200
     else:
@@ -88,39 +87,39 @@ def login():
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
-    firstName = data.get('firstName')
-    lastName = data.get('lastName')
-    nonEncryptedPassword = data.get('password')
-    repPassword = data.get('repPassword')
+    first_name = data.get('firstName')
+    last_name = data.get('lastName')
+    non_encrypted_password = data.get('password')
+    rep_password = data.get('repPassword')
     address = data.get('address')
     email = data.get('email')
     dni = data.get('dni')
     phone = data.get('phone')
-    birthDate = data.get('birthDate')
+    birth_date = data.get('birthDate')
     nationality = data.get('nationality')
     province = data.get('province')
     locality = data.get('locality')
-    postalCode = data.get('postalCode')
+    postal_code = data.get('postalCode')
     gender = data.get('gender')
 
-    print(f'Recibido: firstName = {firstName}, lastName = {lastName}, password = {nonEncryptedPassword}, repPassword = {repPassword}, '
-          f'address = {address}, email = {email}, dni = {dni}, phone = {phone}, birthDate = {birthDate}, nationality = {nationality}, '
-          f'province = {province}, locality = {locality}, postalCode = {postalCode}, gender = {gender}')
+    print(f'Recibido: firstName = {first_name}, lastName = {last_name}, password = {non_encrypted_password}, repPassword = {rep_password}, '
+          f'address = {address}, email = {email}, dni = {dni}, phone = {phone}, birthDate = {birth_date}, nationality = {nationality}, '
+          f'province = {province}, locality = {locality}, postalCode = {postal_code}, gender = {gender}')
 
-    if nonEncryptedPassword != repPassword:
+    if non_encrypted_password != rep_password:
         return jsonify({'error': 'Las contraseñas no son iguales'}), 400
-    if (not firstName or not lastName or not nonEncryptedPassword or not repPassword or not address or not email or not dni or not phone
-        or not birthDate or not nationality or not province or not locality or not postalCode or not gender):
+    if (not first_name or not last_name or not non_encrypted_password or not rep_password or not address or not email or not dni or not phone
+        or not birth_date or not nationality or not province or not locality or not postal_code or not gender):
         return jsonify({'error': 'Faltan datos'}), 400
     user = get_patient(dni)
     if user:
         return jsonify({'error': 'El usuario ya existe'}), 409
     else:
-        encodedPassword = nonEncryptedPassword.encode('utf-8')
-        passwordSalt = bcrypt.gensalt()
-        encryptedPassword = bcrypt.hashpw(encodedPassword, passwordSalt)
-        insert_patient(dni, firstName, lastName, encryptedPassword, email, phone, birthDate, nationality, province,
-                       locality, postalCode, address, gender)
+        encoded_password = non_encrypted_password.encode('utf-8')
+        password_salt = bcrypt.gensalt()
+        encrypted_password = bcrypt.hashpw(encoded_password, password_salt)
+        insert_patient(dni, first_name, last_name, encrypted_password, email, phone, birth_date, nationality, province,
+                       locality, postal_code, address, gender)
         return jsonify({'message': 'Registro completado correctamente'}), 200
 
 
@@ -139,45 +138,45 @@ def contact():
 @app.route('/account', methods = ['POST'])
 def account():
     data = request.json
-    newFirstName = data.get('firstName')
-    newLastName = data.get('lastName')
-    newAddress = data.get('address')
-    newEmail = data.get('email')
-    newDni = data.get('dni')
-    newPhone = data.get('phone')
-    newBirthDate = data.get('birthDate')
-    newNationality = data.get('nationality')
-    newProvince = data.get('province')
-    newLocality = data.get('locality')
-    newPostalCode = data.get('postalCode')
-    newGender = data.get('gender')
-    currentPassword = data.get('currentPassword')
+    new_first_name = data.get('firstName')
+    new_last_name = data.get('lastName')
+    new_address = data.get('address')
+    new_email = data.get('email')
+    new_dni = data.get('dni')
+    new_phone = data.get('phone')
+    new_birth_date = data.get('birthDate')
+    new_nationality = data.get('nationality')
+    new_province = data.get('province')
+    new_locality = data.get('locality')
+    new_postal_code = data.get('postalCode')
+    new_gender = data.get('gender')
+    current_password = data.get('currentPassword')
 
-    user = get_patient(newDni)
-    pswd = get_password(newDni)
-    userPassword = bytes(pswd)
-    if not bcrypt.checkpw(currentPassword.encode('utf-8'), userPassword):
+    user = get_patient(new_dni)
+    pswd = get_password(new_dni)
+    user_password = bytes(pswd)
+    if not bcrypt.checkpw(current_password.encode('utf-8'), user_password):
         return jsonify({'message': 'La contraseña actual no es correcta, por lo tanto los datos no fueron modificados'}), 200
 
 
-    print(f'Recibido: firstname = {newFirstName}, lastname = {newLastName}, '
-          f' address = {newAddress}, email = {newEmail}, phone = {newPhone}, birthDate = {newBirthDate}, '
-          f' nationality = {newNationality}, province = {newProvince}, locality = {newLocality}, postalCode = {newPostalCode}, gender = {newGender}')
+    print(f'Recibido: firstname = {new_first_name}, lastname = {new_last_name}, '
+          f' address = {new_address}, email = {new_email}, phone = {new_phone}, birthDate = {new_birth_date}, '
+          f' nationality = {new_nationality}, province = {new_province}, locality = {new_locality}, postalCode = {new_postal_code}, gender = {new_gender}')
 
-    if (not newFirstName or not newLastName or not newAddress or not newEmail or not newDni or not newPhone or not newBirthDate
-        or not newNationality or not newProvince or not newLocality or not newPostalCode or not newGender):
+    if (not new_first_name or not new_last_name or not new_address or not new_email or not new_dni or not new_phone or not new_birth_date
+        or not new_nationality or not new_province or not new_locality or not new_postal_code or not new_gender):
         return jsonify({'error': 'Faltan datos'}), 400
 
     if user:
-        modify_patient(newDni, newFirstName, newLastName, newEmail, newPhone, newBirthDate,
-                       newNationality, newProvince, newLocality, newPostalCode, newAddress, newGender)
+        modify_patient(new_dni, new_first_name, new_last_name, new_email, new_phone, new_birth_date,
+                       new_nationality, new_province, new_locality, new_postal_code, new_address, new_gender)
         return jsonify({'message': 'Datos modificados correctamente'}), 200
     
 
 @app.route('/upload_image', methods = ['POST'])
 def image_upload():
     if 'file' not in request.files:
-        return jsonify({'error': 'No se encontro un archivo'}), 400
+        return jsonify({'error': 'No se encontró un archivo'}), 400
 
     file = request.files['file']
 
@@ -212,15 +211,15 @@ def change_password():
     decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     dni = decoded_token.get('dni')
 
-    currentPassword = data.get('currentPassword')
-    newPassword = data.get('newPassword')
-    newRepPassword = data.get('repNewPassword')
+    current_password = data.get('currentPassword')
+    new_password = data.get('newPassword')
+    new_rep_password = data.get('repNewPassword')
 
-    print(f'dni = {dni}, currentPassword = {currentPassword}, newPassword = {newPassword}, newRepPassword = {newRepPassword}')
+    print(f'dni = {dni}, current_password = {current_password}, new_password = {new_password}, new_rep_password = {new_rep_password}')
 
-    if not dni or not currentPassword or not newPassword or not newRepPassword:
+    if not dni or not current_password or not new_password or not new_rep_password:
         return jsonify({'error': 'Faltan datos'}), 400
-    if newPassword != newRepPassword:
+    if new_password != new_rep_password:
         return jsonify({'error': 'Las contraseñas no son iguales'}), 400
 
     user = get_patient(dni)
@@ -229,14 +228,14 @@ def change_password():
         return jsonify({'error': 'Usuario no encontrado'}), 404
 
     password = bytes(get_password(dni)) 
-    currentPasswordEncoded = currentPassword.encode('utf-8')
+    current_password_encoded = current_password.encode('utf-8')
 
-    if not bcrypt.checkpw(currentPasswordEncoded, password):
+    if not bcrypt.checkpw(current_password_encoded, password):
         return jsonify({'error': 'La contraseña actual ingresada no es correcta'}), 400
 
-    passwordSalt = bcrypt.gensalt()
-    encodedPassword = bcrypt.hashpw(newPassword.encode('utf-8'), passwordSalt)
-    modify_password(dni, encodedPassword)
+    password_salt = bcrypt.gensalt()
+    encoded_password = bcrypt.hashpw(new_password.encode('utf-8'), password_salt)
+    modify_password(dni, encoded_password)
 
     return jsonify({'message': 'Contraseña actualizada con éxito'}), 200
 
@@ -248,16 +247,16 @@ def delete_account():
     decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     dni = decoded_token.get('dni')
 
-    currentPassword = data.get('currentPassword')
-    print(f'dni = {dni}, currentPassword = {currentPassword}')
+    current_password = data.get('currentPassword')
+    print(f'dni = {dni}, current_password = {current_password}')
 
-    if not dni or not currentPassword:
+    if not dni or not current_password:
         return jsonify({'error': 'Faltan datos'}), 400
     
     password = bytes(get_password(dni)) 
-    currentPasswordEncoded = currentPassword.encode('utf-8')
+    current_password_encoded = current_password.encode('utf-8')
 
-    if not bcrypt.checkpw(currentPasswordEncoded, password):
+    if not bcrypt.checkpw(current_password_encoded, password):
         return jsonify({'error': 'La contraseña actual ingresada no es correcta'}), 400
 
     delete_patient(dni)
@@ -266,7 +265,7 @@ def delete_account():
 @app.route('/xray_diagnosis', methods = ['POST'])
 def xray_diagnosis():
     if 'file' not in request.files:
-        return jsonify({'error': 'No se encontro un archivo'}), 400
+        return jsonify({'error': 'No se encontró un archivo'}), 400
 
     file = request.files['file']
 
