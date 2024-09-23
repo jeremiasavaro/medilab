@@ -41,7 +41,7 @@ def create_tables(conn):
     c.execute('''
         CREATE TABLE IF NOT EXISTS doctor (
             dni INTEGER PRIMARY KEY check (dni > 0),
-            matricule VARCHAR(50) UNIQUE,
+            speciality VARCHAR(50),
             firstName TEXT NOT NULL, 
             lastName TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL check (email LIKE '%_@__%.__%'), 

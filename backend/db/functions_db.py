@@ -3,7 +3,7 @@ from datetime import datetime
 
 def connect():
     try:
-        conn = sqlite3.connect('db/database.db')
+        conn = sqlite3.connect('database.db')
         
         return conn
     except sqlite3.Error as e:
@@ -209,6 +209,19 @@ def get_doctors():
     conn.close()
 
     return doctor_data
+
+def get_doctors_by_speciality(doctor_speciality):
+    conn = connect()
+    cursor = conn.cursor()
+
+    # SQL query to get doctors by matricule
+    cursor.execute("SELECT firstname, speciality FROM doctor WHERE speciality = ?", (doctor_speciality,))
+
+    doctor_data = cursor.fetchall()
+
+    print(f"Doctors fetched: {doctor_data}")
+
+    conn.close()
 
 def get_cities_for_doctor(doctor_dni):
     conn = connect()

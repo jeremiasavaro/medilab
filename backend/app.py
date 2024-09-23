@@ -4,7 +4,7 @@ import bcrypt
 import cloudinary
 import cloudinary.uploader
 import jwt
-from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic
+from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic, get_doctors_by_speciality
 # from pdfFunctions import *
 
 app = Flask(__name__)
