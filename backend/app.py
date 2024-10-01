@@ -1,14 +1,23 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import send_file
+from io import BytesIO
 import bcrypt
 import cloudinary
 import cloudinary.uploader
 import jwt
+import tensorflow as tf
+from datetime import datetime
+from tensorflow.keras.models import load_model
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic, get_doctors_by_speciality
-# from pdfFunctions import *
+from functions import load_image, preprocess_image, create_diagnosis_pdf
+tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'xrai'
+
+model = load_model('modelAI-Jere-v2.h5')
 
 CORS(app)
 
@@ -292,52 +301,44 @@ def upload_xray_photo():
 @app.route('/xray_diagnosis', methods = ['POST'])
 def xray_diagnosis():
     if 'image_url' not in request.form:
+        print("Imagen no recibida")
         return jsonify({'error': 'No image_url provided'}), 400
 
+    # Procesamiento de imagen
     image_url = request.form['image_url']
+    image = load_image(image_url)
+    processed_image = preprocess_image(image)
 
-    #añadir codigo para recuperar URL de la foto (maxi)
+    # Predicción de imagen
+    classes = model.predict(processed_image)
+    result = classes[0]
+    pneumonia_percentage = result[0] * 100
+    normal_percentage = result[1] * 100
 
-    #todo esto se comenta, para su posterior implementación, luego de tener el modelo definido
-    #classes = model.predict(x)
-    #result = classes[0]
-    #pneumonia_percentage = result[0] * 100
-    #normal_percentage = result[1] * 100
-    #if pneumonia_percentage > normal_percentage:
-    #   diag = "PNEUMONIA" + pneumonia_percentage
-    #else:
-    #   diag = "NORMAL" + normal_percentage
-    #des = {pneumonia_percentage:.2f}% PNEUMONIA, {normal_percentage:.2f}% NORMAL"
-    #cod = ???
+    # Determinar el diagnóstico basado en probabilidades
+    if pneumonia_percentage > normal_percentage:
+        diag = f"PNEUMONIA: {pneumonia_percentage:.2f}%"
+    else:
+        diag = f"NORMAL: {normal_percentage:.2f}%"
+    des = f"PNEUMONIA: {pneumonia_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
 
+    # Obtener datos del paciente
+    decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+    dni = decoded_token.get('dni')
 
-    #<CODIGO PARA GENERAR PDF USANDO OLLAMA>
+    patient = get_patient(dni)
+    patient_name = patient[0]
+    diagnosis_date = datetime.today()  # Formato de fecha adecuado para el archivo
 
-    #if not imagen:
-    #   return jsonify({"error": "Por favor, carga una imagen."}), 400
+    # Guardar el diagnóstico en la base de datos
+    #code_diag = insert_diagnostic(diag, des, image_url, dni)
 
-    #imagen_pil = Image.open(image_url)
-    #description_imagen = generar_descripcion_imagen(imagen_pil)
-    #response = generar_respuesta_con_ollama(description_imagen, diag)
+    # Generación del PDF
+    pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, pneumonia_percentage, normal_percentage)
 
-    #buffer = io.BytesIO()
-    #pdf = canvas.Canvas(buffer)
-    #text = pdf.beginText(100, 750)
-    #text.setFont("Helvetica", 12)
-    #text.textLines(f"DIAGNOSTICO MEDICO:\n\n{response}")
-    #pdf.drawText(text)
-    #pdf.showPage()
-    #pdf.save()
+    file_name = f"{dni}-{diagnosis_date}-{patient}.pdf"
 
-    #buffer.seek(0)
+    return send_file(pdf_buffer, as_attachment=True, download_name=file_name, mimetype='application/pdf')
 
-    ##Ver como hacer que el nombre del archivo contenga: dni-fecha-codigoDiag.pdf
-
-    ##Guardamos en la base de datos
-    ##Faltaría que la funcion en la base de datos guarde el path del pdf generado
-    #insert_diagnostic(cod, diag, des, image_url, dni)
-
-    #return send_file(buffer, as_attachment=True, download_name='nombre.pdf', mimetype='application/pdf')
-    return True
 if __name__ == '__main__':
     app.run(debug=False)

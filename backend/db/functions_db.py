@@ -108,15 +108,23 @@ def calculate_age(dateBirth):
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     return age
 
-def insert_diagnostic(cod, result, description, imageDiagnostic, dni):
+
+def insert_diagnostic(result, description, imageDiagnostic, dni):
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("""INSERT INTO diagnostic (cod, result, description, imageDiagnostic,dni) VALUES 
-                  (?,?,?,?,?,?)""", (cod, result, description, imageDiagnostic, dni))
+    cursor.execute("""
+        INSERT INTO diagnostic (result, description, imageDiagnostic, dni) 
+        VALUES (?,?,?,?)
+    """, (result, description, imageDiagnostic, dni))
+
+    # Obtengo el último ID
+    cod = cursor.lastrowid
 
     conn.commit()
     conn.close()
+
+    return cod
 
 
 def get_diagnostics(dni):
@@ -163,7 +171,7 @@ def insert_doctor(dni,matricule, firstName, lastName, email, phoneNumber, dateBi
     conn = connect()
     cursor = conn.cursor()
 
-    cursor.execute("""INSERT INTO doctor (dni, matricule, firstName, lastName, email, phoneNumber, dateBirth, age, gender, imageDoctor) 
+    cursor.execute("""INSERT INTO doctor (dni, speciality, firstName, lastName, email, phoneNumber, dateBirth, age, gender, imageDoctor) 
                   VALUES (?,?,?,?,?,?,?,?,?,?)""", 
                (dni, matricule, firstName, lastName, email, phoneNumber, dateBirth, calculate_age(dateBirth), gender, imageDoctor))
 
