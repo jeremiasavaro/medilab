@@ -33,3 +33,12 @@ We are currently focusing on the following datasets for artificial intelligence 
    Published date: Nov 28, 2021
    Direct Link for download: https://zenodo.org/records/5732746
    References: Siberian State Medical University. Universidad Médica Estatal de Siberia, SibMed es una escuela de medicina pública en Tomsk, Rusia
+
+4. Dataset: NIH Chest X-rays
+   Link: https://nihcc.app.box.com/v/ChestXray-NIHCC/folder/36938765345
+   Description: This dataset contains 112,120 chest X-ray images from 30,805 unique patients, with labels extracted using Natural Language Processing from radiological reports. The dataset includes images labeled with 15 different classes (14 diseases and one for "No findings"). The dataset is primarily used for weakly-supervised learning and does not include the original radiology reports.
+   License: CC0 Public Domain
+   Acknowledgments: We thank the National Institutes of Health Clinical Center and the National Library of Medicine for providing this valuable dataset to the scientific community.
+   Citation: Wang X, Peng Y, Lu L, Lu Z, Bagheri M, Summers RM. "ChestX-ray8: Hospital-scale Chest X-ray Database and Benchmarks on Weakly-Supervised Classification and Localization of Common Thorax Diseases." IEEE CVPR 2017. 
+   Published date: 2017
+   Direct Link for download: https://www.kaggle.com/datasets/nih-chest-xrays/data/data
