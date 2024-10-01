@@ -80,10 +80,10 @@ def create_tables(conn):
      # Diagnostics table
     c.execute('''
         CREATE TABLE IF NOT EXISTS diagnostic (
-            cod INTEGER PRIMARY KEY,
-            result TEXT NOT NULL,
+            cod INTEGER PRIMARY KEY AUTOINCREMENT,
+            res TEXT NOT NULL,
             description TEXT NOT NULL,
-            dateResult DATE NOT NULL,
+            dateResult DATE,
             imageDiagnostic TEXT NOT NULL,
             dni INTEGER NOT NULL,
             CONSTRAINT fk_dni FOREIGN KEY (dni) REFERENCES patient (dni) ON DELETE CASCADE

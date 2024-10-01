@@ -6,6 +6,7 @@ const XrayService = ({ setView }) => {
   const [openSection, setOpenSection] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [pdfBlob, setPdfBlob] = useState(null);  // Nuevo estado para el PDF
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -38,35 +39,59 @@ const XrayService = ({ setView }) => {
   };
 
   const handleScanClick = async () => {
-  if (imageUrl) {
-    const formData = new FormData();
-    formData.append('image_url', imageUrl);
+    if (imageUrl) {
+      const formData = new FormData();
+      formData.append('image_url', imageUrl);
 
-    try {
-      const response = await fetch('http://localhost:5000/xray_diagnosis', {
-        method: 'POST',
-        body: formData,
-      });
+      try {
+        const response = await fetch('http://localhost:5000/xray_diagnosis', {
+          method: 'POST',
+          body: formData,
+        });
 
-      //espera un archivo binario
-      const blob = await response.blob();
+        // Espera un archivo binario
+        const blob = await response.blob();
+        setPdfBlob(blob);  // Guarda el blob en el estado
 
-      //crear el enlace para descargar el PDF
-      const url = window.URL.createObjectURL(new Blob([blob]));
+        // Obtener el nombre del archivo desde el header
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let fileName = 'diagnosis.pdf';  // Valor por defecto en caso de que no obtengamos el nombre
+
+        if (contentDisposition) {
+          // Extraer el nombre del archivo del header
+          const matches = contentDisposition.match(/filename="(.+)"/);
+          if (matches.length > 1) {
+            fileName = matches[1];
+          }
+        }
+
+        // Crear el enlace de descarga de PDF
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);  // Usar el nombre del archivo obtenido
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);  // Remover enlace después de la descarga
+      } catch (error) {
+        console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+      }
+    } else {
+      console.log('No hay imagen cargada.');
+    }
+  };
+
+  const handleDownloadClick = () => {
+    if (pdfBlob) {
+      const url = window.URL.createObjectURL(pdfBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'diagnosis.pdf'); // Nombre del archivo que se descargará
+      link.setAttribute('download', 'diagnosis.pdf');
       document.body.appendChild(link);
       link.click();
-      link.parentNode.removeChild(link); // Remover el enlace después de la descarga
-    } catch (error) {
-      console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+      link.parentNode.removeChild(link);
     }
-  } else {
-    console.log('No hay imagen cargada.');
-  }
-};
-
+  };
 
   return (
     <section id="xray-section" className="contentXray">
@@ -103,6 +128,12 @@ const XrayService = ({ setView }) => {
             <button className="scan-button" onClick={handleScanClick}>
               Start Scanning
             </button>
+
+            {pdfBlob && (
+              <button className="download-button" onClick={handleDownloadClick}>
+                Download Diagnosis PDF
+              </button>
+            )}
           </>
         )}
 
@@ -117,7 +148,7 @@ const XrayService = ({ setView }) => {
               <i className="bi bi-info-square-fill"> </i>
               INFO
             </h2>
-            <p>Aca podríamos argumentar sobre la fiabilidad del método</p>
+            <p>Metodo fiable</p>
             <button onClick={closeOverlaySection}>Close</button>
           </div>
         </div>
