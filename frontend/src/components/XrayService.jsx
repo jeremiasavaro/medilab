@@ -7,6 +7,8 @@ const XrayService = ({ setView }) => {
   const [imageUrl, setImageUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [pdfBlob, setPdfBlob] = useState(null);  // Nuevo estado para el PDF
+  const [isUploadVisible, setIsUploadVisible] = useState(true); // Nuevo estado para controlar visibilidad del botón
+  const [isScanning, setIsScanning] = useState(false);  // Nuevo estado para controlar si está escaneando
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -24,6 +26,7 @@ const XrayService = ({ setView }) => {
 
         const data = await response.json();
         setImageUrl(data.image_url);
+        setIsUploadVisible(false); // Ocultar botón después de cargar la imagen
       } catch (error) {
         console.error('Error uploading the image:', error);
       }
@@ -40,6 +43,7 @@ const XrayService = ({ setView }) => {
 
   const handleScanClick = async () => {
     if (imageUrl) {
+      setIsScanning(true);  // Inicia la carga
       const formData = new FormData();
       formData.append('image_url', imageUrl);
 
@@ -49,47 +53,28 @@ const XrayService = ({ setView }) => {
           body: formData,
         });
 
-        // Espera un archivo binario
+        // Espera un archivo binario (PDF)
         const blob = await response.blob();
-        setPdfBlob(blob);  // Guarda el blob en el estado
-
-        // Obtener el nombre del archivo desde el header
-        const contentDisposition = response.headers.get('Content-Disposition');
-        let fileName = 'diagnosis.pdf';  // Valor por defecto en caso de que no obtengamos el nombre
-
-        if (contentDisposition) {
-          // Extraer el nombre del archivo del header
-          const matches = contentDisposition.match(/filename="(.+)"/);
-          if (matches.length > 1) {
-            fileName = matches[1];
-          }
-        }
-
-        // Crear el enlace de descarga de PDF
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', fileName);  // Usar el nombre del archivo obtenido
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);  // Remover enlace después de la descarga
+        setPdfBlob(blob);  // Guarda el blob del PDF en el estado
+        setIsScanning(false);  // Finaliza la carga
       } catch (error) {
         console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+        setIsScanning(false);  // Asegurar que finalice la carga en caso de error
       }
     } else {
       console.log('No hay imagen cargada.');
     }
   };
-
+  
   const handleDownloadClick = () => {
     if (pdfBlob) {
       const url = window.URL.createObjectURL(pdfBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'diagnosis.pdf');
+      link.setAttribute('download', 'diagnosis.pdf');  // Nombre del archivo
       document.body.appendChild(link);
       link.click();
-      link.parentNode.removeChild(link);
+      link.parentNode.removeChild(link);  // Remover el enlace después de la descarga
     }
   };
 
@@ -123,10 +108,15 @@ const XrayService = ({ setView }) => {
               />
             </div>
 
-            <button className="scan-button" onClick={handleScanClick}>
-              Start Scanning
+            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}>
+              {isScanning ? 'Scanning...' : 'Start Scanning'}
+              <br></br>
             </button>
 
+            {/* Mostrar los tres puntos de carga */}
+            {isScanning && <div className="loading">Procesando...</div>}
+
+            <br></br>
             {pdfBlob && (
               <button className="download-button" onClick={handleDownloadClick}>
                 Download Diagnosis PDF
@@ -135,9 +125,11 @@ const XrayService = ({ setView }) => {
           </>
         )}
 
-        <label htmlFor="xray-upload" className="xray-file-upload">
-          Upload your X-RAY
-        </label>
+        {isUploadVisible && (  // Mostrar el botón de Upload solo si isUploadVisible es true
+          <label htmlFor="xray-upload" className="xray-file-upload">
+            Upload your X-RAY
+          </label>
+        )}
       </div>
       {openSection === 'info' && (
         <div className="overlay-section active">

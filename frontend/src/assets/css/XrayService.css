@@ -21,9 +21,9 @@ body, html {
   transition: background 0.3s ease-in-out;
   top: 0;
   left: 0;
-  width: calc(100%);
+  width: calc(100% + 150px);
   height: 140vh;
-  background-color: #fafafa;;
+  background-color: #b3adadae;;
   align-items: center;
   font-family: 'Poppins', sans-serif;
 }
@@ -34,7 +34,7 @@ body, html {
   align-items: center;
   flex-direction: column;
   height: 60%;
-  margin-top: 200px;
+  margin-top: 100px;
 }
 
 /* Header */
@@ -42,7 +42,7 @@ body, html {
   position: fixed;
   top: 0px;
   left: 0px;
-  width: 100%;
+  width: calc(100% + 150px);
   background-color: rgba(0, 0, 0, 1);
   color: #f9f9f9;
   text-align: center;
@@ -60,7 +60,7 @@ body, html {
   background-color: #0580df;
   padding: 20px;
   color: white;
-  height: calc(100%); 
+  height: calc(100% - 81px); 
   position: fixed;
   top: 80px;
   left: 0px;
@@ -187,6 +187,7 @@ body, html {
   text-align: center;
   transition: background-color 0.3s ease;
   margin-top: 20px;
+  position: fixed;
 }
 
 /* Image container */
