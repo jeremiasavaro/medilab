@@ -83,21 +83,11 @@ def create_tables(conn):
             cod INTEGER PRIMARY KEY AUTOINCREMENT,
             res TEXT NOT NULL,
             description TEXT NOT NULL,
-            dateResult DATE,
+            dateResult DATE DEFAULT (CURRENT_TIMESTAMP),
             imageDiagnostic TEXT NOT NULL,
             dni INTEGER NOT NULL,
             CONSTRAINT fk_dni FOREIGN KEY (dni) REFERENCES patient (dni) ON DELETE CASCADE
         );
-    ''')
-
-     #Trigger to check the date on the insert
-    c.execute('''
-        CREATE TRIGGER IF NOT EXISTS triggerDateResult
-        BEFORE INSERT ON diagnostic
-        FOR EACH ROW
-        BEGIN
-            SELECT NEW.dateResult = CURRENT_TIMESTAMP;
-        END;
     ''')
 
 def view_tables():
@@ -106,8 +96,6 @@ def view_tables():
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
     print("Tables:", tables)
-
-    conn.commit()
     conn.close()
 
 if __name__ == '__main__':

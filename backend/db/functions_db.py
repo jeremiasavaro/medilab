@@ -45,7 +45,7 @@ def get_patient(dni):
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM patient WHERE dni = ?", (dni,))
-    patient_data = cursor.fetchone()
+    patient_data = cursor.fetchall()
 
     conn.close()
     return patient_data
