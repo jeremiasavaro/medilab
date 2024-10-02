@@ -102,9 +102,7 @@ const XrayService = ({ setView }) => {
           Info
         </button>
         <ul>
-          <li onClick={() => setView('home')}>
-            <span className="fa-solid fa-right-to-bracket">Back To Main Page</span>
-          </li>
+          <li onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back to main page</li>
         </ul>
       </div>
       <div className="xrayServices-container">

@@ -14,7 +14,6 @@ body, html {
 
 /* Main container */
 .contentXray {
-  background-image: url('../img/b.jpg');
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -22,9 +21,9 @@ body, html {
   transition: background 0.3s ease-in-out;
   top: 0;
   left: 0;
-  width: calc(100% + 60px);
-  height: 200vh;
-  background-color: #d7efff;
+  width: calc(100%);
+  height: 140vh;
+  background-color: #fafafa;;
   align-items: center;
   font-family: 'Poppins', sans-serif;
 }
@@ -35,16 +34,16 @@ body, html {
   align-items: center;
   flex-direction: column;
   height: 60%;
-  margin-top: -50px;
+  margin-top: 200px;
 }
 
 /* Header */
 .title {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0px;
+  left: 0px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 1);
   color: #f9f9f9;
   text-align: center;
   padding: 20px 0;
@@ -52,38 +51,27 @@ body, html {
   font-family: 'Roboto', sans-serif;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.title:hover {
-  background-color: #444;
-  color: #e0e0e0;
+  z-index: 5;
 }
 
 /* Sidebar */
 .side-Bar {
-  width: 170px;
+  width: 220px;
   background-color: #0580df;
   padding: 20px;
   color: white;
-  height: 90vh;
+  height: calc(100%); 
   position: fixed;
-  top: 79px;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.side-Bar:hover {
-  transform: translateX(5px);
-  background-color: #046bb3;
+  top: 80px;
+  left: 0px;
+  box-sizing: border-box; 
+  z-index: 10; 
 }
 
 .side-Bar ul {
-  list-style: none;
-  margin: 0;
+  list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .side-Bar ul li {
@@ -91,7 +79,15 @@ body, html {
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: color 0.3s ease;
+  text-align: center; 
+}
+
+.side-Bar ul:last-child {
+  position: absolute;
+  align-items: center;
+  text-align: center;
+  bottom: 20px; /* Ajusta el espacio entre el botón y la parte inferior */
+  width: 100%;
 }
 
 .side-Bar ul li:hover {
@@ -105,7 +101,7 @@ body, html {
 /* Toggle buttons */
 .toggle-button {
   padding: 10px;
-  background-color: #444;
+  background-color: #050404;
   color: white;
   border: none;
   cursor: pointer;
@@ -183,7 +179,7 @@ body, html {
 /* Image upload button */
 .xray-file-upload {
   padding: 10px 40px;
-  background-color: #4CAF50;
+  background-color: #007bff;
   color: white;
   border-radius: 5px;
   cursor: pointer;
