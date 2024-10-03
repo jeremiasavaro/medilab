@@ -143,7 +143,7 @@ def contact():
 
     print(f'Recibido: name = {name}, email = {email}, subject = {subject}, message = {message}')
     # we should save this data in the database and think what are we going to do with it after
-
+    return jsonify({'status': 'success', 'message': 'Data received successfully'}), 200
 
 @app.route('/account', methods = ['POST'])
 def account():
