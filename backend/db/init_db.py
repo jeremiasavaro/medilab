@@ -1,10 +1,15 @@
 import sqlite3
 
-def connect():
+def connect(testing=False):
     try:
-        conn = sqlite3.connect('database.db')
-        print("Connection successful")
-        return conn
+        if testing:
+            conn = sqlite3.connect(':memory:')
+            print("Connection to in-memory database successful")
+            return conn
+        else:
+            conn = sqlite3.connect('db/database.db')
+            print("Connection successful")
+            return conn
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
         return None

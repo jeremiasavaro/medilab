@@ -8,7 +8,7 @@ import cloudinary.uploader
 import jwt
 import tensorflow as tf
 from datetime import datetime
-from tensorflow.keras.models import load_model
+#from tensorflow.keras.models import load_model
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic, get_doctors_by_speciality
 from functions import load_image, preprocess_image, create_diagnosis_pdf
 tf.get_logger().setLevel('ERROR')
@@ -16,8 +16,9 @@ tf.get_logger().setLevel('ERROR')
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'xrai'
+app.config['TESTING'] = False
 
-model = load_model('modelAI-Jere-v2.h5')
+#model = load_model('modelAI-Jere-v2.h5')
 
 CORS(app)
 

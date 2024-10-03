@@ -1,15 +1,20 @@
 import sqlite3
 from datetime import datetime
+from flask import current_app
 
-def connect():
+def connect(testing=False):
     try:
-        conn = sqlite3.connect('db/database.db')
-        
-        return conn
+        if testing:
+            conn = sqlite3.connect(':memory:')
+            print("Connection to in-memory database successful")
+            return conn
+        else:
+            conn = sqlite3.connect('db/database.db')
+            print("Connection successful")
+            return conn
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
         return None
-
 
 def insert_patient(dni, firstName, lastName, password, email, phoneNumber, dateBirth, nationality, province,
                    locality, postalCode, address, gender, imagePatient=None):
@@ -41,7 +46,8 @@ def delete_patient(dni):
 
 
 def get_patient(dni):
-    conn = connect()
+    testing = current_app.config['TESTING'] if current_app else False  
+    conn = connect(testing=testing)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM patient WHERE dni = ?", (dni,))
@@ -92,7 +98,7 @@ def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nati
 
 
 def get_password(dni):
-    conn = connect()
+    conn = connect(testing=app.config['TESTING'])
     cursor = conn.cursor()
 
     cursor.execute("SELECT password FROM patient WHERE dni = (?)", (dni,))
