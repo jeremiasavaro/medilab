@@ -16,6 +16,7 @@ import HeroSection from './components/heroSection';
 import ServicesSection from './components/servicesSection';
 import XrayService from './components/XrayService';
 import Header from "./components/header";
+import Alert from './components/Alert';
 import './assets/css/styles.css';
 import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -146,40 +147,49 @@ function App() {
 
   return (
     <div className="App">
-      {view === "login" ? (
-        <Login setView={setView} setIsLoged={setIsLoged} />
-      ) : view === "register" ? (
-        <Register setView={setView} />
-      ) :view === "xrayService" ? (
-        <XrayService setView={setView} /> 
-      ) : view === "account" ? (
-        <Account setView={setView} setIsLoged={setIsLoged} />
-      ) : view === "home" ?(
-        <div>
-          <main className="main">
-            <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
-            <HeroSection setView={setView}/>
-            <About />
-            <ServicesSection />
-            <Doctors />
-            <Gallery />
-            <Faq />
-            <Contact />
-          </main>
-          <Footer />
+        {(() => {
+          if (view === "login") {
+            return <Login setView={setView} setIsLoged={setIsLoged} />;
+          } 
+          if (view === "register") {
+            return <Register setView={setView} />;
+          } 
+          if (view === "xrayService") {
+            if (isLoged) {
+              return <XrayService setView={setView} />;
+            } else {
+              return <Alert setView={setView} />;
 
-          <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
-            <i className="bi bi-arrow-up-short"></i>
-          </a>
-
-        </div>
-      ):(
-          <div>
-            <p>asd</p>
-          </div>
-      )}
-    </div>
+            }
+          } 
+          if (view === "account") {
+            return <Account setView={setView} setIsLoged={setIsLoged} />;
+          } 
+          if (view === "home") {
+            return (
+              <div>
+                <main className="main">
+                  <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
+                  <HeroSection setView={setView} />
+                  <About />
+                  <ServicesSection />
+                  <Doctors />
+                  <Gallery />
+                  <Faq />
+                  <Contact />
+                </main>
+                <Footer />
+    
+                <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
+                  <i className="bi bi-arrow-up-short"></i>
+                </a>
+              </div>
+            );
+          }
+        })()}
+      </div>
   );
+
 }
 
 export default App;
