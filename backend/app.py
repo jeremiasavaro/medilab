@@ -8,8 +8,9 @@ import cloudinary.uploader
 import jwt
 import tensorflow as tf
 from datetime import datetime
+from db.database import db
+from flask_migrate import Migrate
 #from tensorflow.keras.models import load_model
-from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic, get_doctors_by_speciality
 from functions import load_image, preprocess_image, create_diagnosis_pdf
 tf.get_logger().setLevel('ERROR')
 
@@ -17,6 +18,8 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'xrai'
 app.config['TESTING'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #model = load_model('modelAI-Jere-v2.h5')
 
@@ -28,6 +31,11 @@ cloudinary.config(
     api_key = "945298983164966",
     api_secret = "CRjZQ4M5w6Dp-eYdBzjZZQISgKI"
 )
+
+
+# Inicializa la base de datos
+db.init_app(app)
+migrate = Migrate(app, db)
 
 token = "token"
 
