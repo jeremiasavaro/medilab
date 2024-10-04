@@ -1,4 +1,4 @@
-from ..init_db import db
+from ..database import db
 
 class WorksAt(db.Model):
     __tablename__ = 'works_at'
