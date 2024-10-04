@@ -21,9 +21,9 @@ body, html {
   transition: background 0.3s ease-in-out;
   top: 0;
   left: 0;
-  width: calc(100% + 150px);
+  width: calc(100% + 140px);
   height: 140vh;
-  background-color: #b3adadae;;
+  background-color: #ffffff;;
   align-items: center;
   font-family: 'Poppins', sans-serif;
 }
@@ -42,7 +42,7 @@ body, html {
   position: fixed;
   top: 0px;
   left: 0px;
-  width: calc(100% + 150px);
+  width: calc(100% + 140px);
   background-color: rgba(0, 0, 0, 1);
   color: #f9f9f9;
   text-align: center;
@@ -56,7 +56,7 @@ body, html {
 
 /* Sidebar */
 .side-Bar {
-  width: 220px;
+  width: 120px;
   background-color: #0580df;
   padding: 20px;
   color: white;
@@ -209,4 +209,42 @@ body, html {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.table-container {
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.doctor-table th, .doctor-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.doctor-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.doctor-table img {
+  border-radius: 50%;
+}
+
+.divider {
+  width: 90%;
+  border: 3px solid rgb(255, 255, 255);
+  margin: 40px auto;
+}
+
+.h2 {
+  font-family: 'Poppins', sans-serif !important;
+  color: white !important;
 }
