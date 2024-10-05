@@ -72,7 +72,6 @@ body, html {
 
 .toggle-button:hover {
   background-color: #555;
-  transform: scale(1.05);
 }
 
 .buttonBack{
@@ -101,7 +100,6 @@ body, html {
   align-items: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .overlay-section.active {
