@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../assets/css/XrayService.css';
 
 const XrayService = ({ setView }) => {
@@ -10,6 +10,8 @@ const XrayService = ({ setView }) => {
   const [isUploadVisible, setIsUploadVisible] = useState(true); 
   const [isScanning, setIsScanning] = useState(false);  
   const [showTable, setShowTable] = useState(false);
+
+  const tableRef = useRef(null); // Referencia a la tabla
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -78,6 +80,16 @@ const XrayService = ({ setView }) => {
       link.click();
       link.parentNode.removeChild(link);  // Remover el enlace después de la descarga
     }
+  
+    // Mostrar la tabla y esperar a que se renderice
+    setShowTable(true);
+  
+    // Usar setTimeout para hacer el scroll después del siguiente ciclo de renderizado
+    setTimeout(() => {
+      if (tableRef.current) {
+        tableRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 0);  // Un pequeño retraso para permitir que React termine el renderizado
   };
 
   const [data, setData] = useState([
@@ -102,16 +114,13 @@ const XrayService = ({ setView }) => {
 
   return (
     <section id="xray-section" className="contentXray">
-      <header className="title">Faster Diagnostics with X-RAI</header>
-      <div className="side-Bar">
-        <button className="toggle-button" onClick={() => openOverlaySection('info')}>
+      <button className="buttonBack" onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back</button>
+      <header className="title">Faster Diagnostics with X-RAI
+      <button className="toggle-button" onClick={() => openOverlaySection('info')}>
           <i className="bi-info-circle-fill"> </i>
           Info
         </button>
-        <ul>
-          <li onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back</li>
-        </ul>
-      </div>
+      </header>
       <div className="xrayServices-container">
         <input
           id="xray-upload"
@@ -138,10 +147,7 @@ const XrayService = ({ setView }) => {
             <br></br>
             {pdfBlob && (
               <button className="download-button" 
-              onClick={() => {
-                handleDownloadClick();
-                setShowTable(true);  // Cambiar la visibilidad de la tabla después de la descarga
-              }}><i class="fa-regular fa-file-pdf"></i> Download Diagnosis PDF
+              onClick={handleDownloadClick}><i class="fa-regular fa-file-pdf"></i> Download Diagnosis PDF
               </button>
             )}
           </>
@@ -153,7 +159,7 @@ const XrayService = ({ setView }) => {
           </label>
         )}
         {showTable && (
-          <>
+          <div ref={tableRef}>
             <hr className="divider" />
             <h2 className='h2'><b>Medicos recomendados</b></h2>
             <div className="table-container">
@@ -180,7 +186,7 @@ const XrayService = ({ setView }) => {
                 </tbody>
               </table>
             </div>
-          </>
+          </div>
         )}
       </div> 
       {openSection === 'info' && (
