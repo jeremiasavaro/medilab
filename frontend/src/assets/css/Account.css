@@ -8,6 +8,7 @@
     background-color: #fafafa;;
     display: flex;
     justify-content: center;
+    margin-top: -70px;
     align-items: center;
     font-family: 'Poppins', sans-serif;
 }
@@ -15,7 +16,7 @@
 .account-container {
   display: flex;
   font-family: 'Poppins', sans-serif;
-  height: 140vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+  height: 160vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
   margin: 0; /* Elimina márgenes que puedan afectar la alineación */
 }
 
@@ -103,6 +104,7 @@ h1 {
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
+    margin-top: -30px;
     margin-bottom: 20px;
 }
 

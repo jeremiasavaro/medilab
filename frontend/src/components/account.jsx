@@ -108,13 +108,9 @@ const Account = ({ setView, setIsLoged }) => {
       <div className="account-container">
         <div className="account-content">
           <h1><b>Personal data</b></h1>
-          <br />
           <div className="profile-section">
             <div className="profile-info">
               <div>
-                <label htmlFor="file-upload" className="custom-file-upload">
-                  Subir foto de perfil
-                </label>
                 <input
                     id="file-upload"
                     type="file"
@@ -131,6 +127,16 @@ const Account = ({ setView, setIsLoged }) => {
                           style={{maxWidth: '200px', borderRadius: '50%'}}
                       />
                     </div>
+                )}
+                {imageUrl && (
+                  <label htmlFor="file-upload" className="custom-file-upload">
+                    Cambiar foto de perfil
+                </label>
+                )}
+                {!imageUrl && (
+                  <label htmlFor="file-upload" className="custom-file-upload">
+                    Subir foto de perfil
+                </label>
                 )}
               </div>
 
