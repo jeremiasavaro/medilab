@@ -11,6 +11,8 @@ from datetime import datetime
 from db.database import db, migrate
 from flask_migrate import Migrate
 #from tensorflow.keras.models import load_model
+from db.models import*
+from db.functions_db import*
 from functions import load_image, preprocess_image, create_diagnosis_pdf
 tf.get_logger().setLevel('ERROR')
 
@@ -37,10 +39,6 @@ cloudinary.config(
 db.init_app(app)
 migrate.init_app(app, db)
 
-with app.app_context():
-    from db.models import*
-    db.create_all() 
-
 token = "token"
 
 @app.route('/obtainToken', methods=['GET'])
@@ -60,22 +58,22 @@ def obtain_user_data():
         decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
         dni = decoded_token.get('dni')
 
-        patient_data = get_patient(dni)
+        patient = get_patient(dni)
         
         return jsonify({
-            'dni': patient_data[0],
-            'firstName': patient_data[1],
-            'lastName': patient_data[2],
-            'email': patient_data[4],
-            'phone': patient_data[5],
-            'birthDate': patient_data[6],
-            'nationality': patient_data[8],
-            'province': patient_data[9],
-            'locality': patient_data[10],
-            'postalCode': patient_data[11],
-            'address': patient_data[12],
-            'gender' : patient_data[13],
-            'imagePatient' : patient_data[14]
+            'dni': patient.dni,
+            'firstName': patient.first_name,
+            'lastName': patient.last_name,
+            'email': patient.email,
+            'phone_number': patient.phone_number,
+            'birthDate': patient.date_birth,
+            'nationality': patient.nationality,
+            'province': patient.province,
+            'locality': patient.locality,
+            'postal_code': patient.postal_code,
+            'address': patient.address,
+            'gender' : patient.gender,
+            'image_patient' : patient.image_patient
         }), 200
         
     except jwt.ExpiredSignatureError:

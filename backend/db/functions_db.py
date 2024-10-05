@@ -1,45 +1,33 @@
-import sqlite3
 from datetime import datetime
-from flask import current_app
 from db.database import db
-from db.models import patient, doctor, clinic, diagnostic, worksAt
-
-def connect(testing=False):
-    try:
-        if testing:
-            conn = sqlite3.connect(':memory:')
-            print("Connection to in-memory database successful")
-            return conn
-        else:
-            conn = sqlite3.connect('db/database.db')
-            print("Connection successful")
-            return conn
-    except sqlite3.Error as e:
-        print(f"Error connecting to database: {e}")
-        return None
+from db.models.init_models import*
 
 def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_number, date_birth,nationality, province, locality, postal_code, address, gender):
-    new_patient = patient(
+    date_birth_obj = datetime.strptime(date_birth, "%Y-%m-%d").date()
+
+    new_patient = Patient(
         dni=dni,
         first_name=first_name,
         last_name=last_name,
         password=encrypted_password,
         email=email,
-        phone_numbere=phone_number,
-        date_birth=date_birth,
+        phone_number=phone_number,
+        date_birth=date_birth_obj,
+        age= calculate_age(date_birth),
         nationality=nationality,
         province=province,
         locality=locality,
         postal_code=postal_code,
         address=address,
-        gender=gender
+        gender=gender,
+        image_patient=None
     )
     db.session.add(new_patient)
     db.session.commit()
 
 
 def delete_patient(dni):
-    patient = patient.query.filter_by(dni=dni).first()
+    patient = Patient.query.filter_by(dni=dni).first()
     
     if patient:
         db.session.delete(patient)
@@ -53,26 +41,25 @@ def delete_patient(dni):
 
 
 def get_patient(dni):
-    #testing = current_app.config.get('TESTING', False)
     
-    patient = patient.query.filter_by(dni=dni).first()
+    patient = Patient.query.filter_by(dni=dni).first()
     return patient
 
 
 def modify_password(dni, newPassword):
-    patient = patient.query.filter_by(dni=dni).first()
+    patient = Patient.query.filter_by(dni=dni).first()
     if patient:
         patient.password = newPassword
         db.session.commit()
 
 def modify_image_patient(dni, imagePatient):
-    patient = patient.query.filter_by(dni=dni).first()
+    patient = Patient.query.filter_by(dni=dni).first()
     if patient:
         patient.image_patient = imagePatient
         db.session.commit()
 
 def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
-    patient = patient.query.filter_by(dni=dni).first()
+    patient = Patient.query.filter_by(dni=dni).first()
     
     if patient:
         patient.first_name = firstName
@@ -92,7 +79,7 @@ def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nati
         db.session.commit()
 
 def get_password(dni):
-    patient = patient.query.filter_by(dni=dni).first()
+    patient = Patient.query.filter_by(dni=dni).first()
     if patient:
         return patient.password
     return None  # Return None if no patient is found with the given DNI
@@ -106,7 +93,7 @@ def calculate_age(dateBirth):
 
 
 def insert_diagnostic(result, description, imageDiagnostic, dni):
-     new_diagnostic = diagnostic(
+     new_diagnostic = Diagnostic(
         res=result,
         description=description,
         image_diagnostic=imageDiagnostic,
@@ -119,7 +106,7 @@ def insert_diagnostic(result, description, imageDiagnostic, dni):
 def get_diagnostics(dni):
     #testing = current_app.config.get('TESTING', False)
     
-    diagnostics = diagnostic.query.filter_by(dni=dni).all()
+    diagnostics = Diagnostic.query.filter_by(dni=dni).all()
     return diagnostics
 
 def get_diagnostics_by_code(cod):
@@ -131,17 +118,17 @@ def get_diagnostics_by_code(cod):
 def get_diagnostics_by_result(dni, result):
     #testing = current_app.config.get('TESTING', False)
 
-    diagnostics = diagnostic.query.filter_by(dni=dni, result=result).all()
+    diagnostics = Diagnostic.query.filter_by(dni=dni, result=result).all()
     return diagnostics
 
 def get_diagnostics_by_description(dni, description):
      #testing = current_app.config.get('TESTING', False)
 
-    diagnostics = diagnostic.query.filter_by(dni=dni, description=description).all()
+    diagnostics = Diagnostic.query.filter_by(dni=dni, description=description).all()
     return diagnostics
 #-------------------------------------------- Doctor Table functions --------------------------------------------
 def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
-     new_doctor = doctor(
+     new_doctor = Doctor(
         dni=dni,
         speciality=speciality,
         first_name=firstName,
@@ -158,7 +145,7 @@ def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateB
 
 
 def delete_doctor(dni):
-    doctor = doctor.query.filter_by(dni=dni).first()
+    doctor = Doctor.query.filter_by(dni=dni).first()
     
     if patient:
         db.session.delete(doctor)
@@ -168,7 +155,7 @@ def delete_doctor(dni):
         print(f"Doctor with DNI {dni} not found")
 
 def modify_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
-    doctor = doctor.query.filter_by(dni=dni).first()
+    doctor = Doctor.query.filter_by(dni=dni).first()
     
     if doctor:
         doctor.speciality = speciality
@@ -186,13 +173,13 @@ def modify_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateB
 def get_doctors():
     #testing = current_app.config.get('TESTING', False)
     
-    doctors = doctor.query.all()
+    doctors = Doctor.query.all()
     return doctors
 
 def get_doctors_by_speciality(doctor_speciality):
     #testing = current_app.config.get('TESTING', False)
     
-    doctors = doctor.query.filter_by(speciality=doctor_speciality).all()
+    doctors = Doctor.query.filter_by(speciality=doctor_speciality).all()
     return doctors
 
     conn.close()
@@ -232,7 +219,7 @@ def get_cities_for_doctor(doctor_dni):
 
 #-------------------------------------------- Clinic Table functions --------------------------------------------
 def insert_clinic(name, phoneNumber, province, city, postalCode, address):
-    new_clinic = clinic(
+    new_clinic = Clinic(
         name=name,
         phone_number=phoneNumber,
         province=province,
@@ -244,7 +231,7 @@ def insert_clinic(name, phoneNumber, province, city, postalCode, address):
     db.session.commit()
 
 def delete_clinic(name):
-    clinic = clinic.query.filter_by(name=name).first()
+    clinic = Clinic.query.filter_by(name=name).first()
     
     if patient:
         db.session.delete(clinic)
@@ -254,7 +241,7 @@ def delete_clinic(name):
         print(f"Clinic with name {name} not found")   
 
 def modify_clinic(name, phoneNumber, province, city, postalCode, address):
-    clinic = clinic.query.filter_by(name=name).first()
+    clinic = Clinic.query.filter_by(name=name).first()
     
     if clinic:
         clinic.name = name
@@ -269,13 +256,13 @@ def modify_clinic(name, phoneNumber, province, city, postalCode, address):
 def get_all_clinics():
    #testing = current_app.config.get('TESTING', False)
     
-    doctors = doctor.query.all()
+    doctors = Doctor.query.all()
     return doctors   
 
 def get_clinics_by_city(cityname):
    #testing = current_app.config.get('TESTING', False)
     
-    doctors = doctor.query.filter_by(name=cityname).all()
+    doctors = Doctor.query.filter_by(name=cityname).all()
     return doctors
  
 

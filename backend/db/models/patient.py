@@ -23,7 +23,6 @@ class Patient(db.Model):
         db.CheckConstraint("email LIKE '%_@__%.__%'"),
         db.CheckConstraint('phone_number > 0'),
         db.CheckConstraint('date_birth > 0 AND date_birth < CURRENT_DATE'),
-        db.CheckConstraint('age > 0'),
         db.CheckConstraint("gender IN ('Male', 'Female', 'Other')"),
     )
 
