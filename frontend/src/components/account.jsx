@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../assets/css/Account.css';
 import ChangePassword from './changePassword';
 import ConfirmModifications from './confirmModifications';
-import DeleteAccount from './deleteAccount' 
-import { useJwt } from "react-jwt";
+import DeleteAccount from './deleteAccount';
 
 const Account = ({ setView, setIsLoged }) => {
   const [firstName, setFirstName] = useState('');
@@ -19,78 +18,49 @@ const Account = ({ setView, setIsLoged }) => {
   const [postalCode, setPostalCode] = useState('');
   const [gender, setGender] = useState('');
   const [message, setMessage] = useState('');
-  const [token, setToken] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
-
-  const { decodedToken, isExpired } = useJwt(token);
 
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
   const [confirmModifications, setConfirmModifications] = useState(false);
 
   useEffect(() => {
-    const fetchToken = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+        const response = await fetch('http://127.0.0.1:5000/obtainData', {
           method: 'GET',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
         });
 
-        const data = await response.json();
         if (response.ok) {
-          setToken(data.token);
+          const data = await response.json();
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
+          setDni(data.dni);
+          setEmail(data.email);
+          setPhone(data.phone);
+          setAddress(data.address);
+          setBirthDate(data.birthDate);
+          setNationality(data.nationality);
+          setProvince(data.province);
+          setLocality(data.locality);
+          setPostalCode(data.postalCode);
+          setGender(data.gender);
+          setImageUrl(data.imagePatient);
         } else {
-          setMessage("No se pudo obtener el token");
+          setMessage('Failed to fetch user data');
         }
       } catch (error) {
-        setMessage('Error al obtener el token');
+        setMessage('An error occurred while fetching user data');
       }
     };
 
-    fetchToken();
+    fetchUserData();
   }, []);
-
-  useEffect(() => {
-    const setData = async () => {
-      if (token && decodedToken) {
-        try {
-          const response = await fetch('http://127.0.0.1:5000/obtainData', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token,
-            },
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setDni(data.dni);
-            setEmail(data.email);
-            setPhone(data.phone);
-            setAddress(data.address);
-            setBirthDate(data.birthDate);
-            setNationality(data.nationality);
-            setProvince(data.province);
-            setLocality(data.locality);
-            setPostalCode(data.postalCode);
-            setGender(data.gender);
-            setImageUrl(data.imagePatient);
-          } else {
-            setMessage("No se pudo obtener los datos");
-          }
-        } catch (error) {
-          setMessage('Error al obtener los datos');
-        }
-      }
-    }
-
-    setData();
-  }, [token, decodedToken, isExpired]);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -103,6 +73,7 @@ const Account = ({ setView, setIsLoged }) => {
       try {
         const response = await fetch('http://localhost:5000/upload_image', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
 

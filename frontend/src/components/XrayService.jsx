@@ -21,6 +21,7 @@ const XrayService = ({ setView }) => {
       try {
         const response = await fetch('http://localhost:5000/upload_xray_photo', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
 
@@ -50,6 +51,7 @@ const XrayService = ({ setView }) => {
       try {
         const response = await fetch('http://localhost:5000/xray_diagnosis', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
 
