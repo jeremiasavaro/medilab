@@ -1,6 +1,7 @@
 from datetime import datetime
 from db.database import db
-from db.models.init_models import*
+from db.models.init_models import *
+from sqlalchemy.orm import * # type: ignore VER!!!
 
 def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_number, date_birth,nationality, province, locality, postal_code, address, gender):
     date_birth_obj = datetime.strptime(date_birth, "%Y-%m-%d").date()
@@ -112,7 +113,7 @@ def get_diagnostics(dni):
 def get_diagnostics_by_code(cod):
     #testing = current_app.config.get('TESTING', False)
     
-    diagnostics = diagnostic.query.filter_by(cod=cod).all()
+    diagnostics = Diagnostic.query.filter_by(cod=cod).all()
     return diagnostics
 
 def get_diagnostics_by_result(dni, result):
@@ -147,7 +148,7 @@ def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateB
 def delete_doctor(dni):
     doctor = Doctor.query.filter_by(dni=dni).first()
     
-    if patient:
+    if doctor:
         db.session.delete(doctor)
         db.session.commit()
         print(f"Doctor with DNI {dni} successfully removed")
@@ -185,36 +186,19 @@ def get_doctors_by_speciality(doctor_speciality):
     conn.close()
 
 def get_cities_for_doctor(doctor_dni):
-    conn = connect()
-    cursor = conn.cursor()
+    # Query to fetch the cities where the doctor works
+    doctor = Doctor.query.options(joinedload(Doctor.clinics)).filter_by(dni=doctor_dni).first()
 
-    # SQL query to get cities where the doctor works
-    query = """
-        SELECT clinic.city 
-        FROM WorksAt 
-        JOIN clinic ON WorksAt.clinic_number = clinic.clinic_number 
-        WHERE WorksAt.doctor_dni = ?
-    """
-    
-    cursor.execute(query, (doctor_dni,))
-    cities = cursor.fetchall()
-
-    # Print the fetched cities to verify if any data is returned
-    print(f"Cities fetched for doctor {doctor_dni}: {cities}")
-
-    conn.close()
-
-    # If no cities are found, return a message
-    if not cities:
-        print(f"No clinics found for doctor with DNI {doctor_dni}")
+    # I doctor not found, return an empty list
+    if not doctor:
+        print(f"No doctor found with DNI {doctor_dni}")
         return []
 
-    # Extracting city names from the fetched data
-    city_list = [city[0] for city in cities]
+    # Extract city names from related clinics
+    city_list = [clinic.city for clinic in doctor.clinics]
     
-    # Print the final list of cities
+    # Print and return the list of cities
     print(f"City list for doctor {doctor_dni}: {city_list}")
-    
     return city_list
 
 #-------------------------------------------- Clinic Table functions --------------------------------------------
@@ -233,7 +217,7 @@ def insert_clinic(name, phoneNumber, province, city, postalCode, address):
 def delete_clinic(name):
     clinic = Clinic.query.filter_by(name=name).first()
     
-    if patient:
+    if clinic:
         db.session.delete(clinic)
         db.session.commit()
         print(f"Clinic with name {name} successfully removed")
@@ -269,56 +253,27 @@ def get_clinics_by_city(cityname):
 
 #-------------------------------------------- WorksAt Table functions --------------------------------------------
 def insert_WorksAt(doctordni, clinicname):
-    conn = connect()
-    cursor = conn.cursor()
-
-    # Find the clinic number based on the name
-    find_query = "SELECT clinic_number FROM clinic WHERE name = ?"
-    cursor.execute(find_query, (clinicname,))
-    clinic_number = cursor.fetchone()
-
-    if clinic_number is None:
+    clinic = Clinic.query.filter_by(name=clinicname).first()
+    
+    if clinic is None:
         print("Clinic not found.")
         return
 
-    # clinic_number is a tuple, so access the first element
-    clinic_number = clinic_number[0]
-
-    # Insert into WorksAt table
-    cursor.execute("""INSERT INTO WorksAt (clinic_number, doctor_dni) 
-                      VALUES (?, ?)""",
-                   (clinic_number, doctordni))
-
-    conn.commit()
-    conn.close()
+    new_worksat = WorksAt(clinic_number=clinic.clinic_number, doctor_dni=doctordni)
+    db.session.add(new_worksat)
+    db.session.commit()
     print(f"Doctor {doctordni} is now assigned to clinic '{clinicname}'.")
 
 def delete_working_doctor(doctordni, clinicname):
-    conn = connect() 
-    cursor = conn.cursor()
+    clinic = Clinic.query.filter_by(name=clinicname).first()
 
-    # Find the clinic number based on the name
-    find_query = "SELECT clinic_number FROM clinic WHERE name = ?"
-    cursor.execute(find_query, (clinicname,))
-    clinic_number = cursor.fetchone()
-
-    if clinic_number is None:
+    if clinic is None:
         print(f"Clinic '{clinicname}' not found.")
-        conn.close()
         return
 
-    # clinic_number is a tuple, so access the first element
-    clinic_number = clinic_number[0]
+    worksat_entry = WorksAt.query.filter_by(doctor_dni=doctordni, clinic_number=clinic.clinic_number).first()
 
-    # Delete from WorksAt table
-    delete_query = """
-    DELETE FROM WorksAt 
-    WHERE doctor_dni = ? AND clinic_number = ?;
-    """
-    cursor.execute(delete_query, (doctordni, clinic_number))
-
-    # Commit the transaction
-    conn.commit()
-    conn.close()
-
-    print(f"Doctor {doctordni} successfully removed from clinic '{clinicname}'.")
+    if worksat_entry:
+        db.session.delete(worksat_entry)
+        db.session.commit()
+        print(f"Doctor {doctordni} successfully removed from clinic '{clinicname}'.")
