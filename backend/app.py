@@ -12,6 +12,7 @@ from db.functions_db import (
     modify_image_patient, modify_password, delete_patient
 )
 from functions import ( load_image, preprocess_image, create_diagnosis_pdf )
+
 tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
@@ -78,6 +79,7 @@ def make_response(json_message, status_code):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     response.status_code = status_code
     return response
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -161,7 +163,7 @@ def contact():
 
     print(f'Recibido: name = {name}, email = {email}, subject = {subject}, message = {message}')
     # we should save this data in the database and think what are we going to do with it after
-
+    return jsonify({'status': 'success', 'message': 'Data received successfully'}), 200
 
 @app.route('/account', methods = ['POST'])
 def account():
