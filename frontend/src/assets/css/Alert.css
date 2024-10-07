@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+.modal-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semi-transparente */
+  z-index: 1000;
+  backdrop-filter: blur(10px); /* Aplica un efecto de desenfoque al fondo */
+  background-image: url('../img/b.jpg');
+  background-size: cover;
+  font-family: 'Poppins', sans-serif;
+  color:#0580df;
+}
+
+.modal-content {
+  background-color: #000; /* Fondo negro */
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.modal-content h1 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-buttons .login-button {
+  color: white;
+}
+
+.modal-buttons .back-button {
+  color: white;
+}

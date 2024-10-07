@@ -21,9 +21,9 @@ body, html {
   transition: background 0.3s ease-in-out;
   top: 0;
   left: 0;
-  width: calc(100% + 150px);
-  height: 140vh;
-  background-color: #b3adadae;;
+  width: calc(100%);
+  height: 200vh;
+  background-color: #ffffff;;
   align-items: center;
   font-family: 'Poppins', sans-serif;
 }
@@ -42,77 +42,49 @@ body, html {
   position: fixed;
   top: 0px;
   left: 0px;
-  width: calc(100% + 150px);
-  background-color: rgba(0, 0, 0, 1);
+  width: 100%;
+  background-color: #0580df;
   color: #f9f9f9;
-  text-align: center;
+  text-align: center;  /* Mantener el título centrado */
   padding: 20px 0;
   font-size: 26px;
   font-family: 'Roboto', sans-serif;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, color 0.3s ease;
   z-index: 5;
-}
-
-/* Sidebar */
-.side-Bar {
-  width: 220px;
-  background-color: #0580df;
-  padding: 20px;
-  color: white;
-  height: calc(100% - 81px); 
-  position: fixed;
-  top: 80px;
-  left: 0px;
-  box-sizing: border-box; 
-  z-index: 10; 
-}
-
-.side-Bar ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.side-Bar ul li {
-  padding: 10px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  text-align: center; 
-}
-
-.side-Bar ul:last-child {
-  position: absolute;
-  align-items: center;
-  text-align: center;
-  bottom: 20px; /* Ajusta el espacio entre el botón y la parte inferior */
-  width: 100%;
-}
-
-.side-Bar ul li:hover {
-  color: #cccccc;
-}
-
-.side-Bar ul li i {
-  margin-right: 10px;
 }
 
 /* Toggle buttons */
 .toggle-button {
+  position: absolute;
+  left: 20px;  /* Coloca el botón "Info" a 20px del borde izquierdo */
+  top: 50%;    /* Centra verticalmente en relación con el encabezado */
+  transform: translateY(-50%); /* Ajuste para que esté perfectamente centrado verticalmente */
   padding: 10px;
   background-color: #050404;
   color: white;
   border: none;
   cursor: pointer;
   font-size: 16px;
+  width: 100px;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .toggle-button:hover {
   background-color: #555;
-  transform: scale(1.05);
+}
+
+.buttonBack{
+  position: fixed;
+  width: 120px;
+  bottom: 20px;
+  left: 20px;   
+  padding: 10px 20px;
+  background-color: #0580df;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Overlay section */
@@ -128,7 +100,6 @@ body, html {
   align-items: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .overlay-section.active {
@@ -179,7 +150,7 @@ body, html {
 /* Image upload button */
 .xray-file-upload {
   padding: 10px 40px;
-  background-color: #007bff;
+  background-color: #0580df;
   color: white;
   border-radius: 5px;
   cursor: pointer;
@@ -187,7 +158,6 @@ body, html {
   text-align: center;
   transition: background-color 0.3s ease;
   margin-top: 20px;
-  position: fixed;
 }
 
 /* Image container */
@@ -209,4 +179,43 @@ body, html {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.table-container {
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.doctor-table th, .doctor-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.doctor-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.doctor-table img {
+  border-radius: 50%;
+}
+
+.divider {
+  width: 90%;
+  border: 3px solid#0580df;
+  margin: 40px auto;
+}
+
+.h2 {
+  font-family: 'Poppins', sans-serif !important;
+  text-align: center;
+  color: #0580df !important;
 }

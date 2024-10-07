@@ -15,6 +15,7 @@ const Contact = () => {
       // Realiza una solicitud POST al servidor.
       const response = await fetch('http://127.0.0.1:5000/contact', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
         },

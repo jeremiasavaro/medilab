@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../assets/css/XrayService.css';
 
 const XrayService = ({ setView }) => {
@@ -6,9 +6,12 @@ const XrayService = ({ setView }) => {
   const [openSection, setOpenSection] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const [pdfBlob, setPdfBlob] = useState(null);  // Nuevo estado para el PDF
-  const [isUploadVisible, setIsUploadVisible] = useState(true); // Nuevo estado para controlar visibilidad del botón
-  const [isScanning, setIsScanning] = useState(false);  // Nuevo estado para controlar si está escaneando
+  const [pdfBlob, setPdfBlob] = useState(null);  
+  const [isUploadVisible, setIsUploadVisible] = useState(true); 
+  const [isScanning, setIsScanning] = useState(false);  
+  const [showTable, setShowTable] = useState(false);
+
+  const tableRef = useRef(null); // Referencia a la tabla
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -21,6 +24,7 @@ const XrayService = ({ setView }) => {
       try {
         const response = await fetch('http://localhost:5000/upload_xray_photo', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
 
@@ -50,6 +54,7 @@ const XrayService = ({ setView }) => {
       try {
         const response = await fetch('http://localhost:5000/xray_diagnosis', {
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
 
@@ -64,6 +69,7 @@ const XrayService = ({ setView }) => {
     } else {
       console.log('No hay imagen cargada.');
     }
+
   };
   
   const handleDownloadClick = () => {
@@ -76,20 +82,47 @@ const XrayService = ({ setView }) => {
       link.click();
       link.parentNode.removeChild(link);  // Remover el enlace después de la descarga
     }
+  
+    // Mostrar la tabla y esperar a que se renderice
+    setShowTable(true);
+  
+    // Usar setTimeout para hacer el scroll después del siguiente ciclo de renderizado
+    setTimeout(() => {
+      if (tableRef.current) {
+        tableRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 0);  // Un pequeño retraso para permitir que React termine el renderizado
   };
+
+  const [data, setData] = useState([
+    {
+      photo: 'https://via.placeholder.com/50', // URL de ejemplo
+      firstName: 'Carlos',
+      lastName: 'Gomez',
+      specialty: 'Radiologist',
+      dni: '23456730',
+      email: 'carlos.gomez@hospital.com'
+    },
+    {
+      photo: 'https://via.placeholder.com/50', // URL de ejemplo
+      firstName: 'Ana',
+      lastName: 'Martinez',
+      specialty: 'Technician',
+      dni: '17345629',
+      email: 'ana.martinez@hospital.com'
+    },
+    // Agregar más objetos según sea necesario
+  ]);
 
   return (
     <section id="xray-section" className="contentXray">
-      <header className="title">Faster Diagnostics with X-RAI</header>
-      <div className="side-Bar">
-        <button className="toggle-button" onClick={() => openOverlaySection('info')}>
+      <button className="buttonBack" onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back</button>
+      <header className="title">Faster Diagnostics with X-RAI
+      <button className="toggle-button" onClick={() => openOverlaySection('info')}>
           <i className="bi-info-circle-fill"> </i>
           Info
         </button>
-        <ul>
-          <li onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back to main page</li>
-        </ul>
-      </div>
+      </header>
       <div className="xrayServices-container">
         <input
           id="xray-upload"
@@ -108,18 +141,15 @@ const XrayService = ({ setView }) => {
               />
             </div>
 
-            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}>
-              {isScanning ? 'Scanning...' : 'Start Scanning'}
+            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}><i class="fa-solid fa-expand"></i> {isScanning ? 'Scanning...' : 'Start Scanning'}
               <br></br>
             </button>
-
-            {/* Mostrar los tres puntos de carga */}
             {isScanning && <div className="loading">Procesando...</div>}
 
             <br></br>
             {pdfBlob && (
-              <button className="download-button" onClick={handleDownloadClick}>
-                Download Diagnosis PDF
+              <button className="download-button" 
+              onClick={handleDownloadClick}><i class="fa-regular fa-file-pdf"></i> Download Diagnosis PDF
               </button>
             )}
           </>
@@ -130,7 +160,37 @@ const XrayService = ({ setView }) => {
             Upload your X-RAY
           </label>
         )}
-      </div>
+        {showTable && (
+          <div ref={tableRef}>
+            <hr className="divider" />
+            <h2 className='h2'><b>Medicos recomendados</b></h2>
+            <div className="table-container">
+              <table className="doctor-table">
+                <thead>
+                  <tr>
+                    <th>Foto</th>
+                    <th>Nombre y Apellido</th>
+                    <th>Especialidad</th>
+                    <th>DNI</th>
+                    <th>Email de Contacto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((person, index) => (
+                    <tr key={index}>
+                      <td><img src={person.photo} alt={`${person.firstName} ${person.lastName}`} width="50" height="50" /></td>
+                      <td>{person.firstName} {person.lastName}</td>
+                      <td>{person.specialty}</td>
+                      <td>{person.dni}</td>
+                      <td><a href={`mailto:${person.email}`}>{person.email}</a></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div> 
       {openSection === 'info' && (
         <div className="overlay-section active">
           <div className="overlay-content">
