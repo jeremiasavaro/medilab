@@ -643,19 +643,15 @@ html {
   .footer {
     color: var(--default-color);
     background-color: var(--background-color);
-    border-top: 1px solid color-mix(in srgb, var(--accent-color), transparent 75%);
+    justify-content: center;
     font-size: 14px;
     position: relative;
   }
   
   .footer .footer-top {
-    padding-top: 50px;
+    padding-top: 30px;
   }
-  
-  .footer .footer-about .logo {
-    line-height: 1;
-    margin-bottom: 25px;
-  }
+
   
   .footer .footer-about .logo img {
     max-height: 40px;

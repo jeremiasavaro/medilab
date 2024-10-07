@@ -16,7 +16,7 @@
 .account-container {
   display: flex;
   font-family: 'Poppins', sans-serif;
-  height: 160vh; /* Asegura que el contenedor ocupe toda la altura de la ventana */
+  height: auto; /* Asegura que el contenedor ocupe toda la altura de la ventana */
   margin: 0; /* Elimina márgenes que puedan afectar la alineación */
 }
 

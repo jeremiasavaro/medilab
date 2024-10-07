@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
+import Alert from './Alert';
 
-const Contact = () => {
+const Contact = ({setIsLoged, setView, isLoged}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
@@ -10,28 +11,31 @@ const Contact = () => {
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
+      if (isLoged){
+        try {
+          // Realiza una solicitud POST al servidor.
+          const response = await fetch('http://127.0.0.1:5000/contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
+            },
+            body: JSON.stringify({ name, email, subject, userMessage }),
+          });
 
-    try {
-      // Realiza una solicitud POST al servidor.
-      const response = await fetch('http://127.0.0.1:5000/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
-        },
-        body: JSON.stringify({ name, email, subject, userMessage }),
-      });
+          const data = await response.json(); // Parsea la respuesta del servidor como JSON.
 
-      const data = await response.json(); // Parsea la respuesta del servidor como JSON.
-
-      if (response.ok) {
-        setMessage(data.message);
+          if (response.ok) {
+            setMessage(data.message);
+          } else {
+            setMessage(data.error);
+          }
+        } catch (error) {
+          setMessage('Error en la conexión');
+        }
       } else {
-        setMessage(data.error);
-      }
-    } catch (error) {
-      setMessage('Error en la conexión');
-    }
-  };
+        setView('Alert')
+      };
+  }
 
   return (
     <section id="contact" className="contact section">
