@@ -7,6 +7,8 @@ import cloudinary
 import cloudinary.uploader
 import jwt
 import tensorflow as tf
+import os
+from dotenv import load_dotenv
 from datetime import datetime
 from tensorflow.keras.models import load_model
 from db.functions_db import get_patient, insert_patient, get_password, modify_patient, modify_password, modify_image_patient, delete_patient, insert_diagnostic, get_doctors_by_speciality
@@ -15,17 +17,20 @@ tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
 
+#cargo las variables del archivo .env
+load_dotenv()
+
 app.config['SECRET_KEY'] = 'xrai'
 
-model = load_model('modelAI-Jere-v2.h5')
+#model = load_model('modelAI-Jere-v2.h5')
 
 CORS(app)
 
 #configuracion de cloudinary para guardar imagenes de los pacientes
 cloudinary.config(
-    cloud_name = "djlg5dfjj",
-    api_key = "945298983164966",
-    api_secret = "CRjZQ4M5w6Dp-eYdBzjZZQISgKI"
+    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.getenv('CLOUDINARY_API_KEY'),
+    api_secret = os.getenv('CLOUDINARY_API_SECRET')
 )
 
 token = "token"

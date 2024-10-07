@@ -6,3 +6,4 @@ pyjwt==2.9.0
 reportlab==4.2.2
 tensorflow==2.17.0
 numpy==1.26.4
+python-dotenv==1.0.1
