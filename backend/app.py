@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify
+from flask import session as fsession
 from flask_cors import CORS, cross_origin
 from flask_session import Session
 import bcrypt
@@ -7,17 +8,21 @@ import cloudinary.uploader
 import tensorflow as tf
 from datetime import datetime
 from tensorflow.keras.models import load_model
-from db.functions_db import (
-    get_patient, get_password, insert_patient, modify_patient,
-    modify_image_patient, modify_password, delete_patient
-)
+from db.models import *
+from db.functions_db import *
+from db.database import db, migrate
+from flask_migrate import Migrate
+
 from functions import ( load_image, preprocess_image, create_diagnosis_pdf )
 
 tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
 
-# Configure the secret key and session type
+# Configure the secret key, session type and database connection     
+app.config['TESTING'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'xrai'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './flask_sessions/'
@@ -25,8 +30,12 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 Session(app)
 
+
+db.init_app(app)
+migrate.init_app(app, db)
+
 # Load the model
-model = load_model('modelo_vgg16_finetuned.h5')
+#model = load_model('modelo_vgg16_finetuned.h5')
 
 # Configure CORS to allow credentials and resources from frontend
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
@@ -40,7 +49,7 @@ cloudinary.config(
 
 @app.route('/obtainData', methods=['GET'])
 def obtain_user_data():
-    dni = session.get('dni')  # Get user information from session
+    dni = fsession.get('dni')  # Get user information from session
     if not dni:
         return make_response(jsonify({'error': 'No se encontró el usuario en la sesión'}), 401)
 
@@ -50,19 +59,19 @@ def obtain_user_data():
         return make_response(jsonify({'error': 'No se encontró el usuario'}), 404)
 
     return make_response(jsonify({
-        'dni': patient_data[0],
-        'firstName': patient_data[1],
-        'lastName': patient_data[2],
-        'email': patient_data[4],
-        'phone': patient_data[5],
-        'birthDate': patient_data[6],
-        'nationality': patient_data[8],
-        'province': patient_data[9],
-        'locality': patient_data[10],
-        'postalCode': patient_data[11],
-        'address': patient_data[12],
-        'gender': patient_data[13],
-        'imagePatient': patient_data[14]
+        'dni': patient.dni,
+        'firstName': patient.first_name,
+        'lastName': patient.last_name,
+        'email': patient.email,
+        'phone_number': patient.phone_number,
+        'birthDate': patient.date_birth,
+        'nationality': patient.nationality,
+        'province': patient.province,
+        'locality': patient.locality,
+        'postal_code': patient.postal_code,
+        'address': patient.address,
+        'gender' : patient.gender,
+        'image_patient' : patient.image_patient
     }), 200)
 
 # Preflight response in order to avoid CORS blocking
@@ -96,9 +105,9 @@ def login():
 
     user_password = bytes(get_password(dni))
     if bcrypt.checkpw(password.encode('utf-8'), user_password):
-        session.clear()
-        session['dni'] = dni  # Establecer información del usuario en la sesión
-        print(f'Session set: {session["dni"]}')  # Debug print
+        fsession .clear()
+        fsession ['dni'] = dni  # Establecer información del usuario en la sesión
+        print(f'Session set: {fsession ["dni"]}')  # Debug print
         return make_response(jsonify({'message': 'Login exitoso'}), 200)
     else:
         return make_response(jsonify({'error': 'Credenciales incorrectas'}), 401)
@@ -106,8 +115,8 @@ def login():
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    session.pop('dni', None)  # Remove user information from session
-    session.clear()
+    fsession .pop('dni', None)  # Remove user information from session
+    fsession .clear()
     return make_response(jsonify({'message': 'Logout exitoso'}), 200)
 
 
@@ -217,7 +226,7 @@ def image_upload():
     image_url = upload_result.get('url')
 
     # Obtengo el dni del paciente
-    dni = session.get('dni')
+    dni = fsession .get('dni')
 
     if not dni:
         return make_response(jsonify({'error': 'Usuario no encontrado en la sesión'}), 401)
@@ -238,7 +247,7 @@ def change_password():
     data = request.json
 
     # Obtengo el dni del paciente
-    dni = session.get('dni')
+    dni = fsession .get('dni')
 
     if not dni:
         return make_response(jsonify({'error': 'Usuario no encontrado en la sesión'}), 401)
@@ -275,7 +284,7 @@ def delete_account():
     data = request.json
 
     # Obtengo el dni del paciente
-    dni = session.get('dni')
+    dni = fsession .get('dni')
 
     if not dni:
         return make_response(jsonify({'error': 'Usuario no encontrado en la sesión'}), 401)
@@ -310,7 +319,7 @@ def upload_xray_photo():
     image_url = upload_result.get('url')
 
     # Obtengo el dni del paciente
-    dni = session.get('dni')
+    dni = fsession .get('dni')
 
     if not dni:
         return make_response(jsonify({'error': 'Usuario no encontrado en la sesión'}), 401)
@@ -348,7 +357,7 @@ def xray_diagnosis():
     des = f"PNEUMONIA: {pneumonia_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
 
     # Obtener datos del paciente
-    dni = session.get('dni')
+    dni = fsession .get('dni')
 
     if not dni:
         return make_response(jsonify({'error': 'Usuario no encontrado en la sesión'}), 401)
