@@ -22,7 +22,7 @@ load_dotenv()
 
 app.config['SECRET_KEY'] = 'xrai'
 
-#model = load_model('modelAI-Jere-v2.h5')
+model = load_model('modelAI-Jere-v2.h5')
 
 CORS(app)
 
@@ -320,26 +320,31 @@ def xray_diagnosis():
     pneumonia_percentage = result[0] * 100
     normal_percentage = result[1] * 100
 
-    # Determinar el diagnóstico basado en probabilidades
-    if pneumonia_percentage > normal_percentage:
-        diag = f"PNEUMONIA: {pneumonia_percentage:.2f}%"
-    else:
-        diag = f"NORMAL: {normal_percentage:.2f}%"
-    des = f"PNEUMONIA: {pneumonia_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
-
     # Obtener datos del paciente
     decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
     dni = decoded_token.get('dni')
 
     patient = get_patient(dni)
     patient_name = patient[0]
-    diagnosis_date = datetime.today()  # Formato de fecha adecuado para el archivo
+    diagnosis_date = datetime.today()
+
+    #determinar el diagnóstico en probabilidades
+    if pneumonia_percentage > normal_percentage:
+        diag = f"PNEUMONIA: {pneumonia_percentage:.2f}%"
+
+        #generación del PDF para neumonia
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "pneumonia", pneumonia_percentage)
+    else:
+        diag = f"NORMAL: {normal_percentage:.2f}%"
+
+        # generación del PDF para normal
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "normal", normal_percentage)
+
+
+    des = f"PNEUMONIA: {pneumonia_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
 
     # Guardar el diagnóstico en la base de datos
     #code_diag = insert_diagnostic(diag, des, image_url, dni)
-
-    # Generación del PDF
-    pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, pneumonia_percentage, normal_percentage)
 
     file_name = f"{dni}-{diagnosis_date}-{patient}.pdf"
 

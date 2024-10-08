@@ -114,6 +114,10 @@ build/
 # Parcel-bundler cache
 .cache/
 
+# IA Model
+.h5
+.keras
+
 # dotenv environment variables file
 .env
 .env.*
