@@ -1,15 +1,83 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useJwt } from "react-jwt";
 
-const Contact = () => {
-  const [name, setName] = useState('');
+const Contact = ({setIsLoged, setView, isLoged}) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [userMessage, setUserMessage] = useState('');
+  const [token, setToken] = useState('');
+  const { decodedToken, isExpired } = useJwt(token);
+  
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setToken(data.token);
+        } else {
+          setMessage("No se pudo obtener el token");
+        }
+      } catch (error) {
+        setMessage('Error al obtener el token');
+      }
+    };
+
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    const setData = async () => {
+      if (token && decodedToken) {
+        try {
+          const response = await fetch('http://127.0.0.1:5000/obtainData', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+            },
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            setFirstName(data.firstName);
+            setLastName(data.lastName);
+            setEmail(data.email);
+          } else {
+            setMessage("No se pudo obtener los datos");
+          }
+        } catch (error) {
+          setMessage('Error al obtener los datos');
+        }
+      }
+    }
+
+    setData();
+  }, [token, decodedToken, isExpired]);
+  
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
+      if (isLoged){
+        try {
+          // Realiza una solicitud POST al servidor.
+          const response = await fetch('http://127.0.0.1:5000/contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
+            },
+            body: JSON.stringify({ firstName, email, subject, userMessage }),
+          });
 
     try {
       // Realiza una solicitud POST al servidor.
@@ -24,15 +92,18 @@ const Contact = () => {
 
       const data = await response.json(); // Parsea la respuesta del servidor como JSON.
 
-      if (response.ok) {
-        setMessage(data.message);
+          if (response.ok) {
+            setMessage(data.message);
+          } else {
+            setMessage(data.error);
+          }
+        } catch (error) {
+          setMessage('Error en la conexión');
+        }
       } else {
-        setMessage(data.error);
-      }
-    } catch (error) {
-      setMessage('Error en la conexión');
-    }
-  };
+        setView('Alert')
+      };
+  }
 
   return (
     <section id="contact" className="contact section">
@@ -81,8 +152,8 @@ const Contact = () => {
               <div className="row gy-4">
                 <div className="col-md-6">
                   <input type="text"
-                         value={name}
-                         onChange={(e) => setName(e.target.value)}
+                         value={firstName}
+                         onChange={(e) => setFirstName(e.target.value)}
                          className="form-control" placeholder="Your Name" required />
                 </div>
                 <div className="col-md-6">

@@ -165,6 +165,9 @@ function App() {
           if (view === "account") {
             return <Account setView={setView} setIsLoged={setIsLoged} />;
           } 
+          if (view === "Alert") {
+            return <Alert setView={setView} />;
+          }
           if (view === "home") {
             return (
               <div>
@@ -176,7 +179,7 @@ function App() {
                   <Doctors />
                   <Gallery />
                   <Faq />
-                  <Contact />
+                  <Contact isLoged={isLoged} setIsLoged={setIsLoged} setView={setView} />
                 </main>
                 <Footer />
     

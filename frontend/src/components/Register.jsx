@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../assets/css/Register.css';
 
 const Register = ({ setView }) => {
@@ -18,6 +18,22 @@ const Register = ({ setView }) => {
   const [postalCode, setPostalCode] = useState('');
   const [gender, setGender] = useState('');
   const [message, setMessage] = useState('');
+
+  // Crear referencias para cada input
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const dniRef = useRef(null);
+  const emailRef = useRef(null);
+  const phoneRef = useRef(null);
+  const addressRef = useRef(null);
+  const birthDateRef = useRef(null);
+  const nationalityRef = useRef(null);
+  const provinceRef = useRef(null);
+  const localityRef = useRef(null);
+  const postalCodeRef = useRef(null);
+  const genderRef = useRef(null);
+  const passwordRef = useRef(null);
+  const repPasswordRef = useRef(null);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -47,6 +63,13 @@ const Register = ({ setView }) => {
     }
   };
 
+  const handleKeyPress = (e, nextRef) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      nextRef.current?.focus();
+    }
+  };
+
   return (
     <div className="gen">
       <div className="register-container">
@@ -61,6 +84,8 @@ const Register = ({ setView }) => {
               name="firstName"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              ref={firstNameRef}
+              onKeyDown={(e) => handleKeyPress(e, lastNameRef)}
             />
           </div>
           <div className="input-group">
@@ -71,6 +96,8 @@ const Register = ({ setView }) => {
               name="lastName"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              ref={lastNameRef}
+              onKeyDown={(e) => handleKeyPress(e, dniRef)}
             />
           </div>
           <div className="input-group">
@@ -81,6 +108,8 @@ const Register = ({ setView }) => {
               name="dni"
               value={dni}
               onChange={(e) => setDni(e.target.value)}
+              ref={dniRef}
+              onKeyDown={(e) => handleKeyPress(e, emailRef)}
             />
           </div>
           <div className="input-group">
@@ -91,6 +120,8 @@ const Register = ({ setView }) => {
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
+              onKeyDown={(e) => handleKeyPress(e, phoneRef)}
             />
           </div>
           <div className="input-group">
@@ -101,6 +132,8 @@ const Register = ({ setView }) => {
               name="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              ref={phoneRef}
+              onKeyDown={(e) => handleKeyPress(e, addressRef)}
             />
           </div>
           <div className="input-group">
@@ -111,52 +144,80 @@ const Register = ({ setView }) => {
               name="address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+              ref={addressRef}
+              onKeyDown={(e) => handleKeyPress(e, birthDateRef)}
             />
           </div>
           <div className="input-group">
               <label htmlFor='birthDate'>Birth Date:</label>
-              <input 
-              type="date" 
+              <input
+              type="date"
               id="birthDate"
-              value={birthDate} 
-              onChange={(e) => setBirthDate(e.target.value)} required/>
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              ref={birthDateRef}
+              onKeyDown={(e) => handleKeyPress(e, nationalityRef)}
+              required
+              />
           </div>
           <div className="input-group">
               <label htmlFor='nationality'>Nationality:</label>
-              <input 
-              type="text" 
+              <input
+              type="text"
               id="nationality"
-              value={nationality} 
-              onChange={(e) => setNationality(e.target.value)} required/>
+              value={nationality}
+              onChange={(e) => setNationality(e.target.value)}
+              ref={nationalityRef}
+              onKeyDown={(e) => handleKeyPress(e, provinceRef)}
+              required
+              />
             </div>
             <div className="input-group">
               <label htmlFor='province'>Province:</label>
-              <input 
-              type="text" 
+              <input
+              type="text"
               id = "province"
-              value={province} 
-              onChange={(e) => setProvince(e.target.value)} required/>
+              value={province}
+              onChange={(e) => setProvince(e.target.value)}
+              ref={provinceRef}
+              onKeyDown={(e) => handleKeyPress(e, localityRef)}
+              required
+              />
             </div>
             <div className="input-group">
               <label htmlFor='locality'>Locality:</label>
-              <input 
-              type="text" 
+              <input
+              type="text"
               id = "locality"
-              value={locality} 
-              onChange={(e) => setLocality(e.target.value)} required/>
+              value={locality}
+              onChange={(e) => setLocality(e.target.value)}
+              ref={localityRef}
+              onKeyDown={(e) => handleKeyPress(e, postalCodeRef)}
+              required
+              />
             </div>
             <div className="input-group">
               <label htmlFor='postalCode'>Postal Code:</label>
-              <input 
-              type="text" 
-              value={postalCode} 
-              onChange={(e) => setPostalCode(e.target.value)} required/>
+              <input
+              type="text"
+              id="postalCode"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              ref={postalCodeRef}
+              onKeyDown={(e) => handleKeyPress(e, genderRef)}
+              required
+              />
             </div>
             <div className="input-group">
               <label htmlFor='gender'>Gender:</label>
-              <select 
-              value={gender} 
-              onChange={(e) => setGender(e.target.value)} required>
+              <select
+              id="gender"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              ref={genderRef}
+              onKeyDown={(e) => handleKeyPress(e, passwordRef)}
+              required
+              >
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -171,6 +232,8 @@ const Register = ({ setView }) => {
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              ref={passwordRef}
+              onKeyDown={(e) => handleKeyPress(e, repPasswordRef)}
             />
           </div>
           <div className="input-group">
@@ -181,6 +244,8 @@ const Register = ({ setView }) => {
               name="repPassword"
               value={repPassword}
               onChange={(e) => setRepPassword(e.target.value)}
+              ref={repPasswordRef}
+              onKeyDown={(e) => handleKeyPress(e, null)} // Último campo, no hay "siguiente".
             />
           </div>
           <button type="submit">Register</button>

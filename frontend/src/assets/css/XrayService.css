@@ -10,6 +10,11 @@
 body, html {
   font-family: 'Roboto', sans-serif;
   color: #f9f9f9;
+  background-size: cover; /* Ajusta la imagen para que cubra toda la pantalla */
+  background-position: center; /* Centra la imagen en la pantalla */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  height: 100vh; /* Asegura que cubra el 100% de la altura del viewport */
+  margin: 0; /* Elimina cualquier margen en la página */
 }
 
 /* Main container */
@@ -22,7 +27,7 @@ body, html {
   top: 0;
   left: 0;
   width: calc(100%);
-  height: 200vh;
+  height: auto;
   background-color: #ffffff;;
   align-items: center;
   font-family: 'Poppins', sans-serif;
