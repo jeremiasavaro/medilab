@@ -20,6 +20,7 @@ from functions import load_image, preprocess_image, create_diagnosis_pdf
 tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
+# Configure CORS with support for credentials and allow all origins
 CORS(app, supports_credentials=True, origins=['*'])
 
 # Load environment variables
@@ -53,6 +54,7 @@ def handle_options_requests():
         return response
 
 
+# Method used for making the response with the proper headers
 def make_response(json_message, status_code):
     response = jsonify(json_message)
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -63,24 +65,27 @@ def make_response(json_message, status_code):
     return response
 
 
+# Method used for decoding the token
 def decode_token(encoded_token):
     if not encoded_token:
-        return None, make_response({'error': 'No se encontro el token'}, 401)
+        return None, make_response({'error': 'Token not found'}, 401)
     try:
         decoded_token = jwt.decode(encoded_token, app.config['SECRET_KEY'], algorithms=[os.getenv('DECODIFICATION_ALGORITHM')])
         return decoded_token, None
     except jwt.ExpiredSignatureError:
-        return None, make_response({'error': 'El token ya expiro'}, 401)
+        return None, make_response({'error': 'Token expired'}, 401)
     except jwt.InvalidTokenError:
-        return None, make_response({'error': 'Token invalido'}, 401)
+        return None, make_response({'error': 'Invalid token'}, 401)
 
 
+# Endpoint used for obtaining the token
 @app.route('/obtainToken', methods=['GET'])
 def obtain_token():
     global token
     return make_response({'token': token}, 200)
 
 
+# Endpoint used for obtaining the user data
 @app.route('/obtainData', methods=['GET'])
 def obtain_user_data():
     encoded_token = request.headers.get('Authorization')
@@ -91,7 +96,7 @@ def obtain_user_data():
     dni = decoded_token.get('dni')
     patient_data = get_patient(dni)
     if not patient_data:
-        return make_response({'error': 'Usuario no encontrado'}, 404)
+        return make_response({'error': 'User not found'}, 404)
 
     return make_response({
         'dni': patient_data[0],
@@ -110,6 +115,7 @@ def obtain_user_data():
     }, 200)
 
 
+# Endpoint used for logging in
 @app.route('/login', methods=['POST'])
 def login():
     global token
@@ -118,20 +124,21 @@ def login():
     password = data.get('password')
 
     if not dni or not password:
-        return make_response({'error': 'Faltan datos'}, 400)
+        return make_response({'error': 'Data missing'}, 400)
 
     user = get_patient(dni)
     if not user:
-        return make_response({'error': 'No hay un usuario registrado con ese DNI'}, 401)
+        return make_response({'error': 'No user registered with that DNI'}, 401)
 
     user_password = bytes(get_password(dni))
     if bcrypt.checkpw(password.encode('utf-8'), user_password):
         token = jwt.encode({'dni': dni}, app.config['SECRET_KEY'])
-        return make_response({'message': 'Login exitoso', 'token': token}, 200)
+        return make_response({'message': 'Successful login', 'token': token}, 200)
     else:
-        return make_response({'error': 'Credenciales incorrectas'}, 401)
+        return make_response({'error': 'Incorrect credentials'}, 401)
 
 
+# Endpoint used for registering a new user
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -142,13 +149,13 @@ def register():
     ]
     for field in required_fields:
         if not data.get(field):
-            return make_response({'error': 'Faltan datos'}, 400)
+            return make_response({'error': 'Data missing'}, 400)
 
     if data['password'] != data['repPassword']:
-        return make_response({'error': 'Las contraseñas no son iguales'}, 400)
+        return make_response({'error': 'Passwords don\'t match'}, 400)
 
     if get_patient(data['dni']):
-        return make_response({'error': 'El usuario ya existe'}, 409)
+        return make_response({'error': 'User already exists'}, 409)
 
     encoded_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
     insert_patient(
@@ -157,22 +164,24 @@ def register():
         data['province'], data['locality'], data['postalCode'], data['address'],
         data['gender']
     )
-    return make_response({'message': 'Registro completado correctamente'}, 200)
+    return make_response({'message': 'Register completed successfully'}, 200)
 
 
+# Endpoint used for sending a contact message
 @app.route('/contact', methods=['POST'])
 def contact():
     data = request.json
     required_fields = ['name', 'email', 'subject', 'userMessage']
     for field in required_fields:
         if not data.get(field):
-            return make_response({'error': 'Faltan datos'}, 400)
+            return make_response({'error': 'Data missing'}, 400)
 
     # Save contact data to the database
     # TODO: Implement database saving logic
-    return make_response({'message': 'Contacto recibido correctamente'}, 200)
+    return make_response({'message': 'Contact message sent successfully'}, 200)
 
 
+# Endpoint used for modifying the user account
 @app.route('/account', methods=['POST'])
 def account():
     data = request.json
@@ -183,25 +192,26 @@ def account():
     ]
     for field in required_fields:
         if not data.get(field):
-            return make_response({'error': 'Faltan datos'}, 400)
+            return make_response({'error': 'Data missing'}, 400)
 
     user = get_patient(data['dni'])
     if not user or not bcrypt.checkpw(data['currentPassword'].encode('utf-8'), bytes(get_password(data['dni']))):
-        return make_response({'error': 'La contraseña actual no es correcta'}, 400)
+        return make_response({'error': 'Actual password isn\'t correct'}, 400)
 
     modify_patient(
         data['dni'], data['firstName'], data['lastName'], data['email'],
         data['phone'], data['birthDate'], data['nationality'], data['province'],
         data['locality'], data['postalCode'], data['address'], data['gender']
     )
-    return make_response({'message': 'Datos modificados correctamente'}, 200)
+    return make_response({'message': 'Data modified successfully'}, 200)
 
 
+# Endpoint used for uploading an image
 @app.route('/upload_image', methods=['POST'])
 @app.route('/upload_xray_photo', methods=['POST'])
 def image_upload():
     if 'file' not in request.files or not request.files['file'].filename:
-        return make_response({'error': 'No se encontró un archivo'}, 400)
+        return make_response({'error': 'File not found'}, 400)
 
     file = request.files['file']
     upload_result = cloudinary.uploader.upload(file)
@@ -214,23 +224,24 @@ def image_upload():
 
     dni = decoded_token.get('dni')
     if not get_patient(dni):
-        return make_response({'error': 'Usuario no encontrado'}, 404)
+        return make_response({'error': 'User not found'}, 404)
 
     if request.path == '/upload_image':
         modify_image_patient(dni, image_url)
     return make_response({'image_url': image_url}, 200)
 
 
+# Endpoint used for changing the password
 @app.route('/change_password', methods=['POST'])
 def change_password():
     data = request.json
     required_fields = ['currentPassword', 'newPassword', 'repNewPassword']
     for field in required_fields:
         if not data.get(field):
-            return make_response({'error': 'Faltan datos'}, 400)
+            return make_response({'error': 'Data missing'}, 400)
 
     if data['newPassword'] != data['repNewPassword']:
-        return make_response({'error': 'Las contraseñas no son iguales'}, 400)
+        return make_response({'error': 'Passwords don\'t match'}, 400)
 
     encoded_token = request.headers.get('Authorization')
     decoded_token, error_response = decode_token(encoded_token)
@@ -239,18 +250,19 @@ def change_password():
 
     dni = decoded_token.get('dni')
     if not get_patient(dni) or not bcrypt.checkpw(data['currentPassword'].encode('utf-8'), bytes(get_password(dni))):
-        return make_response({'error': 'La contraseña actual ingresada no es correcta'}, 400)
+        return make_response({'error': 'Actual password entered isn\'t correct'}, 400)
 
     encoded_password = bcrypt.hashpw(data['newPassword'].encode('utf-8'), bcrypt.gensalt())
     modify_password(dni, encoded_password)
-    return make_response({'message': 'Contraseña actualizada con éxito'}, 200)
+    return make_response({'message': 'Password updated successfully'}, 200)
 
 
+# Endpoint used for deleting the user's account
 @app.route('/deleteAccount', methods=['POST'])
 def delete_account():
     data = request.json
     if not data.get('currentPassword'):
-        return make_response({'error': 'Faltan datos'}, 400)
+        return make_response({'error': 'Data missing'}, 400)
 
     encoded_token = request.headers.get('Authorization')
     decoded_token, error_response = decode_token(encoded_token)
@@ -259,12 +271,13 @@ def delete_account():
 
     dni = decoded_token.get('dni')
     if not get_patient(dni) or not bcrypt.checkpw(data['currentPassword'].encode('utf-8'), bytes(get_password(dni))):
-        return make_response({'error': 'La contraseña actual ingresada no es correcta'}, 400)
+        return make_response({'error': 'Actual password entered isn\'t correct'}, 400)
 
     delete_patient(dni)
-    return make_response({'message': 'Cuenta eliminada con exito'}, 200)
+    return make_response({'message': 'Account deleted successfully'}, 200)
 
 
+# Endpoint used for obtaining the diagnostic for the uploaded image
 @app.route('/xray_diagnosis', methods=['POST'])
 def xray_diagnosis():
     if 'image_url' not in request.form:
@@ -286,7 +299,7 @@ def xray_diagnosis():
     dni = decoded_token.get('dni')
     patient = get_patient(dni)
     if not patient:
-        return make_response({'error': 'Usuario no encontrado'}, 404)
+        return make_response({'error': 'User not found'}, 404)
 
     patient_name = patient[0]
     diagnosis_date = datetime.today()
