@@ -37,7 +37,12 @@ This project aims to develop a web application in the field of medicine, special
 3. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
-4. Run the Flask application:
+4. Apply the migration to initialize the database:
+   ```bash
+   flask db init
+   flask db migrate
+   flask db upgrade
+5. Run the Flask application:
    ```bash
    flask run
 
