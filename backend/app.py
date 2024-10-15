@@ -20,7 +20,7 @@ from functions import load_image, preprocess_image, create_diagnosis_pdf
 tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:3000'])
+CORS(app, supports_credentials=True, origins=['*'])
 
 # Load environment variables
 load_dotenv()
@@ -46,7 +46,7 @@ def handle_options_requests():
     if request.method == 'OPTIONS':
         response = jsonify({'message': 'Preflight Request'})
         response.status_code = 200
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Origin', '*')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -55,7 +55,7 @@ def handle_options_requests():
 
 def make_response(json_message, status_code):
     response = jsonify(json_message)
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+    response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')

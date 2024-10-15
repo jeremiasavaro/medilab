@@ -22,11 +22,6 @@ const XrayService = ({ setView }) => {
     setSelectedFile(file);
 
     if (file) {
-      if (!token || isExpired) {
-        setMessage('Token is invalid or expired. Please obtain a new token.');
-        return;
-      }
-
       const formData = new FormData();
       formData.append('file', file);
 
@@ -64,6 +59,9 @@ const XrayService = ({ setView }) => {
 
       try {
         const response = await fetch('http://localhost:5000/xray_diagnosis', {
+          headers: {
+            'Authorization': token,
+          },
           method: 'POST',
           body: formData,
         });
