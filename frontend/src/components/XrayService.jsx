@@ -1,15 +1,19 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../assets/css/XrayService.css';
+import { useJwt } from "react-jwt";
 
 const XrayService = ({ setView }) => {
   const [message, setMessage] = useState('');
   const [openSection, setOpenSection] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const [pdfBlob, setPdfBlob] = useState(null);  
-  const [isUploadVisible, setIsUploadVisible] = useState(true); 
-  const [isScanning, setIsScanning] = useState(false);  
+  const [pdfBlob, setPdfBlob] = useState(null);
+  const [isUploadVisible, setIsUploadVisible] = useState(true);
+  const [isScanning, setIsScanning] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [token, setToken] = useState('');
+
+  const { decodedToken, isExpired } = useJwt(token);
 
   const tableRef = useRef(null); // Referencia a la tabla
 
@@ -18,12 +22,20 @@ const XrayService = ({ setView }) => {
     setSelectedFile(file);
 
     if (file) {
+      if (!token || isExpired) {
+        setMessage('Token is invalid or expired. Please obtain a new token.');
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', file);
 
       try {
         const response = await fetch('http://localhost:5000/upload_xray_photo', {
           method: 'POST',
+          headers: {
+            'Authorization': token,
+          },
           body: formData,
         });
 
@@ -67,9 +79,32 @@ const XrayService = ({ setView }) => {
     } else {
       console.log('No hay imagen cargada.');
     }
-
   };
-  
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setToken(data.token);
+        } else {
+          setMessage("No se pudo obtener el token");
+        }
+      } catch (error) {
+        setMessage('Error al obtener el token');
+      }
+    };
+
+    fetchToken();
+  }, []);
+
   const handleDownloadClick = () => {
     if (pdfBlob) {
       const url = window.URL.createObjectURL(pdfBlob);
@@ -80,10 +115,10 @@ const XrayService = ({ setView }) => {
       link.click();
       link.parentNode.removeChild(link);  // Remover el enlace después de la descarga
     }
-  
+
     // Mostrar la tabla y esperar a que se renderice
     setShowTable(true);
-  
+
     // Usar setTimeout para hacer el scroll después del siguiente ciclo de renderizado
     setTimeout(() => {
       if (tableRef.current) {
@@ -139,15 +174,15 @@ const XrayService = ({ setView }) => {
               />
             </div>
 
-            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}><i class="fa-solid fa-expand"></i> {isScanning ? 'Scanning...' : 'Start Scanning'}
+            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}><i className="fa-solid fa-expand"></i> {isScanning ? 'Scanning...' : 'Start Scanning'}
               <br></br>
             </button>
             {isScanning && <div className="loading">Procesando...</div>}
 
             <br></br>
             {pdfBlob && (
-              <button className="download-button" 
-              onClick={handleDownloadClick}><i class="fa-regular fa-file-pdf"></i> Download Diagnosis PDF
+              <button className="download-button"
+              onClick={handleDownloadClick}><i className="fa-regular fa-file-pdf"></i> Download Diagnosis PDF
               </button>
             )}
           </>
@@ -188,7 +223,7 @@ const XrayService = ({ setView }) => {
             </div>
           </div>
         )}
-      </div> 
+      </div>
       {openSection === 'info' && (
         <div className="overlay-section active">
           <div className="overlay-content">
