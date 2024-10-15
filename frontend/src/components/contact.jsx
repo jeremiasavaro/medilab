@@ -79,7 +79,18 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
             body: JSON.stringify({ firstName, email, subject, userMessage }),
           });
 
-          const data = await response.json(); // Parsea la respuesta del servidor como JSON.
+    try {
+      // Realiza una solicitud POST al servidor.
+      const response = await fetch('http://127.0.0.1:5000/contact', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
+        },
+        body: JSON.stringify({ name, email, subject, userMessage }),
+      });
+
+      const data = await response.json(); // Parsea la respuesta del servidor como JSON.
 
           if (response.ok) {
             setMessage(data.message);

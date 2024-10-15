@@ -10,11 +10,10 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 from tensorflow.keras.models import load_model
-from db.functions_db import (
-    get_patient, insert_patient, get_password, modify_patient,
-    modify_password, modify_image_patient, delete_patient,
-    insert_diagnostic, get_doctors_by_speciality
-)
+from db.database import db, migrate
+from db.functions_db import *
+from db.models import *
+
 from functions import load_image, preprocess_image, create_diagnosis_pdf
 
 tf.get_logger().setLevel('ERROR')
@@ -27,8 +26,13 @@ CORS(app, supports_credentials=True, origins=['*'])
 load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+
+db.init_app(app)
+migrate.init_app(app, db)
+
 # Load AI model
-model = load_model(os.getenv('MODEL_PATH'))
+#model = load_model(os.getenv('MODEL_PATH'))
 
 # Cloudinary configuration
 cloudinary.config(
@@ -96,22 +100,22 @@ def obtain_user_data():
     dni = decoded_token.get('dni')
     patient_data = get_patient(dni)
     if not patient_data:
-        return make_response({'error': 'User not found'}, 404)
+        return make_response({'error': 'Usuario no encontrado'}, 404)
 
     return make_response({
-        'dni': patient_data[0],
-        'firstName': patient_data[1],
-        'lastName': patient_data[2],
-        'email': patient_data[4],
-        'phone': patient_data[5],
-        'birthDate': patient_data[6],
-        'nationality': patient_data[8],
-        'province': patient_data[9],
-        'locality': patient_data[10],
-        'postalCode': patient_data[11],
-        'address': patient_data[12],
-        'gender': patient_data[13],
-        'imagePatient': patient_data[14]
+        'dni': patient_data.dni,
+        'firstName': patient_data.first_name,
+        'lastName': patient_data.last_name,
+        'email': patient_data.email,
+        'phone': patient_data.phone_number,
+        'birthDate': patient_data.date_birth,
+        'nationality': patient_data.nationality,
+        'province': patient_data.province,
+        'locality': patient_data.locality,
+        'postalCode': patient_data.postal_code,
+        'address': patient_data.address,
+        'gender': patient_data.gender,
+        'imagePatient': patient_data.image_patient
     }, 200)
 
 
@@ -137,7 +141,7 @@ def login():
     else:
         return make_response({'error': 'Incorrect credentials'}, 401)
 
-
+      
 # Endpoint used for registering a new user
 @app.route('/register', methods=['POST'])
 def register():

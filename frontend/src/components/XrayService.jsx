@@ -63,6 +63,7 @@ const XrayService = ({ setView }) => {
             'Authorization': token,
           },
           method: 'POST',
+          credentials: 'include',
           body: formData,
         });
 
