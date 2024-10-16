@@ -16,6 +16,7 @@ const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone,
         try {
             const response = await fetch('http://127.0.0.1:5000/account', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },

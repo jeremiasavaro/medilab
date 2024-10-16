@@ -17,6 +17,7 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
     try {
       const response = await fetch('http://127.0.0.1:5000/change_password', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

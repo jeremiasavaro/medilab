@@ -10,7 +10,6 @@
 body, html {
   font-family: 'Roboto', sans-serif;
   color: #f9f9f9;
-  background-image: url(https://img.freepik.com/fotos-premium/doctor-mirando-radiografia-torax_488220-27272.jpg);
   background-size: cover; /* Ajusta la imagen para que cubra toda la pantalla */
   background-position: center; /* Centra la imagen en la pantalla */
   background-repeat: no-repeat; /* Evita que la imagen se repita */

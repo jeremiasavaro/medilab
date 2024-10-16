@@ -1,10 +1,11 @@
 import requests
 import numpy as np
-from io import BytesIO
 from PIL import Image
 from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
+from io import BytesIO
 
 
 def load_image(image_url):
@@ -36,56 +37,76 @@ def preprocess_image(image):
     return image_array
 
 
-def create_diagnosis_pdf(patient_name, diagnosis_date, pneumonia_prob, healthy_prob):
-    # Crear el documento PDF en memoria
+def create_diagnosis_pdf(patient_name, diagnosis_date, diagnosis, diagnosis_prob):
     pdf_buffer = BytesIO()
     pdf = SimpleDocTemplate(pdf_buffer, pagesize=A4)
     elements = []
 
-    # Estilos
     styles = getSampleStyleSheet()
     title_style = styles['Title']
-    body_style = styles['BodyText']
+    body_style = ParagraphStyle('BodyText', fontName='Helvetica', fontSize=12, spaceAfter=12)
+    subtitle_style = ParagraphStyle('Subtitle', fontName='Helvetica-Bold', fontSize=14, textColor=colors.darkblue, spaceAfter=12)
 
-    # Título del informe
-    elements.append(Paragraph("Informe de Diagnóstico", title_style))
+    elements.append(Paragraph("Medical Diagnosis Report", title_style))
     elements.append(Spacer(1, 12))
 
-    # Datos del paciente
-    elements.append(Paragraph(f"Paciente: {patient_name}", body_style))
-    elements.append(Paragraph(f"Fecha del Diagnóstico: {diagnosis_date}", body_style))
+    elements.append(Paragraph(f"Patient: {patient_name}", body_style))
+    elements.append(Paragraph(f"Diagnosis Date: {diagnosis_date}", body_style))
     elements.append(Spacer(1, 12))
 
-    # Diagnóstico detallado o simple
-    if pneumonia_prob > healthy_prob:
-        elements.append(Paragraph("**Diagnóstico: Neumonía**", title_style))
+    if diagnosis == "pneumonia":
+        elements.append(Paragraph("Diagnosis: Pneumonia", subtitle_style))
         elements.append(Spacer(1, 12))
-
-        description = """La neumonía es una infección pulmonar que inflama los sacos aéreos ..."""
-        elements.append(Paragraph(description, body_style))
-        elements.append(Spacer(1, 12))
-
-        effects = """Los síntomas comunes de la neumonía incluyen tos con flema ..."""
-        elements.append(Paragraph(effects, body_style))
-        elements.append(Spacer(1, 12))
-
-        treatment = """El tratamiento de la neumonía incluye antibióticos, antivirales o antifúngicos ..."""
-        elements.append(Paragraph(treatment, body_style))
-        elements.append(Spacer(1, 12))
-
-        conclusion = f"""El paciente {patient_name} tiene una probabilidad del {pneumonia_prob:.2f}% de tener neumonía."""
-        elements.append(Paragraph(conclusion, body_style))
+        description = """Pneumonia is a serious lung infection that causes the air sacs in the lungs to become inflamed and filled with fluid or pus. 
+                        This can lead to symptoms such as coughing with mucus, fever, difficulty breathing, and chest pain. Pneumonia can range from mild to life-threatening, 
+                        especially in older adults, children, and individuals with weakened immune systems. The severity of the condition depends on the type of pneumonia and the patient's overall health."""
+        treatment = """Treatment for pneumonia typically involves antibiotics, antivirals, or antifungals, depending on the underlying cause of the infection. 
+                       In severe cases, hospitalization may be required to provide oxygen therapy or mechanical ventilation. Vaccination and preventive measures can reduce the risk of pneumonia."""
+    elif diagnosis == "tuberculosis":
+        elements.append(Paragraph("Diagnosis: Tuberculosis", subtitle_style))
+        description = """Tuberculosis (TB) is an infectious disease caused by the bacterium Mycobacterium tuberculosis, primarily affecting the lungs. 
+                         TB is spread through airborne droplets when an infected person coughs or sneezes. Early symptoms include a persistent cough, 
+                         night sweats, fever, and weight loss. Without timely treatment, tuberculosis can be life-threatening and may spread to other parts of the body."""
+        treatment = """The standard treatment for tuberculosis is a long-term course of antibiotics, often lasting six to nine months. 
+                       Early detection and adherence to the full course of treatment are critical to prevent the development of drug-resistant strains of the bacterium."""
+    elif diagnosis == "covid":
+        elements.append(Paragraph("Diagnosis: COVID-19", subtitle_style))
+        description = """COVID-19 is a viral respiratory illness caused by the SARS-CoV-2 virus. The severity of the disease can vary significantly, ranging from mild symptoms such as cough and fever 
+                        to severe respiratory distress that may require hospitalization. The virus primarily spreads through respiratory droplets and close contact with infected individuals. 
+                        It has had a global impact due to its highly contagious nature and potential for severe health outcomes."""
+        treatment = """Treatment for COVID-19 varies depending on the severity of symptoms. Mild cases may only require rest and symptom management, 
+                       while severe cases may necessitate hospitalization, oxygen therapy, and in critical cases, mechanical ventilation. Vaccination is the most effective way to prevent severe illness."""
+    elif diagnosis == "pulmonia":
+        elements.append(Paragraph("Diagnosis: Pneumonia", subtitle_style))
+        description = """Pneumonia, also known as pulmonary infection, causes inflammation of the air sacs in one or both lungs. 
+                         It can result in fluid accumulation, leading to difficulty breathing and a range of systemic symptoms. 
+                         Pneumonia can result from bacterial, viral, or fungal infections, each requiring specific therapeutic approaches. 
+                         Early diagnosis and intervention are key to reducing the risk of complications."""
+        treatment = """The treatment for pneumonia involves addressing the underlying cause. Bacterial pneumonia is treated with antibiotics, 
+                       viral pneumonia with antivirals, and in some cases, antifungal medications. 
+                       Supportive care, including rest, fluids, and oxygen therapy, is crucial in managing symptoms."""
+    elif diagnosis == "cancer":
+        elements.append(Paragraph("Diagnosis: Lung Cancer", subtitle_style))
+        description = """Lung cancer is a serious condition characterized by the uncontrolled growth of abnormal cells in the lungs. 
+                         It is one of the most common and deadliest cancers worldwide, often caused by smoking, exposure to hazardous chemicals, or genetic factors. 
+                         Symptoms of lung cancer include persistent cough, unexplained weight loss, shortness of breath, and chest pain. Early detection is crucial for improving outcomes."""
+        treatment = """Lung cancer treatment depends on the stage of the disease. Options include surgery to remove tumors, chemotherapy, radiation therapy, 
+                       and targeted therapies. Early-stage lung cancer may be curable with surgery, while advanced stages often require a combination of treatments to manage the disease."""
     else:
-        elements.append(Paragraph("**Diagnóstico: Saludable**", title_style))
-        elements.append(Spacer(1, 12))
+        elements.append(Paragraph("Diagnosis: Healthy", subtitle_style))
+        description = """Based on the medical evaluation and imaging, the patient does not present signs of significant pulmonary disease. 
+                         Regular monitoring and healthy lifestyle choices are recommended to maintain lung health and overall well-being."""
+        treatment = """No medical intervention is necessary at this time. However, maintaining a healthy lifestyle, regular check-ups, and preventive care are essential for long-term health."""
 
-        conclusion = f"""El paciente {patient_name} no presenta signos de neumonía ..."""
-        elements.append(Paragraph(conclusion, body_style))
+    elements.append(Paragraph(description, body_style))
+    elements.append(Spacer(1, 12))
 
-    # Construir el PDF
+    conclusion = f"The patient, {patient_name}, has a {diagnosis_prob:.2f}% likelihood of having {diagnosis}."
+    elements.append(Paragraph(conclusion, body_style))
+    elements.append(Spacer(1, 12))
+
     pdf.build(elements)
     pdf_buffer.seek(0)
 
-    # Regresar el buffer para ser enviado como archivo
     return pdf_buffer
 
