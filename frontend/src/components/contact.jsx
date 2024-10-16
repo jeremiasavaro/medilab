@@ -73,24 +73,14 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
           // Realiza una solicitud POST al servidor.
           const response = await fetch('http://127.0.0.1:5000/contact', {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
             },
-            body: JSON.stringify({ firstName, email, subject, userMessage }),
+            body: JSON.stringify({ firstName, lastName, email, subject, userMessage }),
           });
 
-    try {
-      // Realiza una solicitud POST al servidor.
-      const response = await fetch('http://127.0.0.1:5000/contact', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud está en formato JSON.
-        },
-        body: JSON.stringify({ name, email, subject, userMessage }),
-      });
-
-      const data = await response.json(); // Parsea la respuesta del servidor como JSON.
+          const data = await response.json(); // Parsea la respuesta del servidor como JSON.
 
           if (response.ok) {
             setMessage(data.message);
@@ -102,21 +92,20 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
         }
       } else {
         setView('Alert')
-      };
+      }
   }
 
   return (
     <section id="contact" className="contact section">
       <div className="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>If you have any questions or recommendations, please contact us.</p>
       </div>
       <div className="mb-5" data-aos="fade-up" data-aos-delay="200">
-        <iframe
+      <iframe
             style={{border: 0, width: '100%', height: '270px'}}
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.296302968326!2d-64.351665!3d-33.127668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95d2cc0343eb97a3%3A0xb3bc9f4fd8e978d5!2sPedro%20Zanni%2014%2C%20X5800%20R%C3%ADo%20Cuarto%2C%20C%C3%B3rdoba%2C%20Argentina!5e0!3m2!1sen!2sus!4v1693602897983!5m2!1sen!2sus"
-            frameBorder="0"
-            allowFullScreen
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26729.843315742124!2d-64.3497984!3d-33.129310749999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95cdffb8089fff01%3A0x8851f91e0b23b631!2sUniversidad%20Nacional%20de%20R%C3%ADo%20Cuarto!5e0!3m2!1ses!2sar!4v1729089446519!5m2!1ses!2sar"
+            allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
@@ -129,7 +118,7 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
               <i className="bi bi-geo-alt flex-shrink-0"></i>
               <div>
                 <h3>Location</h3>
-                <p>Pedro Zanni 14, Rio Cuarto, 5200</p>
+                <p>Universidad Nacional de Río Cuarto, 5800</p>
               </div>
             </div>
             <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
@@ -154,19 +143,25 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
                   <input type="text"
                          value={firstName}
                          onChange={(e) => setFirstName(e.target.value)}
-                         className="form-control" placeholder="Your Name" required />
+                         className="form-control" placeholder="First Name" required/>
                 </div>
                 <div className="col-md-6">
+                  <input type="text"
+                         value={lastName}
+                         onChange={(e) => setLastName(e.target.value)}
+                         className="form-control" placeholder="Last Name" required/>
+                </div>
+                <div className="col-md-12">
                   <input type="email"
                          value={email}
                          onChange={(e) => setEmail(e.target.value)}
-                         className="form-control" name="email" placeholder="Your Email" required />
+                         className="form-control" name="email" placeholder="Your Email" required/>
                 </div>
                 <div className="col-md-12">
                   <input type="text"
                          value={subject}
                          onChange={(e) => setSubject(e.target.value)}
-                         className="form-control" name="subject" placeholder="Subject" required />
+                         className="form-control" name="subject" placeholder="Subject" required/>
                 </div>
                 <div className="col-md-12">
                   <textarea
