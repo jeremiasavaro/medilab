@@ -65,4 +65,10 @@ This project aims to develop a web application in the field of medicine, special
    serve -s build
 
 ## Contact
-For any questions or inquiries, please contact jeremiasavaro7@gmail.com.
+For any questions or inquiries, please contact:
+  ccornejomateo@gmail.com
+  maximarquez2004@gmail.com
+  jeremiasavaro7@gmail.com
+  marcelo395juarez@gmail.com
+  fede.dalio1@gmail.com
+  matiaspellizzari0@gmail.com
