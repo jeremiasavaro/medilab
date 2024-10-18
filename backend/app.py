@@ -1,9 +1,8 @@
+#app.py
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from io import BytesIO
 import bcrypt
-import cloudinary
-import cloudinary.uploader
 import jwt
 import tensorflow as tf
 import os
@@ -13,36 +12,23 @@ from tensorflow.keras.models import load_model
 from db.database import db, migrate
 from db.functions_db import *
 from db.models import *
-
+from config.config import *
 from functions import load_image, preprocess_image, create_diagnosis_pdf
 
 tf.get_logger().setLevel('ERROR')
 
-app = Flask(__name__)
-# Configure CORS with support for credentials and allow all origins
-CORS(app, supports_credentials=True, origins=['*'])
 
-# Load environment variables
-load_dotenv()
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+#factory imported from factory folder
+from factory.__init__ import create_app
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-
-db.init_app(app)
-migrate.init_app(app, db)
+app = create_app()
 
 # Load AI model
 #model = load_model(os.getenv('MODEL_PATH'))
 
-# Cloudinary configuration
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
-
 # Global token variable
 token = "token"
+
 
 
 # Preflight response in order to avoid CORS blocking
