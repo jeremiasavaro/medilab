@@ -20,7 +20,7 @@ tf.get_logger().setLevel('ERROR')
 
 app = Flask(__name__)
 # Configure CORS with support for credentials and allow all origins
-CORS(app, supports_credentials=True, origins=['*'])
+CORS(app, supports_credentials=True, origins=['http://localhost:3000'])
 
 # Load environment variables
 load_dotenv()
@@ -32,7 +32,7 @@ db.init_app(app)
 migrate.init_app(app, db)
 
 # Load AI model
-#model = load_model(os.getenv('MODEL_PATH'))
+model = load_model(os.getenv('MODEL_PATH'))
 
 # Cloudinary configuration
 cloudinary.config(
@@ -51,7 +51,7 @@ def handle_options_requests():
     if request.method == 'OPTIONS':
         response = jsonify({'message': 'Preflight Request'})
         response.status_code = 200
-        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -61,7 +61,7 @@ def handle_options_requests():
 # Method used for making the response with the proper headers
 def make_response(json_message, status_code):
     response = jsonify(json_message)
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -141,7 +141,7 @@ def login():
     else:
         return make_response({'error': 'Incorrect credentials'}, 401)
 
-      
+
 # Endpoint used for registering a new user
 @app.route('/register', methods=['POST'])
 def register():
@@ -175,7 +175,7 @@ def register():
 @app.route('/contact', methods=['POST'])
 def contact():
     data = request.json
-    required_fields = ['name', 'email', 'subject', 'userMessage']
+    required_fields = ['firstName', 'lastName', 'email', 'subject', 'userMessage']
     for field in required_fields:
         if not data.get(field):
             return make_response({'error': 'Data missing'}, 400)
@@ -277,7 +277,7 @@ def delete_account():
     if not get_patient(dni) or not bcrypt.checkpw(data['currentPassword'].encode('utf-8'), bytes(get_password(dni))):
         return make_response({'error': 'Actual password entered isn\'t correct'}, 400)
 
-    delete_patient(dni)
+    delete_patient(dni=dni)
     return make_response({'message': 'Account deleted successfully'}, 200)
 
 
@@ -305,7 +305,7 @@ def xray_diagnosis():
     if not patient:
         return make_response({'error': 'User not found'}, 404)
 
-    patient_name = patient[0]
+    patient_name = patient.first_name + " " + patient.last_name
     diagnosis_date = datetime.today()
 
     if pneumonia_percentage > normal_percentage:
