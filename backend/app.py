@@ -1,5 +1,5 @@
 #app.py
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, current_app, jsonify, send_file
 from flask_cors import CORS
 from io import BytesIO
 import bcrypt
@@ -14,22 +14,20 @@ from db.functions_db import *
 from db.models import *
 from config.config import *
 from functions import load_image, preprocess_image, create_diagnosis_pdf
+from factory.__init__ import create_app
 
 tf.get_logger().setLevel('ERROR')
 
-
-#factory imported from factory folder
-from factory.__init__ import create_app
-
+#Create the app
 app = create_app()
 
-# Load AI model
-#model = load_model(os.getenv('MODEL_PATH'))
+#Import the AI model
+with app.app_context():
+    # Save the model used to predict
+    model = current_app.model
 
 # Global token variable
 token = "token"
-
-
 
 # Preflight response in order to avoid CORS blocking
 @app.before_request
@@ -37,7 +35,7 @@ def handle_options_requests():
     if request.method == 'OPTIONS':
         response = jsonify({'message': 'Preflight Request'})
         response.status_code = 200
-        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -47,7 +45,7 @@ def handle_options_requests():
 # Method used for making the response with the proper headers
 def make_response(json_message, status_code):
     response = jsonify(json_message)
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -291,7 +289,8 @@ def xray_diagnosis():
     if not patient:
         return make_response({'error': 'User not found'}, 404)
 
-    patient_name = patient[0]
+    patient_name = patient.first_name
+  
     diagnosis_date = datetime.today()
 
     if pneumonia_percentage > normal_percentage:
