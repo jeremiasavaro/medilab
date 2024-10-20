@@ -280,6 +280,20 @@ def delete_account():
     delete_patient(dni=dni)
     return make_response({'message': 'Account deleted successfully'}, 200)
 
+# Endpoint used for obtaining the doctors table
+@app.route('/doctors', methods=['GET'])
+def get_doctors():
+    doctors = Doctor.query.all()  #Traemos todos los doctores de la tabla correspondiente
+    doctors_list = [{
+        'image_doctor': doctor.image_doctor,
+        'dni': doctor.dni,
+        'first_name': doctor.first_name,
+        'last_name': doctor.last_name,
+        'speciality': doctor.speciality,
+        'email': doctor.email
+    } for doctor in doctors]
+    
+    return jsonify(doctors_list)
 
 # Endpoint used for obtaining the diagnostic for the uploaded image
 @app.route('/xray_diagnosis', methods=['POST'])
