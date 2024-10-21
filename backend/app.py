@@ -1,9 +1,8 @@
-from flask import Flask, request, jsonify, send_file
+#app.py
+from flask import Flask, request, current_app, jsonify, send_file
 from flask_cors import CORS
 from io import BytesIO
 import bcrypt
-import cloudinary
-import cloudinary.uploader
 import jwt
 import tensorflow as tf
 import os
@@ -13,37 +12,22 @@ from tensorflow.keras.models import load_model
 from db.database import db, migrate
 from db.functions_db import *
 from db.models import *
-
-from functions import load_image, preprocess_image, create_diagnosis_pdf
+from config.config import *
+from diagnosis.functions import load_image, preprocess_image, create_diagnosis_pdf
+from factory.__init__ import create_app
 
 tf.get_logger().setLevel('ERROR')
 
-app = Flask(__name__)
-# Configure CORS with support for credentials and allow all origins
-CORS(app, supports_credentials=True, origins=['http://localhost:3000'])
+#Create the app
+app = create_app()
 
-# Load environment variables
-load_dotenv()
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-
-db.init_app(app)
-migrate.init_app(app, db)
-
-# Load AI model
-model = load_model(os.getenv('MODEL_PATH'))
-
-# Cloudinary configuration
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
+#Import the AI model
+with app.app_context():
+    # Save the model used to predict
+    model = current_app.model
 
 # Global token variable
 token = "token"
-
 
 # Preflight response in order to avoid CORS blocking
 @app.before_request
@@ -320,6 +304,7 @@ def xray_diagnosis():
         return make_response({'error': 'User not found'}, 404)
 
     patient_name = patient.first_name + " " + patient.last_name
+    
     diagnosis_date = datetime.today()
 
     if pneumonia_percentage > normal_percentage:

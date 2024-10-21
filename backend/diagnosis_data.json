@@ -1,0 +1,27 @@
+{
+    "pneumonia": {
+        "title": "Diagnosis: Pneumonia",
+        "description": "Pneumonia is a serious lung infection that causes the air sacs in the lungs to become inflamed and filled with fluid or pus. This can lead to symptoms such as coughing with mucus, fever, difficulty breathing, and chest pain. Pneumonia can range from mild to life-threatening, especially in older adults, children, and individuals with weakened immune systems.",
+        "treatment": "Treatment for pneumonia typically involves antibiotics, antivirals, or antifungals, depending on the underlying cause of the infection. In severe cases, hospitalization may be required to provide oxygen therapy or mechanical ventilation. Vaccination and preventive measures can reduce the risk of pneumonia."
+    },
+    "tuberculosis": {
+        "title": "Diagnosis: Tuberculosis",
+        "description": "Tuberculosis (TB) is an infectious disease caused by the bacterium Mycobacterium tuberculosis, primarily affecting the lungs. TB is spread through airborne droplets when an infected person coughs or sneezes. Early symptoms include a persistent cough, night sweats, fever, and weight loss. Without timely treatment, tuberculosis can be life-threatening.",
+        "treatment": "The standard treatment for tuberculosis is a long-term course of antibiotics, often lasting six to nine months. Early detection and adherence to the full course of treatment are critical to prevent the development of drug-resistant strains."
+    },
+    "covid": {
+        "title": "Diagnosis: COVID-19",
+        "description": "COVID-19 is a viral respiratory illness caused by the SARS-CoV-2 virus. Symptoms vary from mild to severe, with some cases requiring hospitalization. It spreads through respiratory droplets and has had a global impact due to its contagious nature.",
+        "treatment": "Treatment varies depending on severity. Mild cases may only require rest and symptom management, while severe cases may need hospitalization, oxygen therapy, or mechanical ventilation. Vaccination is the most effective way to prevent severe illness."
+    },
+    "cancer": {
+        "title": "Diagnosis: Lung Cancer",
+        "description": "Lung cancer involves the uncontrolled growth of abnormal cells in the lungs. It can cause persistent cough, shortness of breath, chest pain, and weight loss. Early detection improves outcomes.",
+        "treatment": "Treatment depends on the stage of the disease. Options include surgery, chemotherapy, radiation therapy, and targeted therapies."
+    },
+    "healthy": {
+        "title": "Diagnosis: Healthy",
+        "description": "The patient does not present signs of significant pulmonary disease. Regular monitoring and healthy lifestyle choices are recommended.",
+        "treatment": "No medical intervention is required at this time. Maintain a healthy lifestyle and attend regular check-ups."
+    }
+}
