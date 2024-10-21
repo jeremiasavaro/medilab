@@ -1,6 +1,7 @@
 import sqlite3
 
-from functions_db import insert_doctor, connect
+from app import app
+from .functions_db import insert_doctor
 
 doctors = [
     (23456730, 'NEU', 'Carlos', 'Gomez', 'carlos.gomez@hospital.com', 358123456789, '1980-05-15', 'Male'),
@@ -22,6 +23,7 @@ doctors = [
 ]
 
 
-for doctor in doctors:
-    insert_doctor(*doctor)
+with app.app_context():
+    for doctor in doctors:
+        insert_doctor(*doctor)
 

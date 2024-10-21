@@ -125,7 +125,7 @@ def login():
     else:
         return make_response({'error': 'Incorrect credentials'}, 401)
 
-      
+
 # Endpoint used for registering a new user
 @app.route('/register', methods=['POST'])
 def register():
@@ -159,7 +159,7 @@ def register():
 @app.route('/contact', methods=['POST'])
 def contact():
     data = request.json
-    required_fields = ['name', 'email', 'subject', 'userMessage']
+    required_fields = ['firstName', 'lastName', 'email', 'subject', 'userMessage']
     for field in required_fields:
         if not data.get(field):
             return make_response({'error': 'Data missing'}, 400)
@@ -261,9 +261,23 @@ def delete_account():
     if not get_patient(dni) or not bcrypt.checkpw(data['currentPassword'].encode('utf-8'), bytes(get_password(dni))):
         return make_response({'error': 'Actual password entered isn\'t correct'}, 400)
 
-    delete_patient(dni)
+    delete_patient(dni=dni)
     return make_response({'message': 'Account deleted successfully'}, 200)
 
+# Endpoint used for obtaining the doctors table
+@app.route('/doctors', methods=['GET'])
+def get_doctors():
+    doctors = Doctor.query.all()  #Traemos todos los doctores de la tabla correspondiente
+    doctors_list = [{
+        'image_doctor': doctor.image_doctor,
+        'dni': doctor.dni,
+        'first_name': doctor.first_name,
+        'last_name': doctor.last_name,
+        'speciality': doctor.speciality,
+        'email': doctor.email
+    } for doctor in doctors]
+    
+    return jsonify(doctors_list)
 
 # Endpoint used for obtaining the diagnostic for the uploaded image
 @app.route('/xray_diagnosis', methods=['POST'])
@@ -289,8 +303,8 @@ def xray_diagnosis():
     if not patient:
         return make_response({'error': 'User not found'}, 404)
 
-    patient_name = patient.first_name
-  
+    patient_name = patient.first_name + " " + patient.last_name
+    
     diagnosis_date = datetime.today()
 
     if pneumonia_percentage > normal_percentage:
