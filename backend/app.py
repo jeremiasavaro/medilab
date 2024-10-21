@@ -312,7 +312,7 @@ def xray_diagnosis():
         pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "pneumonia", pneumonia_percentage)
     else:
         diag = f"NORMAL: {normal_percentage:.2f}%"
-        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "normal", normal_percentage)
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "healthy", normal_percentage)
 
     des = f"PNEUMONIA: {pneumonia_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
     # code_diag = insert_diagnostic(diag, des, image_url, dni)
