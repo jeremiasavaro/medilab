@@ -132,7 +132,7 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
               <i className="bi bi-envelope flex-shrink-0"></i>
               <div>
                 <h3>Email Us</h3>
-                <p>jeremiasavaro7@gmail.com</p>
+                <p>medilab@dc.exa.unrc.edu.ar</p>
               </div>
             </div>
           </div>
