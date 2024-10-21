@@ -11,7 +11,9 @@ const XrayService = ({ setView }) => {
   const [isUploadVisible, setIsUploadVisible] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [doctors, setDoctors] = useState([]);
   const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const { decodedToken, isExpired } = useJwt(token);
 
@@ -126,25 +128,22 @@ const XrayService = ({ setView }) => {
     }, 0);  // Un pequeño retraso para permitir que React termine el renderizado
   };
 
-  const [data, setData] = useState([
-    {
-      photo: 'https://via.placeholder.com/50', // URL de ejemplo
-      firstName: 'Carlos',
-      lastName: 'Gomez',
-      specialty: 'Radiologist',
-      dni: '23456730',
-      email: 'carlos.gomez@hospital.com'
-    },
-    {
-      photo: 'https://via.placeholder.com/50', // URL de ejemplo
-      firstName: 'Ana',
-      lastName: 'Martinez',
-      specialty: 'Technician',
-      dni: '17345629',
-      email: 'ana.martinez@hospital.com'
-    },
-    // Agregar más objetos según sea necesario
-  ]);
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/doctors');  // Cambia a la URL correcta de tu API
+        const data = await response.json();
+        console.log('Doctors data:', data); // Verificar los datos aquí
+        setDoctors(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+        setLoading(false);
+      }
+    };
+  
+    fetchDoctors();
+  }, []);
 
   return (
     <section id="xray-section" className="contentXray">
@@ -208,13 +207,13 @@ const XrayService = ({ setView }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((person, index) => (
+                  {doctors.map((doctor, index) => (
                     <tr key={index}>
-                      <td><img src={person.photo} alt={`${person.firstName} ${person.lastName}`} width="50" height="50" /></td>
-                      <td>{person.firstName} {person.lastName}</td>
-                      <td>{person.specialty}</td>
-                      <td>{person.dni}</td>
-                      <td><a href={`mailto:${person.email}`}>{person.email}</a></td>
+                      <td><img src={doctor.photo} width="50" height="50" /></td>
+                      <td>{doctor.first_name} {doctor.last_name}</td>
+                      <td>{doctor.speciality}</td>
+                      <td>{doctor.dni}</td>
+                      <td><a href={`mailto:${doctor.email}`}>{doctor.email}</a></td>
                     </tr>
                   ))}
                 </tbody>
