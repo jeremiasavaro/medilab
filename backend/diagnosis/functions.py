@@ -1,5 +1,6 @@
 import requests
 import numpy as np
+import base64
 import json
 from PIL import Image
 from reportlab.lib.pagesizes import A4
@@ -37,7 +38,10 @@ def preprocess_image(image):
 
     return image_array
 
-
+def encode_image_to_base64(image):
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    return base64.b64encode(buffered.getvalue()).decode('utf-8')
 
 def create_diagnosis_pdf(patient_name, diagnosis_date, diagnosis, diagnosis_prob):
     

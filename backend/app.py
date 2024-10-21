@@ -1,7 +1,8 @@
-#app.py
+# app.py
 from flask import Flask, request, current_app, jsonify, send_file
 from flask_cors import CORS
 from io import BytesIO
+import requests
 import bcrypt
 import jwt
 import tensorflow as tf
@@ -13,21 +14,22 @@ from db.database import db, migrate
 from db.functions_db import *
 from db.models import *
 from config.config import *
-from diagnosis.functions import load_image, preprocess_image, create_diagnosis_pdf
+from diagnosis.functions import load_image, preprocess_image, create_diagnosis_pdf, encode_image_to_base64
 from factory.__init__ import create_app
 
 tf.get_logger().setLevel('ERROR')
 
-#Create the app
+# Create the app
 app = create_app()
 
-#Import the AI model
+# Import the AI model
 with app.app_context():
     # Save the model used to predict
     model = current_app.model
 
 # Global token variable
 token = "token"
+
 
 # Preflight response in order to avoid CORS blocking
 @app.before_request
@@ -58,7 +60,8 @@ def decode_token(encoded_token):
     if not encoded_token:
         return None, make_response({'error': 'Token not found'}, 401)
     try:
-        decoded_token = jwt.decode(encoded_token, app.config['SECRET_KEY'], algorithms=[os.getenv('DECODIFICATION_ALGORITHM')])
+        decoded_token = jwt.decode(encoded_token, app.config['SECRET_KEY'],
+                                   algorithms=[os.getenv('DECODIFICATION_ALGORITHM')])
         return decoded_token, None
     except jwt.ExpiredSignatureError:
         return None, make_response({'error': 'Token expired'}, 401)
@@ -264,10 +267,11 @@ def delete_account():
     delete_patient(dni=dni)
     return make_response({'message': 'Account deleted successfully'}, 200)
 
+
 # Endpoint used for obtaining the doctors table
 @app.route('/doctors', methods=['GET'])
 def get_doctors():
-    doctors = Doctor.query.all()  #Traemos todos los doctores de la tabla correspondiente
+    doctors = Doctor.query.all()  # Traemos todos los doctores de la tabla correspondiente
     doctors_list = [{
         'image_doctor': doctor.image_doctor,
         'dni': doctor.dni,
@@ -276,8 +280,9 @@ def get_doctors():
         'speciality': doctor.speciality,
         'email': doctor.email
     } for doctor in doctors]
-    
+
     return jsonify(doctors_list)
+
 
 # Endpoint used for obtaining the diagnostic for the uploaded image
 @app.route('/xray_diagnosis', methods=['POST'])
@@ -287,11 +292,34 @@ def xray_diagnosis():
 
     image_url = request.form['image_url']
     image = load_image(image_url)
-    processed_image = preprocess_image(image)
+    # processed_image = preprocess_image(image)
+    encoded_image = encode_image_to_base64(image)
 
-    classes = model.predict(processed_image)
-    pneumonia_percentage = classes[0][0] * 100
-    normal_percentage = classes[0][1] * 100
+    try:
+        req = requests.post(
+            os.getenv('HF_MODEL_URL'),
+            headers={
+                "Authorization": f"Bearer {os.getenv('HF_API_TOKEN')}",
+                "Content-Type": "application/json"
+            },
+            json={"image": encoded_image}
+        )
+        req.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print("Response content:", e.response.text)
+        return make_response({'error': 'Error al consultar el modelo', 'details': str(e)}, 500)
+
+    req.raise_for_status()
+
+    # Procesar la respuesta del modelo
+    prediction = req.json()
+
+    print("Prediction Response:", prediction)
+
+    # classes = model.predict(processed_image)
+
+    pneumonia_percentage = prediction[0][0] * 100
+    normal_percentage = prediction[0][1] * 100
 
     encoded_token = request.headers.get('Authorization')
     decoded_token, error_response = decode_token(encoded_token)
@@ -304,7 +332,7 @@ def xray_diagnosis():
         return make_response({'error': 'User not found'}, 404)
 
     patient_name = patient.first_name + " " + patient.last_name
-    
+
     diagnosis_date = datetime.today()
 
     if pneumonia_percentage > normal_percentage:
@@ -312,7 +340,7 @@ def xray_diagnosis():
         pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "pneumonia", pneumonia_percentage)
     else:
         diag = f"NORMAL: {normal_percentage:.2f}%"
-        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "healthy", normal_percentage)
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "normal", normal_percentage)
 
     des = f"PNEUMONIA: {pneumonia_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
     # code_diag = insert_diagnostic(diag, des, image_url, dni)
