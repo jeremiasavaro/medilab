@@ -13,7 +13,7 @@ from db.database import db, migrate
 from db.functions_db import *
 from db.models import *
 from config.config import *
-from functions import load_image, preprocess_image, create_diagnosis_pdf
+from diagnosis.functions import load_image, preprocess_image, create_diagnosis_pdf
 from factory.__init__ import create_app
 
 tf.get_logger().setLevel('ERROR')
