@@ -1,10 +1,9 @@
 // src/components/Doctors.jsx
 
-import React, { useState, useRef, useEffect } from 'react';
-import doctorsBg from "../assets/img/doctors/doctors-1.jpg";
+import React, { useState, useEffect } from 'react';
+import Carousel from 'react-bootstrap/Carousel';
 
 function Doctors() {
-
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +20,7 @@ function Doctors() {
         setLoading(false);
       }
     };
-  
+
     fetchDoctors();
   }, []);
 
@@ -36,21 +35,28 @@ function Doctors() {
         <p>These are the professionals we have.</p>
       </div>
 
-      <div className="container">
-        <div className="row gy-4">
-          {doctors.map((doctor, index) => (
-            <div className="col-lg-6" data-aos="fade-up" data-aos-delay="100" key={index}>
-              <div className="team-member d-flex align-items-start">
-                <div className="member-info">
-                  <h4>{doctor.first_name} {doctor.last_name}</h4>
-                  <span>{doctor.speciality}</span>
-                  {/* Agrega más información del doctor si es necesario */}
-                </div>
+      <Carousel controls={true} indicators={false} interval={null}>
+        {doctors.map((doctor, index) => (
+          <Carousel.Item key={index}>
+            <div className="d-flex justify-content-center align-items-center">
+              <div className="team-member text-center">
+                <h4>{doctor.first_name} {doctor.last_name}</h4>
+                <span>{doctor.speciality}</span>
+                <br></br>
+                <span>{doctor.email}</span>
               </div>
+              {index + 1 < doctors.length && (
+                <div className="team-member text-center">
+                  <h4>{doctors[index + 1].first_name} {doctors[index + 1].last_name}</h4>
+                  <span>{doctors[index + 1].speciality}</span>
+                  <br></br>
+                  <span>{doctors[index + 1].email}</span>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      </div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
     </section>
   );
 }
