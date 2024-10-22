@@ -11,7 +11,6 @@ class Doctor(db.Model):
     date_birth = db.Column(db.Date, nullable=False)
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(10), nullable=False)
-    image_doctor = db.Column(db.String(255), nullable=True)
 
     __table_args__ = (
         db.CheckConstraint('dni > 0'),
