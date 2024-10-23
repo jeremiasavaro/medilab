@@ -1405,10 +1405,27 @@ html {
     position: relative;
     border-radius: 5px;
     transition: 0.5s;
-    padding: 30px;
+    padding: 20px;
     height: 100%;
     width: 35%;
-    margin: 10px; /* Espaciado entre los médicos */
+    margin: 10px;
+    display: flex; /* Usamos flex para alinear la imagen y el contenido */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: start; /* Alinea el contenido al inicio */
+}
+
+.doctors .team-member .img-fluid {
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px; /* Espaciado entre la imagen y el contenido */
+}
+
+.doctors .team-member .info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea el texto a la izquierda */
 }
 
 .d-flex.justify-content-center {

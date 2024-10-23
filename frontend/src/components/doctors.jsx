@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import imgMale from '../assets/img/docMale.png';
+import imgFemale from '../assets/img/docFemale.webp';
 
 function Doctors() {
   const [doctors, setDoctors] = useState([]);
@@ -36,26 +38,43 @@ function Doctors() {
       </div>
 
       <Carousel controls={true} indicators={false} interval={null}>
-        {doctors.map((doctor, index) => (
-          <Carousel.Item key={index}>
-            <div className="d-flex justify-content-center align-items-center">
-              <div className="team-member text-center">
+        {doctors.map((doctor, index) => {
+          if (index % 2 !== 0) return null;
+            return (
+            <Carousel.Item key={doctor.id}>
+              <div className="d-flex justify-content-center align-items-center">
+              <div className="team-member text-left">
+                {doctor.gender === "Male" && (
+                  <img src={imgMale} alt="" className="img-fluid" />
+                )}
+                {doctor.gender === "Female" && (
+                  <img src={imgFemale} alt="" className="img-fluid" />
+                )}
+                <div className="info">
                 <h4>{doctor.first_name} {doctor.last_name}</h4>
-                <span>{doctor.speciality}</span>
-                <br></br>
-                <span>{doctor.email}</span>
+                <span>Speciality: {doctor.speciality}</span>
+                <span>Contact: {doctor.email}</span>
+                </div>
               </div>
               {index + 1 < doctors.length && (
-                <div className="team-member text-center">
+                <div className="team-member text-left">
+                  {doctors[index+1].gender === "Male" && (
+                    <img src={imgMale} alt="" className="img-fluid" />
+                  )}
+                  {doctors[index+1].gender === "Female" && (
+                    <img src={imgFemale} alt="" className="img-fluid" />
+                  )}
+                <div className="info">
                   <h4>{doctors[index + 1].first_name} {doctors[index + 1].last_name}</h4>
-                  <span>{doctors[index + 1].speciality}</span>
-                  <br></br>
-                  <span>{doctors[index + 1].email}</span>
+                  <span>Speciality: {doctors[index + 1].speciality}</span>
+                  <span>Contact: {doctors[index + 1].email}</span>
+                </div>
                 </div>
               )}
-            </div>
-          </Carousel.Item>
-        ))}
+              </div>
+            </Carousel.Item>
+            );
+        })}
       </Carousel>
     </section>
   );

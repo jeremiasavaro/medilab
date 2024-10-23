@@ -203,6 +203,10 @@ def get_cities_for_doctor(doctor_dni):
     print(f"City list for doctor {doctor_dni}: {city_list}")
     return city_list
 
+def remove_doctors():
+    Doctor.query.delete()
+    db.session.commit()
+
 #-------------------------------------------- Clinic Table functions --------------------------------------------
 def insert_clinic(name, phoneNumber, province, city, postalCode, address):
     new_clinic = Clinic(
