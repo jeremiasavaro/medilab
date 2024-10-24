@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
+import infoData from '../infoData.json';
 
 const XrayService = ({ setView }) => {
   const [message, setMessage] = useState('');
@@ -16,6 +17,8 @@ const XrayService = ({ setView }) => {
   const [loading, setLoading] = useState(true);
 
   const { decodedToken, isExpired } = useJwt(token);
+
+  const [data] = useState(infoData);  // Datos de la sección de información
 
   const tableRef = useRef(null); // Referencia a la tabla
 
@@ -223,17 +226,50 @@ const XrayService = ({ setView }) => {
         )}
       </div>
       {openSection === 'info' && (
-        <div className="overlay-section active">
-          <div className="overlay-content">
-            <h2>
-              <i className="bi bi-info-square-fill"> </i>
-              INFO
-            </h2>
-            <p>Metodo fiable</p>
-            <button onClick={closeOverlaySection}>Close</button>
-          </div>
+      <div className="overlay-section active">
+        <div className="overlay-content">
+          <h2>
+            <i className="bi bi-info-square-fill"></i> INFO
+          </h2>
+
+          {/* Sección "Sobre Nosotros" */}
+          <h3>{data.aboutUs.title}</h3>
+          <p>{data.aboutUs.content}</p>
+
+          {/* Sección "Metodología Utilizada" */}
+          <h3>{data.methodology.title}</h3>
+          <p>{data.methodology.content[0]}</p>
+          <ul>
+            <li>
+              <strong>{data.methodology.content[1].model1.name}:</strong>{' '}
+              {data.methodology.content[1].model1.description}
+            </li>
+            <li>
+              <strong>{data.methodology.content[2].model2.name}:</strong>{' '}
+              {data.methodology.content[2].model2.description}
+            </li>
+          </ul>
+
+          {/* Sección "Enfermedades Detectadas" */}
+          <h3>{data.detectedDiseases.title}</h3>
+          <ul>
+            {data.detectedDiseases.list.map((disease, index) => (
+              <li key={index}>- {disease}</li>
+            ))}
+          </ul>
+
+          {/* Aviso Importante */}
+          <h3>{data.disclaimer.title}</h3>
+          <p>{data.disclaimer.content}</p>
+
+          {/* Agradecimientos */}
+          <h3>{data.credits.title}</h3>
+          <p>{data.credits.content}</p>
+
+          <button onClick={closeOverlaySection}>Close</button>
         </div>
-      )}
+      </div>
+    )}
     </section>
   );
 };
