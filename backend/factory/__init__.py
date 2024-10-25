@@ -8,18 +8,21 @@ from config import *
 from cloudinary import config as cloudinary_config
 from tensorflow.keras.models import load_model
 
+#blueprints import
+from blueprints.auth.__init__ import auth
 
-# Cargar variables de entorno desde .env
+
+#load environment variables
 load_dotenv()
 
-# Cargar configuración de Cloudinary
+#load cloudinary configuration
 cloudinary_config(
     cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
     api_key=os.getenv('CLOUDINARY_API_KEY'),
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
-# Cargar el modelo de IA globalmente
+#load model global variable
 MODEL_PATH = os.getenv('MODEL_PATH')
 model = load_model(MODEL_PATH)
 
@@ -30,10 +33,10 @@ def create_app(config_class=None):
     # Configure CORS with support for credentials and allow all origins
     CORS(app, supports_credentials=True, origins=['http://localhost:3000'])
 
-    # Cargar configuración desde el entorno o parámetro
+    #load configuration
     if not config_class:
-        config_class = get_config() # Obtener configuración
-    app.config.from_object(config_class) # Cargar configuración
+        config_class = get_config() #obtain the configuration class
+    app.config.from_object(config_class) #load the configuration
    
     print(app.config['SQLALCHEMY_DATABASE_URI'])
 
@@ -41,5 +44,9 @@ def create_app(config_class=None):
     migrate.init_app(app, db)
 
     app.model = model
+
+    # each blueprint is registered
+    app.register_blueprint(auth, url_prefix="/auth")
+
 
     return app

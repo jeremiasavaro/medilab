@@ -7,7 +7,6 @@ import jwt
 import tensorflow as tf
 import os
 from utils import handle_options_requests, make_response, decode_token, token
-from auth.__init__ import auth
 from dotenv import load_dotenv
 from datetime import datetime
 from tensorflow.keras.models import load_model
@@ -30,9 +29,6 @@ with app.app_context():
 
 
 handle_options_requests(app)
-
-# each blueprint is registered
-app.register_blueprint(auth, url_prefix="/auth")
 
 
 # Endpoint used for obtaining the user data
