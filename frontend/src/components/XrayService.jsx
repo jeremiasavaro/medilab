@@ -58,7 +58,7 @@ const XrayService = ({ setView }) => {
       formData.append('image_url', imageUrl);
 
       try {
-        const response = await fetch('http://localhost:5000/xray_diagnosis', {
+        const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
           headers: {
             'Authorization': token,
           },
