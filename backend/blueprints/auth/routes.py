@@ -1,4 +1,4 @@
-from flask import jsonify, request, current_app
+from flask import request, current_app
 import jwt
 import bcrypt
 from .__init__ import *
