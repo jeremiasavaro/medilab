@@ -32,7 +32,7 @@ const Account = ({ setView, setIsLoged }) => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -6,6 +6,8 @@ import bcrypt
 import jwt
 import tensorflow as tf
 import os
+from utils import handle_options_requests, make_response, decode_token, token
+from auth.__init__ import auth
 from dotenv import load_dotenv
 from datetime import datetime
 from tensorflow.keras.models import load_model
@@ -26,51 +28,11 @@ with app.app_context():
     # Save the model used to predict
     model = current_app.model
 
-# Global token variable
-token = "token"
 
-# Preflight response in order to avoid CORS blocking
-@app.before_request
-def handle_options_requests():
-    if request.method == 'OPTIONS':
-        response = jsonify({'message': 'Preflight Request'})
-        response.status_code = 200
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        return response
+handle_options_requests(app)
 
-
-# Method used for making the response with the proper headers
-def make_response(json_message, status_code):
-    response = jsonify(json_message)
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.status_code = status_code
-    return response
-
-
-# Method used for decoding the token
-def decode_token(encoded_token):
-    if not encoded_token:
-        return None, make_response({'error': 'Token not found'}, 401)
-    try:
-        decoded_token = jwt.decode(encoded_token, app.config['SECRET_KEY'], algorithms=[os.getenv('DECODIFICATION_ALGORITHM')])
-        return decoded_token, None
-    except jwt.ExpiredSignatureError:
-        return None, make_response({'error': 'Token expired'}, 401)
-    except jwt.InvalidTokenError:
-        return None, make_response({'error': 'Invalid token'}, 401)
-
-
-# Endpoint used for obtaining the token
-@app.route('/obtainToken', methods=['GET'])
-def obtain_token():
-    global token
-    return make_response({'token': token}, 200)
+# each blueprint is registered
+app.register_blueprint(auth, url_prefix="/auth")
 
 
 # Endpoint used for obtaining the user data
@@ -101,59 +63,7 @@ def obtain_user_data():
         'gender': patient_data.gender,
         'imagePatient': patient_data.image_patient
     }, 200)
-
-
-# Endpoint used for logging in
-@app.route('/login', methods=['POST'])
-def login():
-    global token
-    data = request.json
-    dni = data.get('dni')
-    password = data.get('password')
-
-    if not dni or not password:
-        return make_response({'error': 'Data missing'}, 400)
-
-    user = get_patient(dni)
-    if not user:
-        return make_response({'error': 'No user registered with that DNI'}, 401)
-
-    user_password = bytes(get_password(dni))
-    if bcrypt.checkpw(password.encode('utf-8'), user_password):
-        token = jwt.encode({'dni': dni}, app.config['SECRET_KEY'])
-        return make_response({'message': 'Successful login', 'token': token}, 200)
-    else:
-        return make_response({'error': 'Incorrect credentials'}, 401)
-
-      
-# Endpoint used for registering a new user
-@app.route('/register', methods=['POST'])
-def register():
-    data = request.json
-    required_fields = [
-        'firstName', 'lastName', 'password', 'repPassword', 'address',
-        'email', 'dni', 'phone', 'birthDate', 'nationality', 'province',
-        'locality', 'postalCode', 'gender'
-    ]
-    for field in required_fields:
-        if not data.get(field):
-            return make_response({'error': 'Data missing'}, 400)
-
-    if data['password'] != data['repPassword']:
-        return make_response({'error': 'Passwords don\'t match'}, 400)
-
-    if get_patient(data['dni']):
-        return make_response({'error': 'User already exists'}, 409)
-
-    encoded_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
-    insert_patient(
-        data['dni'], data['firstName'], data['lastName'], encoded_password,
-        data['email'], data['phone'], data['birthDate'], data['nationality'],
-        data['province'], data['locality'], data['postalCode'], data['address'],
-        data['gender']
-    )
-    return make_response({'message': 'Register completed successfully'}, 200)
-
+    
 
 # Endpoint used for sending a contact message
 @app.route('/contact', methods=['POST'])
