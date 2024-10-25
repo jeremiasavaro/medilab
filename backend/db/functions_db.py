@@ -1,6 +1,6 @@
 from datetime import datetime
-from db.database import db
-from db.models.init_models import *
+from .database import db
+from .models import *
 from sqlalchemy.orm import * # type: ignore VER!!!
 
 def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_number, date_birth,nationality, province, locality, postal_code, address, gender):
@@ -129,20 +129,24 @@ def get_diagnostics_by_description(dni, description):
     return diagnostics
 #-------------------------------------------- Doctor Table functions --------------------------------------------
 def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
-     new_doctor = Doctor(
+     
+    # Convertir la fecha de nacimiento de cadena a objeto datetime.date
+    date_birth = datetime.strptime(dateBirth, '%Y-%m-%d').date()
+
+    new_doctor = Doctor(
         dni=dni,
         speciality=speciality,
         first_name=firstName,
         last_name=lastName,
         email=email,
         phone_number=phoneNumber,
-        date_birth=dateBirth,
+        date_birth=date_birth,  # Usar el objeto de fecha
         age=calculate_age(dateBirth),
         gender=gender,
         image_doctor=imageDoctor,
-     )
-     db.session.add(new_doctor)
-     db.session.commit()
+    )
+    db.session.add(new_doctor)
+    db.session.commit()
 
 
 def delete_doctor(dni):
