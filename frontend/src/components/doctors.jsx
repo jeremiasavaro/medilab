@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
-import imgMale from '../assets/img/docMale.png';
-import imgFemale from '../assets/img/docFemale.webp';
+import imgMale from '../assets/img/doctors/docMale.png';
+import imgFemale from '../assets/img/doctors/docFemale.webp';
 
 function Doctors() {
   const [doctors, setDoctors] = useState([]);

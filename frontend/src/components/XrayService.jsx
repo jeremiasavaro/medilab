@@ -197,22 +197,20 @@ const XrayService = ({ setView }) => {
         {showTable && (
           <div ref={tableRef}>
             <hr className="divider" />
-            <h2 className='h2'><b>Medicos recomendados</b></h2>
+            <h2 className='h2'><b>Recommended doctors</b></h2>
             <div className="table-container">
               <table className="doctor-table">
                 <thead>
                   <tr>
-                    <th>Foto</th>
-                    <th>Nombre y Apellido</th>
-                    <th>Especialidad</th>
+                    <th>Name and surname</th>
+                    <th>Speciality</th>
                     <th>DNI</th>
-                    <th>Email de Contacto</th>
+                    <th>contact email</th>
                   </tr>
                 </thead>
                 <tbody>
                   {doctors.map((doctor, index) => (
                     <tr key={index}>
-                      <td><img src={doctor.photo} width="50" height="50" /></td>
                       <td>{doctor.first_name} {doctor.last_name}</td>
                       <td>{doctor.speciality}</td>
                       <td>{doctor.dni}</td>
