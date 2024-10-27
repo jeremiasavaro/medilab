@@ -15,6 +15,7 @@ from db.models import *
 from config.config import *
 from diagnosis.functions import load_image, preprocess_image, create_diagnosis_pdf
 from factory.__init__ import create_app
+from huggingface_hub import hf_hub_download
 
 tf.get_logger().setLevel('ERROR')
 
@@ -288,6 +289,15 @@ def xray_diagnosis():
     image_url = request.form['image_url']
     image = load_image(image_url)
     processed_image = preprocess_image(image)
+
+    #Download and load the model outside the endpoint
+    repo_id = "MatiasPellizzari/Xray"
+    model_filename = "Xray/modelAI-Jere-v1.h5"   # Include the folder path
+    try:
+        local_model_path = hf_hub_download(repo_id=repo_id, filename=model_filename)
+        model = tf.keras.models.load_model(local_model_path)  # Load the .h5 model
+    except Exception as e:
+        return make_response({'error': f'Failed to load model: {e}'}, 500)
 
     classes = model.predict(processed_image)
     pneumonia_percentage = classes[0][0] * 100
