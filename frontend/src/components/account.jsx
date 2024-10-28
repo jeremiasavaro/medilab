@@ -101,7 +101,7 @@ const Account = ({ setView, setIsLoged }) => {
       formData.append('file', file);
 
       try {
-        const response = await fetch('http://localhost:5000/upload_image', {
+        const response = await fetch('http://localhost:5000/image/upload_image', {
           method: 'POST',
           headers: {
             'Authorization': token,

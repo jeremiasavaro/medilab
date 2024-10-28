@@ -13,6 +13,7 @@ from blueprints.auth.__init__ import auth
 from blueprints.user.__init__ import user
 from blueprints.xray.__init__ import xray
 from blueprints.inquiries.__init__ import inquiries
+from blueprints.image.__init__ import image
 
 # Load environment variables
 load_dotenv()
@@ -45,5 +46,6 @@ def create_app(config_class=None):
     app.register_blueprint(user, url_prefix="/user")
     app.register_blueprint(xray, url_prefix="/xray")
     app.register_blueprint(inquiries, url_prefix="/inquiries")
+    app.register_blueprint(image, url_prefix="/image")
 
     return app

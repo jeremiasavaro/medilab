@@ -26,7 +26,7 @@ const XrayService = ({ setView }) => {
       formData.append('file', file);
 
       try {
-        const response = await fetch('http://localhost:5000/upload_xray_photo', {
+        const response = await fetch('http://localhost:5000/image/upload_xray_photo', {
           method: 'POST',
           headers: {
             'Authorization': token,
