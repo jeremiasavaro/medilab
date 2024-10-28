@@ -21,7 +21,7 @@ cloudinary_config(
 
 # Cargar el modelo de IA globalmente
 MODEL_PATH = os.getenv('MODEL_PATH')
-model = load_model(MODEL_PATH)
+#model = load_model(MODEL_PATH)
 
 
 def create_app(config_class=None):
@@ -40,6 +40,6 @@ def create_app(config_class=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    app.model = model
+#    app.model = model
 
     return app

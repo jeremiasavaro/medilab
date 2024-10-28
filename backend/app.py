@@ -23,13 +23,24 @@ tf.get_logger().setLevel('ERROR')
 app = create_app()
 
 # Download and load the model outside the endpoint
+# This will cause the model to be loaded once when the application starts and be ready for subsequent requests.
 repo_id = "MatiasPellizzari/Xray"
 model_filename = "Xray/modelAI-Jere-v1.h5"  # Include the folder path
-try:
-    local_model_path = hf_hub_download(repo_id=repo_id, filename=model_filename)
-    model = tf.keras.models.load_model(local_model_path) # Load the model
-except Exception as e:
-    raise RuntimeError(f"Error al cargar el modelo: {e}")
+
+# Load model from Hugging Face if it doesn't exist locally
+def get_model():
+    try:
+        local_model_path = hf_hub_download(repo_id=repo_id, filename=model_filename)
+        model = tf.keras.models.load_model(local_model_path) # Cargar el modelo
+        return model
+    except Exception as e:
+        raise RuntimeError(f"Error al cargar el modelo: {e}")
+
+# Initialize the model
+model = get_model()
+
+# Assign the model to the application to make it globally available
+app.model = model
 
 #Import the AI model
 with app.app_context():
@@ -299,8 +310,8 @@ def xray_diagnosis():
     image = load_image(image_url)
     processed_image = preprocess_image(image)
 
-    # Perform the prediction with the previously loaded model
-    classes = model.predict(processed_image)
+    # Use the model from the global instance `app.model`
+    classes = app.model.predict(processed_image)
     pneumonia_percentage = classes[0][0] * 100
     normal_percentage = classes[0][1] * 100
 
