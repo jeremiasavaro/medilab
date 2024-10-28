@@ -22,6 +22,15 @@ tf.get_logger().setLevel('ERROR')
 #Create the app
 app = create_app()
 
+# Download and load the model outside the endpoint
+repo_id = "MatiasPellizzari/Xray"
+model_filename = "Xray/modelAI-Jere-v1.h5"  # Include the folder path
+try:
+    local_model_path = hf_hub_download(repo_id=repo_id, filename=model_filename)
+    model = tf.keras.models.load_model(local_model_path) # Load the model
+except Exception as e:
+    raise RuntimeError(f"Error al cargar el modelo: {e}")
+
 #Import the AI model
 with app.app_context():
     # Save the model used to predict
@@ -290,15 +299,7 @@ def xray_diagnosis():
     image = load_image(image_url)
     processed_image = preprocess_image(image)
 
-    #Download and load the model outside the endpoint
-    repo_id = "MatiasPellizzari/Xray"
-    model_filename = "Xray/modelAI-Jere-v1.h5"   # Include the folder path
-    try:
-        local_model_path = hf_hub_download(repo_id=repo_id, filename=model_filename)
-        model = tf.keras.models.load_model(local_model_path)  # Load the .h5 model
-    except Exception as e:
-        return make_response({'error': f'Failed to load model: {e}'}, 500)
-
+    # Perform the prediction with the previously loaded model
     classes = model.predict(processed_image)
     pneumonia_percentage = classes[0][0] * 100
     normal_percentage = classes[0][1] * 100
