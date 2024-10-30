@@ -31,7 +31,7 @@ const XrayService = ({ setView }) => {
       formData.append('file', file);
 
       try {
-        const response = await fetch('http://localhost:5000/upload_xray_photo', {
+        const response = await fetch('http://localhost:5000/image/upload_xray_photo', {
           method: 'POST',
           headers: {
             'Authorization': token,
@@ -63,7 +63,7 @@ const XrayService = ({ setView }) => {
       formData.append('image_url', imageUrl);
 
       try {
-        const response = await fetch('http://localhost:5000/xray_diagnosis', {
+        const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
           headers: {
             'Authorization': token,
           },
@@ -88,7 +88,7 @@ const XrayService = ({ setView }) => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
