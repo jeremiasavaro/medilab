@@ -32,7 +32,7 @@ const Account = ({ setView, setIsLoged }) => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const Account = ({ setView, setIsLoged }) => {
     const setData = async () => {
       if (token && decodedToken) {
         try {
-          const response = await fetch('http://127.0.0.1:5000/obtainData', {
+          const response = await fetch('http://127.0.0.1:5000/user/obtainData', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ const Account = ({ setView, setIsLoged }) => {
       formData.append('file', file);
 
       try {
-        const response = await fetch('http://localhost:5000/upload_image', {
+        const response = await fetch('http://localhost:5000/image/upload_image', {
           method: 'POST',
           headers: {
             'Authorization': token,

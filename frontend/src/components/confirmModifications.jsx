@@ -14,7 +14,7 @@ const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone,
       e.preventDefault();
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/account', {
+            const response = await fetch('http://127.0.0.1:5000/user/account', {
             method: 'POST',
             credentials: 'include',
             headers: {
