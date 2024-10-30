@@ -1,0 +1,39 @@
+{
+    "en": {
+      "aboutUs": "About Us",
+      "intro": "A team of students from the National University of Rio Cuarto. With the aim of improving people's health, implementing automatic and simple diagnoses.",
+      "features": [
+        {
+          "title": "Innovation and Precision",
+          "description": "We use the most advanced artificial intelligence to offer fast and accurate results, improving the quality of life of our patients."
+        },
+        {
+          "title": "Commitment to Care",
+          "description": "Our dedication to healthcare goes beyond technology. We are committed to supporting medical professionals with reliable tools that enhance patient care, ensuring that every diagnosis is delivered with the utmost care."
+        },
+        {
+          "title": "Compassionate Expertise",
+          "description": "At the heart of our mission is a deep compassion for our patients. We combine cutting-edge technology with a human touch, providing expert diagnostics with empathy and understanding."
+        }
+      ]
+    },
+    "es": {
+      "aboutUs": "Sobre Nosotros",
+      "intro": "Un equipo de estudiantes de la Universidad Nacional de Río Cuarto. Con el objetivo de mejorar la salud de las personas, implementando diagnósticos automáticos y sencillos.",
+      "features": [
+        {
+          "title": "Innovación y Precisión",
+          "description": "Usamos la inteligencia artificial más avanzada para ofrecer resultados rápidos y precisos, mejorando la calidad de vida de nuestros pacientes."
+        },
+        {
+          "title": "Compromiso con el Cuidado",
+          "description": "Nuestra dedicación a la salud va más allá de la tecnología. Nos comprometemos a apoyar a los profesionales médicos con herramientas confiables que mejoren el cuidado de los pacientes, asegurando que cada diagnóstico se entregue con el mayor cuidado."
+        },
+        {
+          "title": "Experiencia Compasiva",
+          "description": "En el corazón de nuestra misión está una profunda compasión por nuestros pacientes. Combinamos tecnología de punta con un toque humano, proporcionando diagnósticos expertos con empatía y comprensión."
+        }
+      ]
+    }
+  }
+  
