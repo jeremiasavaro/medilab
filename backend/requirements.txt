@@ -13,4 +13,4 @@ pytest-cov==5.0.0
 Flask-SQLAlchemy==3.1.1  
 Flask-Migrate==4.0.7     
 python-dotenv==1.0.1
-huggingface-hub==*
+huggingface-hub==0.26.2

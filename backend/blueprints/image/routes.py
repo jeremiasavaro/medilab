@@ -1,10 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from io import BytesIO
-import tensorflow as tf
-from utils import handle_options_requests, make_response, decode_token
-from datetime import datetime
-from db.functions_db import *
+from utils import make_response, decode_token
+from db.functions_db import get_patient, modify_image_patient
 from db.models import *
 from config.config import *
 from .__init__ import *
