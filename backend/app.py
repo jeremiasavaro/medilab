@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import get_custom_objects
 from db.database import db, migrate
 from db.functions_db import *
 from db.models import *
@@ -25,27 +26,34 @@ app = create_app()
 # Download and load the model outside the endpoint
 # This will cause the model to be loaded once when the application starts and be ready for subsequent requests.
 repo_id = "MatiasPellizzari/Xray"
-model_filename = "Xray/modelAI-Jere-v1.h5"  # Include the folder path
+models_info = {
+    "general": "Xray/modelAI-Jere-v1.h5",
+    "neumonia": "Xray/modelo_vgg16_finetuned_neumonia.h5",
+    #"covid": "Xray/modelo_vgg16_finetuned_covid.keras", NOT WORKING
+    #"tuberculosis": "Xray/modelo_vgg16_finetuned_tuberculosis.keras" NOT WORKING
+}
 
-# Load model from Hugging Face if it doesn't exist locally
-def get_model():
-    try:
-        local_model_path = hf_hub_download(repo_id=repo_id, filename=model_filename)
-        model = tf.keras.models.load_model(local_model_path) # Cargar el modelo
+def load_model(filename):
+     try:
+        # Download model from Hugging Face
+        local_model_path = hf_hub_download(repo_id=repo_id, filename=filename)
+        # Load model with custom objects if needed, without compilation
+        model = tf.keras.models.load_model(local_model_path, custom_objects=get_custom_objects())
         return model
-    except Exception as e:
-        raise RuntimeError(f"Error al cargar el modelo: {e}")
+     except Exception as e:
+        raise RuntimeError(f"Error loading model '{filename}': {e}")
+    
 
-# Initialize the model
-model = get_model()
+app.models = {
+    model_name: load_model(filename)
+    for model_name, filename in models_info.items()
+}
 
-# Assign the model to the application to make it globally available
-app.model = model
 
 #Import the AI model
 with app.app_context():
     # Save the model used to predict
-    model = current_app.model
+    model = current_app.models
 
 # Global token variable
 token = "token"
@@ -310,8 +318,8 @@ def xray_diagnosis():
     image = load_image(image_url)
     processed_image = preprocess_image(image)
 
-    # Use the model from the global instance `app.model`
-    classes = app.model.predict(processed_image)
+    #Now the model needs to be selected, as in model['sickness']
+    classes = app.models['general'].predict(processed_image)
     pneumonia_percentage = classes[0][0] * 100
     normal_percentage = classes[0][1] * 100
 
@@ -326,7 +334,6 @@ def xray_diagnosis():
         return make_response({'error': 'User not found'}, 404)
 
     patient_name = patient.first_name + " " + patient.last_name
-    
     diagnosis_date = datetime.today()
 
     if pneumonia_percentage > normal_percentage:
