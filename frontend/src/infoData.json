@@ -1,0 +1,47 @@
+{
+    "aboutUs": {
+      "title": "Sobre Nosotros",
+      "content": "Somos un grupo de estudiantes de la Universidad Nacional de Río Cuarto, con la tarea de realizar una pagina web en la que integremos inteligencia artificial, decidimos hacerlo en el campo de la medicina. Nuestro objetivo es utilizar la tecnología para ayudar a mejorar la detección temprana de enfermedades mediante radiografías, aunque destacamos que el uso de esta herramienta no reemplaza la consulta médica profesional."
+    },
+    "methodology": {
+      "title": "Metodología Utilizada",
+      "content": [
+        "Para el diagnóstico automático, utilizamos dos modelos de inteligencia artificial:",
+        {
+          "model1": {
+            "name": "VGG16",
+            "type": "Red Neuronal Convolucional",
+            "description": "Este modelo se basa en una arquitectura de redes profundas preentrenadas, adaptadas para detectar patrones específicos en imágenes radiográficas."
+          }
+        },
+        {
+          "model2": {
+            "name": "SVM",
+            "type": "Clasificador de Máquinas de Vectores de Soporte",
+            "description": "Utiliza técnicas matemáticas avanzadas para clasificar las radiografías como normales o anormales, basándose en vectores representativos de características."
+          }
+        }
+      ]
+    },
+    "detectedDiseases": {
+      "title": "Enfermedades Detectadas",
+      "list": [
+        "Neumonía",
+        "Tuberculosis",
+        "COVID-19",
+        "Cáncer de Pulmón",
+        "Cardiomegalia",
+        "Edema Pulmonar",
+        "Fibrosis Pulmonar"
+      ]
+    },
+    "disclaimer": {
+      "title": "Aviso Importante",
+      "content": "Los resultados proporcionados por esta herramienta no deben ser considerados como un diagnóstico médico definitivo. Si tiene alguna duda o preocupación acerca de su salud, le recomendamos encarecidamente que consulte con un profesional de la salud para un diagnóstico adecuado."
+    },
+    "credits": {
+      "title": "Agradecimientos",
+      "content": "Este proyecto ha sido posible gracias al esfuerzo colaborativo de estudiantes y docentes de la Universidad Nacional de Río Cuarto, quienes nos han apoyado en cada etapa del desarrollo."
+    }
+  }
+  

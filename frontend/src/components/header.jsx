@@ -19,16 +19,16 @@ function Header({ setView, isLoged, setIsLoged }) {
         <div className="container d-flex justify-content-center justify-content-md-between">
           <div className="contact-info d-flex align-items-center">
             <i className="bi bi-envelope d-flex align-items-center">
-              <a href="mailto:jeremiasavaro7@gmail.com">jeremiasavaro7@gmail.com</a>
+              <a href="mailto:medilab@dc.exa.unrc.edu.ar">medilab@dc.exa.unrc.edu.ar</a>
             </i>
             <i className="bi bi-phone d-flex align-items-center ms-4">
               <span>+54 358 600-1336</span>
             </i>
           </div>
           <div className="social-links d-none d-md-flex align-items-center">
-            <a href="https://www.facebook.com/jeremiasjose.avaro?mibextid=ZbWKwL" className="facebook"><i className="bi bi-facebook"></i></a>
-            <a href="https://www.instagram.com/baachi13?igsh=MWZ4Mzd2OXFyYW92dQ==" className="instagram"><i className="bi bi-instagram"></i></a>
-            <a href="https://github.com/jeremiasavaro/proyecto-UNRC-2024" className="bi-github"><i className="bi bi-github"></i></a>
+            <a href="https://www.facebook.com/universidadriocuarto" className="facebook"><i className="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/universidadnacionalderiocuarto/" className="instagram"><i className="bi bi-instagram"></i></a>
+            <a href="https://github.com/jeremiasavaro/proyecto-UNRC-2024" className="github"><i className="bi bi-github"></i></a>
           </div>
         </div>
       </div>

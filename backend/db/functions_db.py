@@ -128,7 +128,7 @@ def get_diagnostics_by_description(dni, description):
     diagnostics = Diagnostic.query.filter_by(dni=dni, description=description).all()
     return diagnostics
 #-------------------------------------------- Doctor Table functions --------------------------------------------
-def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
+def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender):
      
     # Convertir la fecha de nacimiento de cadena a objeto datetime.date
     date_birth = datetime.strptime(dateBirth, '%Y-%m-%d').date()
@@ -143,7 +143,6 @@ def insert_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateB
         date_birth=date_birth,  # Usar el objeto de fecha
         age=calculate_age(dateBirth),
         gender=gender,
-        image_doctor=imageDoctor,
     )
     db.session.add(new_doctor)
     db.session.commit()
@@ -159,7 +158,7 @@ def delete_doctor(dni):
     else:
         print(f"Doctor with DNI {dni} not found")
 
-def modify_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender, imageDoctor=None):
+def modify_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateBirth, gender):
     doctor = Doctor.query.filter_by(dni=dni).first()
     
     if doctor:
@@ -171,7 +170,6 @@ def modify_doctor(dni,speciality, firstName, lastName, email, phoneNumber, dateB
         doctor.date_birth = dateBirth
         doctor.age = calculate_age(dateBirth)
         doctor.gender = gender
-        doctor.image_doctor = imageDoctor
         
         db.session.commit()
 
@@ -204,6 +202,10 @@ def get_cities_for_doctor(doctor_dni):
     # Print and return the list of cities
     print(f"City list for doctor {doctor_dni}: {city_list}")
     return city_list
+
+def remove_doctors():
+    Doctor.query.delete()
+    db.session.commit()
 
 #-------------------------------------------- Clinic Table functions --------------------------------------------
 def insert_clinic(name, phoneNumber, province, city, postalCode, address):
