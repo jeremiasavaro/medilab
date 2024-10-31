@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Header({ setView, isLoged, setIsLoged }) {
+function Header({ setView, isLoged, setIsLoged , language, setLanguage }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -10,8 +10,17 @@ function Header({ setView, isLoged, setIsLoged }) {
   //Cuando se deslogee, seteamos en falso isLoged, y lo mandamos a home con esta variable cambiada
   const handleLogout = () => {
     setIsLoged(false);
-    setView("home"); // Redirigir a la vista de login tras el logout
+    setView("home"); 
+    setIsDropdownOpen(false); // Cerrar desplegable
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver al inicio
   };
+  
+  const handleChangeLanguage = (lang) => {
+    setLanguage(lang);
+    setIsDropdownOpen(false); // Cerrar desplegable
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver al inicio
+  };
+  
 
   return (
     <header id="header" className="header sticky-top">
@@ -48,6 +57,27 @@ function Header({ setView, isLoged, setIsLoged }) {
               <li><a href="#gallery" className="active">Gallery</a></li>
               <li><a href="#faq" className="active">FAQ</a></li>
               <li><a href="#contact" className="active">Contact</a></li>
+              <li className="dropdown">
+                <a href="#" onClick={toggleDropdown}>
+                  Language <i className="bi bi-chevron-down ms-1"></i>
+                </a>
+                {isDropdownOpen && (
+                  <ul className="dropdown-menu">
+                      <>
+                        <li>
+                          <a href="#english" onClick={() => handleChangeLanguage("en")}>
+                            English
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#spanish" onClick={() => handleChangeLanguage("es")}>
+                            Spanish
+                          </a>
+                        </li>
+                      </>
+                  </ul>
+                )}
+              </li>
               <li className="dropdown">
                 <a href="#" className="active" onClick={toggleDropdown}>
                   Account <i className="bi bi-chevron-down ms-1"></i>
