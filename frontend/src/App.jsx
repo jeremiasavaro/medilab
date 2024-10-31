@@ -33,6 +33,7 @@ import '@srexi/purecounterjs/dist/purecounter_vanilla';
 
 function App() {
   const [view, setView] = useState("home");
+  const [language, setLanguage] = useState('en');
 
   const toggleForm = (formName) => {
     setView(formName);
@@ -172,9 +173,9 @@ function App() {
             return (
               <div>
                 <main className="main">
-                  <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />
+                  <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
                   <HeroSection setView={setView} />
-                  <About />
+                  <About language={language}/>  {/*Hacer esto para todos los componentes!!*/}
                   <ServicesSection />
                   <Doctors />
                   <Gallery />

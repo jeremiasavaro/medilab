@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
+import infoData from '../infoData.json';
 
 const XrayService = ({ setView }) => {
   const [message, setMessage] = useState('');
@@ -17,6 +18,8 @@ const XrayService = ({ setView }) => {
 
   const { decodedToken, isExpired } = useJwt(token);
 
+  const [data] = useState(infoData);  // Datos de la sección de información
+
   const tableRef = useRef(null); // Referencia a la tabla
 
   const handleFileChange = async (event) => {
@@ -28,7 +31,7 @@ const XrayService = ({ setView }) => {
       formData.append('file', file);
 
       try {
-        const response = await fetch('http://localhost:5000/upload_xray_photo', {
+        const response = await fetch('http://localhost:5000/image/upload_xray_photo', {
           method: 'POST',
           headers: {
             'Authorization': token,
@@ -60,7 +63,7 @@ const XrayService = ({ setView }) => {
       formData.append('image_url', imageUrl);
 
       try {
-        const response = await fetch('http://localhost:5000/xray_diagnosis', {
+        const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
           headers: {
             'Authorization': token,
           },
@@ -85,7 +88,7 @@ const XrayService = ({ setView }) => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/obtainToken', {
+        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -125,15 +128,15 @@ const XrayService = ({ setView }) => {
       if (tableRef.current) {
         tableRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 0);  // Un pequeño retraso para permitir que React termine el renderizado
+    }, 0);
   };
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:5000/doctors');  // Cambia a la URL correcta de tu API
+        const response = await fetch('http://localhost:5000/inquiries/doctors');
         const data = await response.json();
-        console.log('Doctors data:', data); // Verificar los datos aquí
+        console.log('Doctors data:', data);
         setDoctors(data);
         setLoading(false);
       } catch (error) {
@@ -194,22 +197,20 @@ const XrayService = ({ setView }) => {
         {showTable && (
           <div ref={tableRef}>
             <hr className="divider" />
-            <h2 className='h2'><b>Medicos recomendados</b></h2>
+            <h2 className='h2'><b>Recommended doctors</b></h2>
             <div className="table-container">
               <table className="doctor-table">
                 <thead>
                   <tr>
-                    <th>Foto</th>
-                    <th>Nombre y Apellido</th>
-                    <th>Especialidad</th>
+                    <th>Name and surname</th>
+                    <th>Speciality</th>
                     <th>DNI</th>
-                    <th>Email de Contacto</th>
+                    <th>contact email</th>
                   </tr>
                 </thead>
                 <tbody>
                   {doctors.map((doctor, index) => (
                     <tr key={index}>
-                      <td><img src={doctor.photo} width="50" height="50" /></td>
                       <td>{doctor.first_name} {doctor.last_name}</td>
                       <td>{doctor.speciality}</td>
                       <td>{doctor.dni}</td>
@@ -223,17 +224,50 @@ const XrayService = ({ setView }) => {
         )}
       </div>
       {openSection === 'info' && (
-        <div className="overlay-section active">
-          <div className="overlay-content">
-            <h2>
-              <i className="bi bi-info-square-fill"> </i>
-              INFO
-            </h2>
-            <p>Metodo fiable</p>
-            <button onClick={closeOverlaySection}>Close</button>
-          </div>
+      <div className="overlay-section active">
+        <div className="overlay-content">
+          <h2>
+            <i className="bi bi-info-square-fill"></i> INFO
+          </h2>
+
+          {/* Sección "Sobre Nosotros" */}
+          <h3>{data.aboutUs.title}</h3>
+          <p>{data.aboutUs.content}</p>
+
+          {/* Sección "Metodología Utilizada" */}
+          <h3>{data.methodology.title}</h3>
+          <p>{data.methodology.content[0]}</p>
+          <ul>
+            <li>
+              <strong>{data.methodology.content[1].model1.name}:</strong>{' '}
+              {data.methodology.content[1].model1.description}
+            </li>
+            <li>
+              <strong>{data.methodology.content[2].model2.name}:</strong>{' '}
+              {data.methodology.content[2].model2.description}
+            </li>
+          </ul>
+
+          {/* Sección "Enfermedades Detectadas" */}
+          <h3>{data.detectedDiseases.title}</h3>
+          <ul>
+            {data.detectedDiseases.list.map((disease, index) => (
+              <li key={index}>- {disease}</li>
+            ))}
+          </ul>
+
+          {/* Aviso Importante */}
+          <h3>{data.disclaimer.title}</h3>
+          <p>{data.disclaimer.content}</p>
+
+          {/* Agradecimientos */}
+          <h3>{data.credits.title}</h3>
+          <p>{data.credits.content}</p>
+
+          <button onClick={closeOverlaySection}>Close</button>
         </div>
-      )}
+      </div>
+    )}
     </section>
   );
 };

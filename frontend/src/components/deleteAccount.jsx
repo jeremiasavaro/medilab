@@ -10,7 +10,7 @@ const DeleteAccount = ({ setIsLoged, setView, Delete, del }) => {
     const handleDeleteAccount = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://127.0.0.1:5000/deleteAccount', {
+            const response = await fetch('http://127.0.0.1:5000/user/deleteAccount', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

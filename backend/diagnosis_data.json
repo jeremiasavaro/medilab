@@ -23,5 +23,20 @@
         "title": "Diagnosis: Healthy",
         "description": "The patient does not present signs of significant pulmonary disease. Regular monitoring and healthy lifestyle choices are recommended.",
         "treatment": "No medical intervention is required at this time. Maintain a healthy lifestyle and attend regular check-ups."
+    },
+    "edema": {
+        "title": "Diagnosis: Pulmonary Edema",
+        "description": "Pulmonary edema is a condition in which fluid accumulates in the lungs' air sacs, making it difficult to breathe. It can be caused by heart problems, infections, high altitude, or exposure to toxins. Symptoms include shortness of breath, wheezing, and coughing up frothy sputum.",
+        "treatment": "Treatment involves addressing the underlying cause and may include oxygen therapy, diuretics to remove excess fluid, and medications to improve heart function. In severe cases, mechanical ventilation may be required."
+    },
+    "cardiomegaly": {
+        "title": "Diagnosis: Cardiomegaly",
+        "description": "Cardiomegaly refers to an enlarged heart, often a sign of another condition such as high blood pressure or heart disease. While it may not always cause symptoms, severe cases can lead to breathlessness, fatigue, and irregular heartbeats.",
+        "treatment": "Treatment depends on the underlying cause and may include lifestyle changes, medications to control blood pressure, or surgery to address structural issues. In some cases, devices like pacemakers may be used to support heart function."
+    },
+    "fibrosis": {
+        "title": "Diagnosis: Pulmonary Fibrosis",
+        "description": "Pulmonary fibrosis is a lung disease that occurs when lung tissue becomes scarred and stiff, making it difficult to breathe. The cause can be unknown (idiopathic) or related to long-term exposure to toxins, radiation, or infections. Symptoms include dry cough, fatigue, and shortness of breath.",
+        "treatment": "There is no cure for pulmonary fibrosis, but treatments like oxygen therapy, medications to slow the progression, and pulmonary rehabilitation can help manage symptoms. In advanced cases, lung transplantation may be considered."
     }
 }
