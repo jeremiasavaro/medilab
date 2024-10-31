@@ -10,10 +10,8 @@ from tensorflow.keras.utils import get_custom_objects
 from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 
-# Load the model from the global variable
+
 load_dotenv()
-MODEL_PATH = os.getenv('MODEL_PATH')
-model = load_model(MODEL_PATH)
 
 # Download and load the model outside the endpoint
 # This will cause the model to be loaded once when the application starts and be ready for subsequent requests.

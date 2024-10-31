@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from utils import *
+from db.models import *
 from .__init__ import inquiries
 
 # Endpoint used for sending a contact message
@@ -20,7 +21,6 @@ def contact():
 def get_doctors():
     doctors = Doctor.query.all()  #Traemos todos los doctores de la tabla correspondiente
     doctors_list = [{
-        'image_doctor': doctor.image_doctor,
         'dni': doctor.dni,
         'first_name': doctor.first_name,
         'last_name': doctor.last_name,
