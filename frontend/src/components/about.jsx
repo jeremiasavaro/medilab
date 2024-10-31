@@ -23,12 +23,6 @@ function About({language}) {
   return (
     <section id="about" className="about section">
       <div className="container">
-        <div className="language-selector">
-          {/* Botones para cambiar de idioma */}
-          <button onClick={() => setLanguage('en')}>English</button>
-          <button onClick={() => setLanguage('es')}>Español</button>
-        </div>
-
         <div className="row gy-4 gx-5">
           <div className="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="200">
             <img 
