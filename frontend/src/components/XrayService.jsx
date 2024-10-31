@@ -128,15 +128,15 @@ const XrayService = ({ setView }) => {
       if (tableRef.current) {
         tableRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 0);  // Un pequeño retraso para permitir que React termine el renderizado
+    }, 0);
   };
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:5000/doctors');  // Cambia a la URL correcta de tu API
+        const response = await fetch('http://localhost:5000/inquiries/doctors');
         const data = await response.json();
-        console.log('Doctors data:', data); // Verificar los datos aquí
+        console.log('Doctors data:', data);
         setDoctors(data);
         setLoading(false);
       } catch (error) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import aboutBg from "../assets/img/about.jpg";
-import texts from "../assets/components-data/about.json";
+import texts from "../assets/components-data/aboutData.json";
 
 function About({language}) {
   // Usados para cambiar el idioma del contenido
