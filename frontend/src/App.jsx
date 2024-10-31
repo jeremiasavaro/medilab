@@ -174,7 +174,7 @@ function App() {
               <div>
                 <main className="main">
                   <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} setLanguage={setLanguage} language={language} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
-                  <HeroSection setView={setView} />
+                  <HeroSection setView={setView} language={language} />
                   <About language={language}/>  {/*Hacer esto para todos los componentes!!*/}
                   <ServicesSection />
                   <Doctors />
