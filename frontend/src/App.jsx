@@ -159,7 +159,7 @@ function App() {
             if (isLoged) {
               return <XrayService setView={setView} />;
             } else {
-              return <Alert setView={setView} />;
+              return <Alert setView={setView} language={language}/>;
 
             }
           } 
@@ -167,7 +167,7 @@ function App() {
             return <Account setView={setView} setIsLoged={setIsLoged} />;
           } 
           if (view === "Alert") {
-            return <Alert setView={setView} />;
+            return <Alert setView={setView} language={language} />;
           }
           if (view === "home") {
             return (
