@@ -164,7 +164,7 @@ function App() {
             }
           } 
           if (view === "account") {
-            return <Account setView={setView} setIsLoged={setIsLoged} />;
+            return <Account setView={setView} setIsLoged={setIsLoged} language={language}/>;
           } 
           if (view === "Alert") {
             return <Alert setView={setView} language={language} />;
