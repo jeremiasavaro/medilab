@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../assets/css/deleteAccount.css";
+import deleteAccData from "../assets/components-data/deleteAccountData.json"
 
-const DeleteAccount = ({ setIsLoged, setView, Delete, del }) => {
+const DeleteAccount = ({ setIsLoged, setView, Delete, del, language  }) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [message, setMessage] = useState('');
+    // Usados para cambiar el idioma del contenido
+    const [content, setContent] = useState(deleteAccData[language]);
+
+    // Dependiendo del idioma, se muestra un texto u otro
+    useEffect(() => {
+        setContent(deleteAccData[language]);
+    }, [language]);
 
     if (!Delete) return null;
 
@@ -41,19 +49,19 @@ const DeleteAccount = ({ setIsLoged, setView, Delete, del }) => {
             <div className="modal-content">
                 <form onSubmit={handleDeleteAccount}>
                     <div className="form-group">
-                        <label htmlFor="currentPassword" className="changes">Confirm delete</label>
+                        <label htmlFor="currentPassword" className="changes">{content.confirmDelete}</label>
                         <input
                             type="password"
                             id="currentPassword"
-                            placeholder='Current password'
+                            placeholder={content.currentPassword}
                             value={currentPassword}
                             onChange={(e) => setCurrentPassword(e.target.value)}
                             required
                         />
                     </div>
                     <div className="modal-buttons">
-                        <button type="button" onClick={del}>Cancel</button>
-                        <button type="submit">Confirm delete</button>
+                        <button type="button" onClick={del}>{content.cancel}</button>
+                        <button type="submit">{content.confirm}</button>
                     </div>
                     {message && <p className="message">{message}</p>}
                 </form>

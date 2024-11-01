@@ -249,8 +249,8 @@ const Account = ({ setView, setIsLoged, language }) => {
       />
       <ConfirmModifications notConfirmed={confirmModifications} confirmed = {() => setConfirmModifications(false)} firstName = {firstName} lastName = {lastName} 
       email = {email} phone = {phone} dni = {dni} address = {address} nationality = {nationality} province = {province} locality = {locality} birthDate = {birthDate}
-      postalCode = {postalCode} gender = {gender} message = {message} />
-      <DeleteAccount setView = {setView} setIsLoged = {setIsLoged} Delete = {deleteAccount} del = {() => setDeleteAccount(false)} />
+      postalCode = {postalCode} gender = {gender} message = {message} language={language}/>
+      <DeleteAccount setView = {setView} setIsLoged = {setIsLoged} Delete = {deleteAccount} del = {() => setDeleteAccount(false)} language={language}/>
     </section>
   );
 };
