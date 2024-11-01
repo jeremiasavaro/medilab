@@ -182,7 +182,7 @@ function App() {
                   <Faq language={language}/>
                   <Contact isLoged={isLoged} setIsLoged={setIsLoged} setView={setView} />
                 </main>
-                <Footer />
+                <Footer language={language}/>
     
                 <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
                   <i className="bi bi-arrow-up-short"></i>
