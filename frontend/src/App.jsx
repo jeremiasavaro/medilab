@@ -157,7 +157,7 @@ function App() {
           } 
           if (view === "xrayService") {
             if (isLogged) {
-              return <XrayService setView={setView} />;
+              return <XrayService setView={setView} language={language}/>;
             } else {
               return <Alert setView={setView} language={language}/>;
 
@@ -175,7 +175,7 @@ function App() {
                 <main className="main">
                   <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
                   <HeroSection setView={setView} language={language} />
-                  <About language={language}/>  {/*Hacer esto para todos los componentes!!*/}
+                  <About language={language}/>
                   <ServicesSection language={language}/>
                   <Doctors />
                   <Gallery language={language}/>

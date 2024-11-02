@@ -47,17 +47,17 @@
             "github": "https://github.com/jeremiasavaro/proyecto-UNRC-2024"
         },
         "menuItems": {
-            "home": "Pagina principal",
+            "home": "Página principal",
             "about": "Sobre Nosotros",
             "services": "Servicios",
             "doctors": "Doctores",
-            "gallery": "Galeria",
+            "gallery": "Galería",
             "faq": "FAQ",
             "contact": "Contacto"
         },
         "languageDropdown": {
             "title": "Idioma",
-            "english": "Ingles",
+            "english": "Inglés",
             "spanish": "Español"
         },
         "accountDropdown": {

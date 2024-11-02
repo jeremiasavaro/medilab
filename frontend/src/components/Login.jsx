@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../assets/css/Login.css';
 import loginData from '../assets/components-data/loginData.json'
 
-const Login = ({ view, setView, isLoged, setIsLoged, language }) => {
+const Login = ({ view, setView, isLogged, setIsLogged, language }) => {
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -31,7 +31,7 @@ const Login = ({ view, setView, isLoged, setIsLoged, language }) => {
 
       if (response.ok) {
         setMessage(data.message);
-        setIsLoged(true); // Cambia a true si el login es exitoso
+        setIsLogged(true); // Cambia a true si el login es exitoso
         setView('home')
       } else {
         setMessage(data.error);
