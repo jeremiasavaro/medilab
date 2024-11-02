@@ -39,10 +39,10 @@ function App() {
     setView(formName);
   };
 
-  const [isLoged, setIsLoged] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   const toggleLoginState = () => {
-    setIsLoged(!isLoged);
+    setIsLogged(!isLogged);
   };
 
   useEffect(() => {
@@ -150,13 +150,13 @@ function App() {
     <div className="App">
         {(() => {
           if (view === "login") {
-            return <Login setView={setView} setIsLoged={setIsLoged} language={language} />;
+            return <Login setView={setView} setIsLogged={setIsLogged} language={language} />;
           } 
           if (view === "register") {
             return <Register setView={setView} language={language} />;
           } 
           if (view === "xrayService") {
-            if (isLoged) {
+            if (isLogged) {
               return <XrayService setView={setView} />;
             } else {
               return <Alert setView={setView} language={language}/>;
@@ -164,7 +164,7 @@ function App() {
             }
           } 
           if (view === "account") {
-            return <Account setView={setView} setIsLoged={setIsLoged} language={language}/>;
+            return <Account setView={setView} setIsLogged={setIsLogged} language={language}/>;
           } 
           if (view === "Alert") {
             return <Alert setView={setView} language={language} />;
@@ -173,14 +173,14 @@ function App() {
             return (
               <div>
                 <main className="main">
-                  <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} setLanguage={setLanguage} language={language} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
+                  <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
                   <HeroSection setView={setView} language={language} />
                   <About language={language}/>  {/*Hacer esto para todos los componentes!!*/}
                   <ServicesSection language={language}/>
                   <Doctors />
-                  <Gallery />
+                  <Gallery language={language}/>
                   <Faq language={language}/>
-                  <Contact isLoged={isLoged} setIsLoged={setIsLoged} setView={setView} language={language}/>
+                  <Contact isLogged={isLogged} setIsLogged={setIsLogged} setView={setView} language={language}/>
                 </main>
                 <Footer language={language}/>
     
