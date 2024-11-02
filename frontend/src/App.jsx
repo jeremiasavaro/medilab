@@ -150,7 +150,7 @@ function App() {
     <div className="App">
         {(() => {
           if (view === "login") {
-            return <Login setView={setView} setIsLoged={setIsLoged} />;
+            return <Login setView={setView} setIsLoged={setIsLoged} language={language} />;
           } 
           if (view === "register") {
             return <Register setView={setView} />;
