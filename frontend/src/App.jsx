@@ -153,7 +153,7 @@ function App() {
             return <Login setView={setView} setIsLoged={setIsLoged} language={language} />;
           } 
           if (view === "register") {
-            return <Register setView={setView} />;
+            return <Register setView={setView} language={language} />;
           } 
           if (view === "xrayService") {
             if (isLoged) {
