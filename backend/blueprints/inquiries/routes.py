@@ -19,7 +19,7 @@ def contact():
 # Endpoint used for obtaining the doctors table
 @inquiries.route('/doctors', methods=['GET'])
 def get_doctors():
-    doctors = Doctor.query.all()  #Traemos todos los doctores de la tabla correspondiente
+    doctors = Doctor.query.all()  
     doctors_list = [{
         'dni': doctor.dni,
         'first_name': doctor.first_name,
