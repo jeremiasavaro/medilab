@@ -37,11 +37,11 @@ const DeleteAccount = ({ setIsLoged, setView, Delete, del }) => {
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
+        <div className="modal-overlay-deleteAccount">
+            <div className="modal-content-deleteAccount">
                 <form onSubmit={handleDeleteAccount}>
                     <div className="form-group">
-                        <label htmlFor="currentPassword" className="changes">Confirm delete</label>
+                        <label htmlFor="currentPassword" className="changes">Confirm delete account</label>
                         <input
                             type="password"
                             id="currentPassword"
@@ -53,7 +53,7 @@ const DeleteAccount = ({ setIsLoged, setView, Delete, del }) => {
                     </div>
                     <div className="modal-buttons">
                         <button type="button" onClick={del}>Cancel</button>
-                        <button type="submit">Confirm delete</button>
+                        <button type="submit">Confirm</button>
                     </div>
                     {message && <p className="message">{message}</p>}
                 </form>

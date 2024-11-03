@@ -38,9 +38,9 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h1><b>Change Password</b></h1>
+    <div className="modal-overlay-changePassword">
+      <div className="modal-content-changePassword">
+        <h1 className='h1-changePassword'><b>Change Password</b></h1>
         <br></br>
         <form onSubmit={handleChangePassword}>
           <div className="form-group">
@@ -77,7 +77,7 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
             <button type="button" onClick={onClose}>Cancel</button>
             <button type="submit">Change password</button>
           </div>
-          {message && <p className="message">{message}</p>}
+          {message && <p className="message-changePassword">{message}</p>}
         </form>
       </div>
     </div>

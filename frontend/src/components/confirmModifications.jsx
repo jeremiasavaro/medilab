@@ -38,8 +38,8 @@ const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone,
     };
 
     return (
-      <div className="modal-overlay">
-        <div className="modal-content">
+      <div className="modal-overlay-confirmModifications">
+        <div className="modal-content-confirmModifications">
           <form onSubmit={handleConfirmModifications}>
             <div className="form-group">
               <label htmlFor="currentPassword" className = "changes">Confirm changes</label>
