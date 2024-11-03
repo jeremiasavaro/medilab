@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import "../assets/css/changePassword.css"
+import {useJwt} from "react-jwt";
 
 const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
 
@@ -7,33 +8,62 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
   const [newPassword, setNewPassword] = useState('');
   const [repNewPassword, setRepNewPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [token, setToken] = useState('');
+
+  const { decodedToken, isExpired } = useJwt(token);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setToken(data.token);
+        } else {
+          setMessage("No se pudo obtener el token");
+        }
+      } catch (error) {
+        setMessage('Error al obtener el token');
+      }
+    };
+
+    fetchToken();
+  }, []);
 
   if (!isOpen) return null;
-
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch('http://127.0.0.1:5000/user/change_password', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ currentPassword, newPassword, repNewPassword }),
-      });
+    if (token && decodedToken) {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/user/change_password', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          },
+          body: JSON.stringify({currentPassword, newPassword, repNewPassword}),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        setMessage(data.message);
-        setTimeout(() => onClose(), 1000); // Cierra el modal después de 1 segundo para permitir que el mensaje se lea
-      } else {
-        setMessage(data.error);
+        if (response.ok) {
+          setMessage(data.message);
+          setTimeout(() => onClose(), 1000); // Cierra el modal después de 1 segundo para permitir que el mensaje se lea
+        } else {
+          setMessage(data.error);
+        }
+      } catch (error) {
+        setMessage('Error en el cambio de contraseña');
       }
-    } catch (error) {
-      setMessage('Error en el cambio de contraseña');
     }
   };
 
