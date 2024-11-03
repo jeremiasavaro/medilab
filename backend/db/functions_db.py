@@ -1,7 +1,7 @@
 from datetime import datetime
 from .database import db
 from .models import *
-from sqlalchemy.orm import * # type: ignore VER!!!
+from sqlalchemy.orm import *
 
 def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_number, date_birth,nationality, province, locality, postal_code, address, gender):
     
@@ -91,9 +91,8 @@ def get_password(dni):
 
 def calculate_age(dateBirth):
     today = datetime.today()
-    birth_date = dateBirth.date()
-    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-    return age
+    birth_date = datetime.strptime(dateBirth, '%Y-%m-%d').date()
+    return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
 
 def insert_diagnostic(result, description, imageDiagnostic, dni):
