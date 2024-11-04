@@ -4,6 +4,7 @@ from .models import *
 from sqlalchemy.orm import * # type: ignore VER!!!
 
 def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_number, date_birth,nationality, province, locality, postal_code, address, gender):
+    
     date_birth_obj = datetime.strptime(date_birth, "%Y-%m-%d").date()
 
     new_patient = Patient(
@@ -59,20 +60,22 @@ def modify_image_patient(dni, imagePatient):
         patient.image_patient = imagePatient
         db.session.commit()
 
-def modify_patient(dni, firstName, lastName, email, phoneNumber, dateBirth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
+def modify_patient(dni, firstName, lastName, email, phoneNumber, date_birth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
     patient = Patient.query.filter_by(dni=dni).first()
-    
+
+    date_obj = datetime.strptime(date_birth, '%Y-%m-%d')
+
     if patient:
         patient.first_name = firstName
         patient.last_name = lastName
         patient.email = email
         patient.phone_number = phoneNumber
-        patient.date_birth = dateBirth
-        patient.age = calculate_age(dateBirth)
+        patient.date_birth = date_obj
+        patient.age = calculate_age(date_obj)
         patient.nationality = nationality
         patient.province = province
         patient.locality = locality
-        patient.postal_code = postalCode
+        patient.postal_code = postalCode 
         patient.address = address
         patient.gender = gender
         patient.image_patient = imagePatient
@@ -88,7 +91,7 @@ def get_password(dni):
 
 def calculate_age(dateBirth):
     today = datetime.today()
-    birth_date = datetime.strptime(dateBirth, "%Y-%m-%d")
+    birth_date = dateBirth.date()
     age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     return age
 

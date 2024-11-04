@@ -39,10 +39,10 @@ function App() {
     setView(formName);
   };
 
-  const [isLoged, setIsLoged] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   const toggleLoginState = () => {
-    setIsLoged(!isLoged);
+    setIsLogged(!isLogged);
   };
 
   useEffect(() => {
@@ -150,39 +150,39 @@ function App() {
     <div className="App">
         {(() => {
           if (view === "login") {
-            return <Login setView={setView} setIsLoged={setIsLoged} />;
+            return <Login setView={setView} setIsLogged={setIsLogged} language={language} />;
           } 
           if (view === "register") {
-            return <Register setView={setView} />;
+            return <Register setView={setView} language={language} />;
           } 
           if (view === "xrayService") {
-            if (isLoged) {
-              return <XrayService setView={setView} />;
+            if (isLogged) {
+              return <XrayService setView={setView} language={language}/>;
             } else {
-              return <Alert setView={setView} />;
+              return <Alert setView={setView} language={language}/>;
 
             }
           } 
           if (view === "account") {
-            return <Account setView={setView} setIsLoged={setIsLoged} />;
+            return <Account setView={setView} setIsLogged={setIsLogged} language={language}/>;
           } 
           if (view === "Alert") {
-            return <Alert setView={setView} />;
+            return <Alert setView={setView} language={language} />;
           }
           if (view === "home") {
             return (
               <div>
                 <main className="main">
-                  <Header setView={setView} isLoged={isLoged} setIsLoged={setIsLoged} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
-                  <HeroSection setView={setView} />
-                  <About language={language}/>  {/*Hacer esto para todos los componentes!!*/}
-                  <ServicesSection />
-                  <Doctors />
-                  <Gallery />
-                  <Faq />
-                  <Contact isLoged={isLoged} setIsLoged={setIsLoged} setView={setView} />
+                  <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} />  {/*Añadir el setLanguage, y añadir un boton que en onClick le cambia el valor*/}
+                  <HeroSection setView={setView} language={language} />
+                  <About language={language}/>
+                  <ServicesSection language={language}/>
+                  <Doctors language={language}/>
+                  <Gallery language={language}/>
+                  <Faq language={language}/>
+                  <Contact isLogged={isLogged} setIsLogged={setIsLogged} setView={setView} language={language}/>
                 </main>
-                <Footer />
+                <Footer language={language}/>
     
                 <a href="#" id="scroll-top" className="scroll-top d-flex align-items-center justify-content-center">
                   <i className="bi bi-arrow-up-short"></i>

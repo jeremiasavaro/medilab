@@ -2,6 +2,7 @@ from flask import request
 import bcrypt
 from .__init__ import *
 from utils import *
+from datetime import datetime
 from db.functions_db import get_patient, modify_patient, get_password, modify_password, delete_patient
 
 # Endpoint used for obtaining the user data
@@ -16,6 +17,8 @@ def obtain_user_data():
     patient_data = get_patient(dni)
     if not patient_data:
         return make_response({'error': 'Usuario no encontrado'}, 404)
+
+    print(patient_data.date_birth)
 
     return make_response({
         'dni': patient_data.dni,

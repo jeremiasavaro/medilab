@@ -1,0 +1,14 @@
+{
+  "en": {
+    "confirmChanges": "Confirm changes",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "currentPassword": "Current password"
+  },
+  "es": {
+    "confirmChanges": "Confirmar cambios",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "currentPassword": "Contraseña actual"
+  }
+}
