@@ -78,7 +78,7 @@ def create_diagnosis_pdf(patient_name, diagnosis_date, diagnosis, diagnosis_prob
 
     #Conclusión con la probabilidad
     if diagnosis == "healthy":
-        conclusion = f"The patient, {patient_name}, has a {diagnosis_prob:.2f}% likelihood of being {diagnosis}."
+        conclusion = f"The patient, {patient_name}, is {diagnosis}."
     else:
         conclusion = f"The patient, {patient_name}, has a {diagnosis_prob:.2f}% likelihood of having {diagnosis}."
     elements.append(Paragraph(conclusion, body_style))
