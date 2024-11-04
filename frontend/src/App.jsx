@@ -177,7 +177,7 @@ function App() {
                   <HeroSection setView={setView} language={language} />
                   <About language={language}/>
                   <ServicesSection language={language}/>
-                  <Doctors />
+                  <Doctors language={language}/>
                   <Gallery language={language}/>
                   <Faq language={language}/>
                   <Contact isLogged={isLogged} setIsLogged={setIsLogged} setView={setView} language={language}/>
