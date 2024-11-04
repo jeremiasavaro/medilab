@@ -45,8 +45,8 @@ const DeleteAccount = ({ setIsLoged, setView, Delete, del, language  }) => {
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
+        <div className="modal-overlay-deleteAccount">
+            <div className="modal-content-deleteAccount">
                 <form onSubmit={handleDeleteAccount}>
                     <div className="form-group">
                         <label htmlFor="currentPassword" className="changes">{content.confirmDelete}</label>

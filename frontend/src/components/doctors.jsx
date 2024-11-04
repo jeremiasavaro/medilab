@@ -12,7 +12,7 @@ function Doctors() {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:5000/inquiries/doctors');  // Cambia a la URL correcta de tu API
+        const response = await fetch('http://localhost:5000/inquiries/doctors'); 
         const data = await response.json();
         console.log('Doctors data:', data); // Verificar los datos aquí
         setDoctors(data);
