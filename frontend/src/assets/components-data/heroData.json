@@ -13,12 +13,12 @@
       },
     "es" :{
             "welcomeTitle": "BIENVENIDO A MEDILAB",
-            "xrayServiceTitle": "Servicio de diagnosticos de rayos-x",
-            "xrayServiceDescription": "El servicio X-Rar ofrece una forma de ofrecer un diagnostico a partir de un rayo-x usando IA.",
+            "xrayServiceTitle": "Servicio de diagnóstico de rayos-x",
+            "xrayServiceDescription": "El servicio X-Ray ofrece una forma de ofrecer un diagnóstico a partir de una radiografía usando IA.",
             "accessService": "Acceder al servicio",
             "reliabilityTitle": "Alta confiabilidad",
-            "reliabilityDescription": "El servicio de diagnosticos de rayos X, mediante IA probee ayuda al paciente acortando tiempos y brindando una experiencia más cómoda.",
-            "rapidDiagnosisTitle": "Diagnosticos rapidos",
+            "reliabilityDescription": "El servicio de diagnóstico de rayos X, mediante IA provee ayuda al paciente acortando tiempos y brindando una experiencia más cómoda.",
+            "rapidDiagnosisTitle": "Diagnósticos rápidos",
             "rapidDiagnosisDescription": "Gracias a la velocidad y precisión de nuestra IA, los resultados del escaneo están disponibles en minutos, optimizando el tiempo de espera de los pacientes.",
             "friendlyInterfaceTitle": "Interfaz amigable",
             "friendlyInterfaceDescription": "Una experiencia fácil e intuitiva, diseñada pensando en el usuario, permite a los profesionales sanitarios acceder a los diagnósticos de forma rápida y sin complicaciones."         
