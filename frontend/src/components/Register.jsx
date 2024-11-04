@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../assets/css/Register.css';
+import registerData from '../assets/components-data/registerData.json'
 
-const Register = ({ setView }) => {
+const Register = ({ setView, language }) => {
   // Define los estados para todos los campos del formulario.
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,6 +35,14 @@ const Register = ({ setView }) => {
   const genderRef = useRef(null);
   const passwordRef = useRef(null);
   const repPasswordRef = useRef(null);
+
+  // Usados para cambiar el idioma del contenido
+  const [content, setContent] = useState(registerData[language]);
+
+  // Dependiendo del idioma, se muestra un texto u otro
+  useEffect(() => {
+    setContent(registerData[language]);
+  }, [language]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -73,11 +82,11 @@ const Register = ({ setView }) => {
   return (
     <div className="gen">
       <div className="register-container">
-        <h2><b>Create your account</b></h2>
+        <h2><b>{content.createAccount}</b></h2>
         <br></br>
         <form className="horizontal-form" onSubmit={handleRegister}>
           <div className="input-group">
-            <label htmlFor="firstName">First Name</label>
+            <label htmlFor="firstName">{content.firstName}</label>
             <input
               type="text"
               id="firstName"
@@ -89,7 +98,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="lastName">Last Name</label>
+            <label htmlFor="lastName">{content.lastName}</label>
             <input
               type="text"
               id="lastName"
@@ -101,7 +110,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="dni">DNI</label>
+            <label htmlFor="dni">{content.id}</label>
             <input
               type="text"
               id="dni"
@@ -113,7 +122,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{content.email}</label>
             <input
               type="email"
               id="email"
@@ -125,7 +134,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="phone">Phone</label>
+            <label htmlFor="phone">{content.phone}</label>
             <input
               type="tel"
               id="phone"
@@ -137,7 +146,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="address">Address</label>
+            <label htmlFor="address">{content.address}</label>
             <input
               type="text"
               id="address"
@@ -149,7 +158,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-              <label htmlFor='birthDate'>Birth Date:</label>
+              <label htmlFor='birthDate'>{content.birthDate}</label>
               <input
               type="date"
               id="birthDate"
@@ -161,7 +170,7 @@ const Register = ({ setView }) => {
               />
           </div>
           <div className="input-group">
-              <label htmlFor='nationality'>Nationality:</label>
+              <label htmlFor='nationality'>{content.nationality}</label>
               <input
               type="text"
               id="nationality"
@@ -173,7 +182,7 @@ const Register = ({ setView }) => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor='province'>Province:</label>
+              <label htmlFor='province'>{content.province}</label>
               <input
               type="text"
               id = "province"
@@ -185,7 +194,7 @@ const Register = ({ setView }) => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor='locality'>Locality:</label>
+              <label htmlFor='locality'>{content.locality}</label>
               <input
               type="text"
               id = "locality"
@@ -197,7 +206,7 @@ const Register = ({ setView }) => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor='postalCode'>Postal Code:</label>
+              <label htmlFor='postalCode'>{content.postalCode}</label>
               <input
               type="text"
               id="postalCode"
@@ -209,7 +218,7 @@ const Register = ({ setView }) => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor='gender'>Gender:</label>
+              <label htmlFor='gender'>{content.gender}</label>
               <select
               id="gender"
               value={gender}
@@ -218,14 +227,14 @@ const Register = ({ setView }) => {
               onKeyDown={(e) => handleKeyPress(e, passwordRef)}
               required
               >
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">{content.select}</option>
+                <option value="Male">{content.male}</option>
+                <option value="Female">{content.female}</option>
+                <option value="Other">{content.other}</option>
               </select>
             </div>
           <div className="input-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{content.password}</label>
             <input
               type="password"
               id="password"
@@ -237,7 +246,7 @@ const Register = ({ setView }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="repPassword">Confirm Password</label>
+            <label htmlFor="repPassword">{content.confirmPassword}</label>
             <input
               type="password"
               id="repPassword"
@@ -248,18 +257,17 @@ const Register = ({ setView }) => {
               onKeyDown={(e) => handleKeyPress(e, null)} // Último campo, no hay "siguiente".
             />
           </div>
-          <button type="submit">Register</button>
+          <button type="submit">{content.register}</button>
         </form>
         <p>
           <br></br>
-          Already have an account?,{' '}
+          {content.alreadyHaveAccount},{' '}
           <span
             onClick={() => setView("login")}
             className="hover-link"
           >
-            click here
+            {content.clickHere}
           </span>
-          .
         </p>
         <p>
             {' '}
@@ -269,7 +277,7 @@ const Register = ({ setView }) => {
               }}
               className="hover-link"
             >
-              Back to main page
+              {content.mainPage}
             </span>
           </p>
         {message && <p className="message">{message}</p>}

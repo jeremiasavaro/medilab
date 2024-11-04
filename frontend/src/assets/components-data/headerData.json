@@ -1,0 +1,76 @@
+{
+    "en": {
+        "contactInfo": {
+            "email": "medilab@dc.exa.unrc.edu.ar",
+            "phone": "+54 358 600-1336"
+        },
+        "socialLinks": {
+            "facebook": "https://www.facebook.com/universidadriocuarto",
+            "instagram": "https://www.instagram.com/universidadnacionalderiocuarto/",
+            "github": "https://github.com/jeremiasavaro/proyecto-UNRC-2024"
+        },
+        "menuItems": {
+            "home": "Home",
+            "about": "About",
+            "services": "Services",
+            "doctors": "Doctors",
+            "gallery": "Gallery",
+            "faq": "FAQ",
+            "contact": "Contact"
+        },
+        "languageDropdown": {
+            "title": "Language",
+            "english": "English",
+            "spanish": "Spanish"
+        },
+        "accountDropdown": {
+            "title": "Account",
+            "loggedIn": {
+            "myAccount": "My Account",
+            "logout": "Logout"
+            },
+            "notLoggedIn": {
+            "login": "Login",
+            "register": "Register"
+            }
+        },
+        "siteName": "Medilab"
+    },
+    "es": {
+        "contactInfo": {
+            "email": "medilab@dc.exa.unrc.edu.ar",
+            "phone": "+54 358 600-1336"
+        },
+        "socialLinks": {
+            "facebook": "https://www.facebook.com/universidadriocuarto",
+            "instagram": "https://www.instagram.com/universidadnacionalderiocuarto/",
+            "github": "https://github.com/jeremiasavaro/proyecto-UNRC-2024"
+        },
+        "menuItems": {
+            "home": "Página principal",
+            "about": "Sobre Nosotros",
+            "services": "Servicios",
+            "doctors": "Doctores",
+            "gallery": "Galería",
+            "faq": "FAQ",
+            "contact": "Contacto"
+        },
+        "languageDropdown": {
+            "title": "Idioma",
+            "english": "Inglés",
+            "spanish": "Español"
+        },
+        "accountDropdown": {
+            "title": "Cuenta",
+            "loggedIn": {
+            "myAccount": "Mi cuenta",
+            "logout": "Cerrar sesión"
+            },
+            "notLoggedIn": {
+            "login": "Iniciar sesión",
+            "register": "Registrarse"
+            }
+        },
+        "siteName": "Medilab"               
+    }
+}

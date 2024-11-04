@@ -1,16 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import "../assets/css/changePassword.css"
+import changePasswordData from "../assets/components-data/changePasswordData.json";
 import {useJwt} from "react-jwt";
 
-const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
+const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language }) => {
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [repNewPassword, setRepNewPassword] = useState('');
   const [message, setMessage] = useState('');
+  
   const [token, setToken] = useState('');
-
   const { decodedToken, isExpired } = useJwt(token);
+  
+  // Usados para cambiar el idioma del contenido
+  const [content, setContent] = useState(changePasswordData[language]);
+
+  // Dependiendo del idioma, se muestra un texto u otro
+  useEffect(() => {
+    setContent(changePasswordData[language]);
+  }, [language]);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -70,11 +79,11 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
   return (
     <div className="modal-overlay-changePassword">
       <div className="modal-content-changePassword">
-        <h1 className='h1-changePassword'><b>Change Password</b></h1>
+        <h1 className='h1-changePassword'><b>{content.title}</b></h1>
         <br></br>
         <form onSubmit={handleChangePassword}>
           <div className="form-group">
-            <label htmlFor="currentPassword">Current password</label>
+            <label htmlFor="currentPassword">{content.currentPassword}</label>
                 <input
                   type="password"
                   id="currentPassword"
@@ -84,7 +93,7 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
               />
           </div>
           <div className="form-group">
-            <label htmlFor="newPassword">New password</label>
+            <label htmlFor="newPassword">{content.newPassword}</label>
                 <input
                   type="password"
                   id="newPassword"
@@ -94,7 +103,7 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
               />
           </div>
           <div className="form-group">
-            <label htmlFor="repNewPassword">Repite new password</label>
+            <label htmlFor="repNewPassword">{content.confirmPassword}</label>
                 <input
                   type="password"
                   id="repNewPassword"
@@ -104,8 +113,8 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen }) => {
               />
           </div>
           <div className="modal-buttons">
-            <button type="button" onClick={onClose}>Cancel</button>
-            <button type="submit">Change password</button>
+            <button type="button" onClick={onClose}>{content.cancel}</button>
+            <button type="submit">{content.changePassword}</button>
           </div>
           {message && <p className="message-changePassword">{message}</p>}
         </form>

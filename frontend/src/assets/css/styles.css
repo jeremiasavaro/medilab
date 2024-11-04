@@ -383,6 +383,11 @@ html {
     .navmenu {
       padding: 0;
     }
+
+    .navmenu a {
+      text-decoration: none;
+    }
+    
   
     .navmenu ul {
       margin: 0;

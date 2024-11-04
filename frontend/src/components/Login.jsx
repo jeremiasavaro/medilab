@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/css/Login.css';
+import loginData from '../assets/components-data/loginData.json'
 
-const Login = ({ view, setView, isLoged, setIsLoged }) => {
+const Login = ({ view, setView, isLogged, setIsLogged, language }) => {
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  // Usados para cambiar el idioma del contenido
+  const [content, setContent] = useState(loginData[language]);
+
+  // Dependiendo del idioma, se muestra un texto u otro
+  useEffect(() => {
+    setContent(loginData[language]);
+  }, [language]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,7 +31,7 @@ const Login = ({ view, setView, isLoged, setIsLoged }) => {
 
       if (response.ok) {
         setMessage(data.message);
-        setIsLoged(true);  // Cambia a true si el login es exitoso
+        setIsLogged(true); // Cambia a true si el login es exitoso
         setView('home')
       } else {
         setMessage(data.error);
@@ -38,11 +46,11 @@ const Login = ({ view, setView, isLoged, setIsLoged }) => {
       <div className="login-container">
         <div className="login-form">
           <br />
-          <h2><b>Welcome to Medilab</b></h2>
+          <h2><b>{content.welcome}</b></h2>
           <br />
           <form onSubmit={handleLogin}>
             <div className="input-group">
-              <label htmlFor="dni">DNI</label>
+              <label htmlFor="dni">{content.dni}</label>
               <input
                 type="text"
                 id="dni"
@@ -52,7 +60,7 @@ const Login = ({ view, setView, isLoged, setIsLoged }) => {
               />
             </div>
             <div className="input-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{content.password}</label>
               <input
                 type="password"
                 id="password"
@@ -60,19 +68,18 @@ const Login = ({ view, setView, isLoged, setIsLoged }) => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button type="submit" className="login-btn">Login</button>
+            <button type="submit" className="login-btn">{content.login}</button>
             {message && <p className="message">{message}</p>}
           </form>
           <p>
             <br />
-            If you're not registered,{' '}
+            {content.notRegistered},{' '}
             <span
               onClick={() => setView("register")}
               className="hover-link"
             >
-              click here
+              {content.click}
             </span>
-            .
           </p>
           <p>
             {' '}
@@ -82,7 +89,7 @@ const Login = ({ view, setView, isLoged, setIsLoged }) => {
               }}
               className="hover-link"
             >
-              Back to main page
+              {content.mainPage}
             </span>
           </p>
         </div>

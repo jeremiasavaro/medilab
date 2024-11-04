@@ -1,0 +1,12 @@
+{
+  "en": {
+    "alertMessage": "Sorry, you must be logged for make this action.",
+    "loginMessage": "Go to log in",
+    "backMessage": "Back to main page"
+  },
+  "es": {
+    "alertMessage": "Lo siento, debes estar logueado para realizar esta acción.",
+    "loginMessage": "Loguearse",
+    "backMessage": "Volver a la página principal"
+  }
+}

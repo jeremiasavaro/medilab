@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../assets/css/confirmModifications.css"
+import confirmModData from '../assets/components-data/confirmModificationsData.json';
 
 const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone, birthDate,
-    nationality, province, locality, postalCode, gender, confirmed, notConfirmed, setConfirmModifications }) => {
+    nationality, province, locality, postalCode, gender, confirmed, notConfirmed, setConfirmModifications, language }) => {
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [message, setMessage] = useState('');
+    // Usados para cambiar el idioma del contenido
+    const [content, setContent] = useState(confirmModData[language]);
+
+    // Dependiendo del idioma, se muestra un texto u otro
+    useEffect(() => {
+        setContent(confirmModData[language]);
+    }, [language]);
 
     if (!notConfirmed) return null;
-
 
     const handleConfirmModifications = async (e) => {
       e.preventDefault();
@@ -42,20 +49,20 @@ const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone,
         <div className="modal-content-confirmModifications">
           <form onSubmit={handleConfirmModifications}>
             <div className="form-group">
-              <label htmlFor="currentPassword" className = "changes">Confirm changes</label>
+              <label htmlFor="currentPassword" className="changes">{content.confirmChanges}</label>
               <br></br>
                   <input
                     type="password"
                     id="currentPassword"
-                    placeholder='Current password'
+                    placeholder={content.currentPassword}
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     required
                 />
             </div>
             <div className="modal-buttons">
-                <button type="button" onClick={confirmed}>Cancel</button>
-                <button type="submit">Confirm</button>
+                <button type="button" onClick={confirmed}>{content.cancel}</button>
+                <button type="submit">{content.confirm}</button>
             </div>
             {message && <p className = "message">{message}</p>}
           </form>
