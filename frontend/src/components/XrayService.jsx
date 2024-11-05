@@ -4,6 +4,7 @@ import { useJwt } from "react-jwt";
 import infoData from '../assets/components-data/infoData.json';
 import xrayData from '../assets/components-data/xrayServiceData.json';
 import { useToken } from '../hooks/useToken';
+import { useGetDoctors } from '../hooks/useGetDoctors';
 
 const DoctorTable = ({ doctors, content, tableRef }) => (
   <div ref={tableRef}>
@@ -43,7 +44,6 @@ const XrayService = ({ setView, language }) => {
   const [isUploadVisible, setIsUploadVisible] = useState(true);
   const [isScanning, setIsScanning] = useState(false);
   const [showTable, setShowTable] = useState(false);
-  const [doctors, setDoctors] = useState([]);
   const [content, setContent] = useState(xrayData[language]);
   const [data, setData] = useState(infoData[language]);
 
@@ -52,21 +52,12 @@ const XrayService = ({ setView, language }) => {
   const {token, messageToken} = useToken();
   const { decodedToken, isExpired } = useJwt(token);
 
+  const {doctors, mesaggeDoctors} = useGetDoctors();
+
   useEffect(() => {
     setContent(xrayData[language]);
     setData(infoData[language]);
-    fetchDoctors();
   }, [language]);
-
-  const fetchDoctors = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/inquiries/doctors');
-      const data = await response.json();
-      setDoctors(data);
-    } catch (error) {
-      console.error('Error fetching doctors:', error);
-    }
-  };
 
   const handleFileUpload = async (file) => {
     if (!file) return;
@@ -179,7 +170,7 @@ const XrayService = ({ setView, language }) => {
           </label>
         )}
 
-        {showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
+        {doctors && showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
       </div>
 
       {openSection === 'info' && (
