@@ -29,3 +29,15 @@ def get_doctors():
     } for doctor in doctors]
     
     return jsonify(doctors_list)
+
+# Endpoint used for obtain the diagnoses of the current user
+@inquiries.route('/my_diagnoses', methods=['GET'])
+def get_diagnoses():
+    diagnoses = Diagnostic.query.all()  
+    diagnoses_list = [{
+        'image_diagnostic': diagnostic.image_diagnostic,
+        'date_result': diagnostic.date_result,
+        'dni': diagnostic.dni
+    } for diagnostic in diagnoses]
+    
+    return jsonify(diagnoses_list)

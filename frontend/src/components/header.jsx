@@ -67,7 +67,7 @@ function Header({ setView, isLogged, setIsLogged , language, setLanguage }) {
               <li><a href="#faq" className="active">{content.menuItems.faq}</a></li>
               <li><a href="#contact" className="active">{content.menuItems.contact}</a></li>
               <li className="dropdown">
-                <a href="#" onClick={toggleDropdown}>
+                <a href="#" className="active" onClick={toggleDropdown}>
                   {content.languageDropdown.title} <i className="bi bi-chevron-down ms-1"></i>
                 </a>
                 {isDropdownOpen && (

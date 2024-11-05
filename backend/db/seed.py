@@ -24,6 +24,7 @@ doctors = [
 
 
 with app.app_context():
+    remove_doctors()
     for doctor in doctors:
         insert_doctor(*doctor)
-
+    print("Doctors inserted successfully")

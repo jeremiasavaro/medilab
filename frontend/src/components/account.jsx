@@ -5,6 +5,7 @@ import ConfirmModifications from './confirmModifications';
 import DeleteAccount from './deleteAccount' 
 import { useJwt } from "react-jwt";
 import accountData from '../assets/components-data/accountData.json';
+import MyDiagnoses from './myDiagnoses';
 
 const Account = ({ setView, setIsLogged, language }) => {
   const [firstName, setFirstName] = useState('');
@@ -29,6 +30,7 @@ const Account = ({ setView, setIsLogged, language }) => {
   const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
   const [confirmModifications, setConfirmModifications] = useState(false);
+  const [myDiagnoses, setMyDiagnoses] = useState(false)
   // Usados para cambiar el idioma del contenido
   const [content, setContent] = useState(accountData[language]);
 
@@ -135,7 +137,7 @@ const Account = ({ setView, setIsLogged, language }) => {
       <div className="sidebar">
         <div className="logo">{content.yourProfile}</div>
         <ul>
-          <li><i className="fa-solid fa-notes-medical"></i>{content.myDiagnoses}</li>
+          <li onClick={() => setMyDiagnoses(true)}><i className="fa-solid fa-notes-medical"></i>{content.myDiagnoses}</li>
           <li onClick={() => setChangePasswordModalOpen(true)}>
             <i className="fa-solid fa-key"></i>{content.changePassword}
           </li>
@@ -251,6 +253,7 @@ const Account = ({ setView, setIsLogged, language }) => {
       email = {email} phone = {phone} dni = {dni} address = {address} nationality = {nationality} province = {province} locality = {locality} birthDate = {birthDate}
       postalCode = {postalCode} gender = {gender} message = {message} language={language}/>
       <DeleteAccount setView = {setView} setIsLogged = {setIsLogged} Delete = {deleteAccount} del = {() => setDeleteAccount(false)} language={language}/>
+      <MyDiagnoses isOpen={myDiagnoses} onClose={() => setMyDiagnoses(false)} />
     </section>
   );
 };
