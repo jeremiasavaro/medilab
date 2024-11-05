@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import texts from "../assets/components-data/headerData.json";
 
-function Header({ setView, isLoged, setIsLoged , language, setLanguage }) {
+function Header({ setView, isLogged, setIsLogged , language, setLanguage }) {
   // Usados para cambiar el idioma del contenido
   const [content, setContent] = useState(texts[language]);
 
@@ -16,9 +16,9 @@ function Header({ setView, isLoged, setIsLoged , language, setLanguage }) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  //Cuando se deslogee, seteamos en falso isLoged, y lo mandamos a home con esta variable cambiada
+  //Cuando se deslogee, seteamos en falso isLogged, y lo mandamos a home con esta variable cambiada
   const handleLogout = () => {
-    setIsLoged(false);
+    setIsLogged(false);
     setView("home"); 
     setIsDropdownOpen(false); // Cerrar desplegable
     window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver al inicio
@@ -93,7 +93,7 @@ function Header({ setView, isLoged, setIsLoged , language, setLanguage }) {
                 </a>
                 {isDropdownOpen && (
                   <ul className="dropdown-menu">
-                    {isLoged ? (
+                    {isLogged ? (
                       <>
                         <li>
                           <a href="#account" onClick={() => setView("account")}>
