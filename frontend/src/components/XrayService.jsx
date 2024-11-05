@@ -3,6 +3,7 @@ import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
 import infoData from '../assets/components-data/infoData.json';
 import xrayData from '../assets/components-data/xrayServiceData.json';
+import { useToken } from '../hooks/useToken';
 
 const DoctorTable = ({ doctors, content, tableRef }) => (
   <div ref={tableRef}>
@@ -43,33 +44,19 @@ const XrayService = ({ setView, language }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [showTable, setShowTable] = useState(false);
   const [doctors, setDoctors] = useState([]);
-  const [token, setToken] = useState('');
   const [content, setContent] = useState(xrayData[language]);
   const [data, setData] = useState(infoData[language]);
 
   const tableRef = useRef(null); // Referencia a la tabla
 
+  const {token, messageToken} = useToken();
   const { decodedToken, isExpired } = useJwt(token);
 
   useEffect(() => {
     setContent(xrayData[language]);
     setData(infoData[language]);
-    fetchToken();
     fetchDoctors();
   }, [language]);
-
-  const fetchToken = async () => {
-    try {
-      const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await response.json();
-      response.ok ? setToken(data.token) : setMessage("No se pudo obtener el token");
-    } catch (error) {
-      setMessage('Error al obtener el token');
-    }
-  };
 
   const fetchDoctors = async () => {
     try {
@@ -85,19 +72,20 @@ const XrayService = ({ setView, language }) => {
     if (!file) return;
     const formData = new FormData();
     formData.append('file', file);
+    if(token && decodedToken) {
+      try {
+        const response = await fetch('http://localhost:5000/image/upload_xray_photo', {
+          method: 'POST',
+          headers: { 'Authorization': token },
+          body: formData,
+        });
 
-    try {
-      const response = await fetch('http://localhost:5000/image/upload_xray_photo', {
-        method: 'POST',
-        headers: { 'Authorization': token },
-        body: formData,
-      });
-
-      const data = await response.json();
-      setImageUrl(data.image_url);
-      setIsUploadVisible(false);
-    } catch (error) {
-      console.error('Error uploading the image:', error);
+        const data = await response.json();
+        setImageUrl(data.image_url);
+        setIsUploadVisible(false);
+      } catch (error) {
+        console.error('Error uploading the image:', error);
+      }
     }
   };
 
@@ -113,20 +101,21 @@ const XrayService = ({ setView, language }) => {
     setIsScanning(true);
     const formData = new FormData();
     formData.append('image_url', imageUrl);
-
-    try {
-      const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
-        headers: { 'Authorization': token },
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-      });
-      const blob = await response.blob();
-      setPdfBlob(blob);
-    } catch (error) {
-      console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
-    } finally {
-      setIsScanning(false);
+    if(token && decodedToken) {
+      try {
+        const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
+          headers: { 'Authorization': token },
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+        });
+        const blob = await response.blob();
+        setPdfBlob(blob);
+      } catch (error) {
+        console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+      } finally {
+        setIsScanning(false);
+      }
     }
   };
 
@@ -175,6 +164,7 @@ const XrayService = ({ setView, language }) => {
               <i className="fa-solid fa-expand"></i> {isScanning ? content.scanning : content.startScanning}
             </button>
             {isScanning && <div className="loading">{content.processing}</div>}
+            <br></br>
             {pdfBlob && (
               <button className="download-button" onClick={handleDownloadClick}>
                 <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
