@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from .database import db
 from .models import *
 from sqlalchemy.orm import *
@@ -61,7 +61,10 @@ def modify_image_patient(dni, imagePatient):
 def modify_patient(patient_data):
     patient = Patient.query.filter_by(dni=patient_data['dni']).first()
 
-    date_obj = datetime.strptime(patient_data['birthDate'], '%Y-%m-%d')
+    try:
+        date_obj = datetime.strptime(patient_data['birthDate'], '%Y-%m-%d').date()
+    except ValueError:
+        date_obj = datetime.strptime(patient_data['birthDate'], '%a, %d %b %Y %H:%M:%S %Z').date()
 
     if patient:
         patient.first_name = patient_data['firstName']
@@ -90,7 +93,8 @@ def get_password(dni):
 
 def calculate_age(dateBirth):
     today = datetime.today()
-    birth_date = datetime.strptime(dateBirth, '%Y-%m-%d').date()
+    birth_date = dateBirth
+
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
 

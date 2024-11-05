@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 
 export const useObtainData = (token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setPhone, setAddress, setBirthDate, setNationality, setProvince, setLocality, setPostalCode, setGender, setImageUrl, setMessage) => {
+  
+  const formatInputDate = (dateString) => {
+    const date = new Date(dateString);
+    if (isNaN(date)) return '';
+    return date.toISOString().split('T')[0]; 
+  };
+  
   useEffect(() => {
     const setData = async () => {
       if (token && decodedToken) {
@@ -21,7 +28,8 @@ export const useObtainData = (token, decodedToken, isExpired, setFirstName, setL
             setDni(data.dni);
             setPhone(data.phone);
             setAddress(data.address);
-            setBirthDate(data.birthDate);
+            const formattedDate = formatInputDate(data.birthDate);
+            setBirthDate(formattedDate);
             setNationality(data.nationality);
             setProvince(data.province);
             setLocality(data.locality);
@@ -29,7 +37,7 @@ export const useObtainData = (token, decodedToken, isExpired, setFirstName, setL
             setGender(data.gender);
             setImageUrl(data.imagePatient);
           } else {
-            setMessage("No se pudo obtener los datos");
+            setMessage('No se pudo obtener los datos');
           }
         } catch (error) {
           setMessage('Error al obtener los datos');
