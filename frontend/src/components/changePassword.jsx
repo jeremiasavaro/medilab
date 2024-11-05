@@ -4,6 +4,21 @@ import changePasswordData from "../assets/components-data/changePasswordData.jso
 import {useJwt} from "react-jwt";
 import { useToken } from '../hooks/useToken';
 
+function passwordInput({id, content, value, handleChange}) {
+  return (
+    <div className="form-group">
+      <label htmlFor={id}>{content}</label>
+          <input
+            type="password"
+            id={id}
+            value={value}
+            onChange={handleChange}
+            required
+        />
+    </div>
+  );
+}
+
 const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language }) => {
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -53,36 +68,9 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language 
         <h1 className='h1-changePassword'><b>{content.title}</b></h1>
         <br></br>
         <form onSubmit={handleChangePassword}>
-          <div className="form-group">
-            <label htmlFor="currentPassword">{content.currentPassword}</label>
-                <input
-                  type="password"
-                  id="currentPassword"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  required
-              />
-          </div>
-          <div className="form-group">
-            <label htmlFor="newPassword">{content.newPassword}</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-              />
-          </div>
-          <div className="form-group">
-            <label htmlFor="repNewPassword">{content.confirmPassword}</label>
-                <input
-                  type="password"
-                  id="repNewPassword"
-                  value={repNewPassword}
-                  onChange={(e) => setRepNewPassword(e.target.value)}
-                  required
-              />
-          </div>
+          <passwordInput id={"currentPassword"} content={content.currentPassword} value={currentPassword} handleChange={(e) => setCurrentPassword(e.target.value)}/>
+          <passwordInput id={"newPassword"} content={content.newPassword} value={newPassword} handleChange={(e) => setNewPassword(e.target.value)}/>
+          <passwordInput id={"repNewPassword"} content={content.confirmPassword} value={repNewPassword} handleChange={(e) => setRepNewPassword(e.target.value)}/>
           <div className="modal-buttons">
             <button type="button" onClick={onClose}>{content.cancel}</button>
             <button type="submit">{content.changePassword}</button>
