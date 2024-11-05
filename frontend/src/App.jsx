@@ -180,7 +180,7 @@ function App() {
                   <Doctors language={language}/>
                   <Gallery language={language}/>
                   <Faq language={language}/>
-                  <Contact isLogged={isLogged} setIsLogged={setIsLogged} setView={setView} language={language}/>
+                  <Contact isLogged={isLogged} setView={setView} language={language}/>
                 </main>
                 <Footer language={language}/>
     
