@@ -28,7 +28,7 @@ def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_
     db.session.commit()
 
 
-def delete_patient(db, dni):
+def delete_patient(dni):
     patient = Patient.query.filter_by(dni=dni).first()
 
     if patient:
