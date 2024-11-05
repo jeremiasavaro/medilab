@@ -80,4 +80,72 @@ Para evaluar el rendimiento del modelo, se divide el conjunto de datos en un 80%
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
-## Entrenamiento y evaluación
+## Entrenamiento
+
+Se entrena un modelo de clasificación SVM (Support Vector Machine) con kernel lineal, y se evalúa su rendimiento en el conjunto de validación. Este tipo de kernel es útil cuando los datos son linealmente separables.
+Para entrenar el modelo, utilizamos SVC de la biblioteca scikit-learn. Este modelo SVM es adecuado para problemas de clasificación binaria, como en este caso, donde el objetivo es clasificar las imágenes en una de dos categorías: "Normal" o "Neumonía"
+
+```python
+svm_model = SVC(kernel='linear', probability=True)
+svm_model.fit(X_train, y_train)
+```
+
+`SVC` significa **Support Vector Classifier**. Es una implementación específica de SVM en la biblioteca scikit-learn de Python, diseñada específicamente para tareas de clasificación.
+
+Con un algoritmo SVM, se calculará la relación entre cada par de puntos y, finalmente, dibujará el SVC a partir de ahí.
+
+![Ejemplo sin clasificar](images/example_SVM_img1.jpg)  
+*Figura 1: Datos de ejemplo sin clasificar.*
+
+Los puntos se vuelven linealmente separables, ya que podemos dibujar el SVC Lineal óptimo de la siguiente manera:
+
+![Ejemplo clasificado](images/example_SVM_img2.jpg)  
+*Figura 2: Clasificación de los datos con SVC Lineal.*
+
+Fuente: [StrataScratch - Machine Learning Algorithms Explained: Support Vector Machine](https://www.stratascratch.com/blog/machine-learning-algorithms-explained-support-vector-machine/)
+
+## Evaluación
+
+Se evalúa el rendimiento del modelo en el conjunto de validación utilizando métricas de precisión, recall y F1 score, que permiten ver la eficacia del modelo al clasificar entre las clases "NORMAL" y "PNEUMONIA".
+
+```python
+# Predicciones en el conjunto de validación
+y_pred = svm_model.predict(X_val)
+
+# Evaluación del modelo
+print("SVM Accuracy:", accuracy_score(y_val, y_pred))  # Precisión general del modelo
+print(classification_report(y_val, y_pred))  # Informe detallado con precisión, recall y F1 score
+```
+
+![Estadisticas](images/svm_val_evaluation.jpg)  
+*Figura 3: Informe detallado con presicion, recall, f1 score para ambas clases.*
+
+### Predicciones con Probabilidades en el Conjunto de Validación
+
+Como una característica de nuestro servicio, se obtienen las probabilidades de pertenencia a cada clase para las predicciones en el conjunto de validación, lo que permite observar con qué grado de confianza el modelo clasifica cada caso como **NORMAL** o **PNEUMONIA**.
+
+```python
+# Predicciones con probabilidades en el conjunto de validación
+y_pred_proba = svm_model.predict_proba(X_val)  # Devuelve las probabilidades para cada clase
+
+# Mostrar las primeras predicciones con sus porcentajes de confianza
+for i in range(5):  # Muestra solo las primeras 5 como ejemplo
+    print(f"Predicción: {y_pred[i]}, Probabilidad de clase 0 (normal): {y_pred_proba[i][0]:.2f}, Probabilidad de clase 1 (neumonía): {y_pred_proba[i][1]:.2f}")
+```
+
+## Vizualización de imagen
+
+Aqui se puede observar una imagen de la clase normal de los datos que toma el modelo para entrenarse. Esta imagen son los `512x512` píxeles representados nuevamente en una imagen.
+
+```python
+import matplotlib.pyplot as plt
+img = X[0].reshape(512, 512)
+plt.imshow(img, cmap='gray')
+plt.show()
+```
+
+![primer_elemento_claseNormal](images/normal_img_representation_from_trained_data.jpg)
+*Figura 4: una imagen perteneciente a la clase Normal.*
+
+## Cross-Validaton
+
