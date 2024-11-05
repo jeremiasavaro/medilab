@@ -3,6 +3,22 @@
 import React, {useEffect, useState} from 'react';
 import texts from "../assets/components-data/servicesSectionData.json";
 
+function  Service ({title, description, aosdelay}) {
+  return (
+    <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay={aosdelay}>
+            <div className="service-item position-relative">
+              <div className="icon">
+                <i className="fas fa-heartbeat"></i>
+              </div>
+              <a href="#" className="stretched-link">
+                <h3>{title}</h3>
+              </a>
+              <p>{description}</p>
+            </div>
+          </div>
+  );
+}
+
 function Services({ language }) {
   const [content, setContent] = useState(texts[language]);
 
@@ -21,40 +37,9 @@ function Services({ language }) {
 
       <div className="container">
         <div className="row gy-4">
-          <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div className="service-item position-relative">
-              <div className="icon">
-                <i className="fas fa-heartbeat"></i>
-              </div>
-              <a href="#" className="stretched-link">
-                <h3>{content.firstComponentTitle}</h3>
-              </a>
-              <p>{content.firstComponentDescription}</p>
-            </div>
-          </div>
-          <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div className="service-item position-relative">
-              <div className="icon">
-                <i className="fas fa-hospital-user"></i>
-              </div>
-              <a href="#" className="stretched-link">
-                <h3>{content.secondComponentTitle}</h3>
-              </a>
-              <p>{content.secondComponentDescription}</p>
-            </div>
-          </div>
-          <div className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-            <div className="service-item position-relative">
-              <div className="icon">
-                <i className="fas fa-notes-medical"></i>
-              </div>
-              <a href="#" className="stretched-link">
-                <h3>{content.thirdComponentTitle}</h3>
-              </a>
-              <p>{content.thirdComponentDescription}</p>
-              <a href="#" className="stretched-link"></a>
-            </div>
-          </div>
+          <Service title={content.firstComponentTitle} description={content.firstComponentDescription} aosdelay={"100"}/>
+          <Service title={content.secondComponentTitle} description={content.secondComponentDescription} aosdelay={"300"}/>
+          <Service title={content.thirdComponentTitle} description={content.thirdComponentDescription} aosdelay={"600"}/>
         </div>
       </div>
     </section>

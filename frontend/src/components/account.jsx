@@ -7,7 +7,7 @@ import { useJwt } from "react-jwt";
 import accountData from '../assets/components-data/accountData.json';
 import MyDiagnoses from './myDiagnoses';
 
-const Account = ({ setView, setIsLoged, language }) => {
+const Account = ({ setView, setIsLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dni, setDni] = useState('');
@@ -252,7 +252,7 @@ const Account = ({ setView, setIsLoged, language }) => {
       <ConfirmModifications notConfirmed={confirmModifications} confirmed = {() => setConfirmModifications(false)} firstName = {firstName} lastName = {lastName} 
       email = {email} phone = {phone} dni = {dni} address = {address} nationality = {nationality} province = {province} locality = {locality} birthDate = {birthDate}
       postalCode = {postalCode} gender = {gender} message = {message} language={language}/>
-      <DeleteAccount setView = {setView} setIsLoged = {setIsLoged} Delete = {deleteAccount} del = {() => setDeleteAccount(false)} language={language}/>
+      <DeleteAccount setView = {setView} setIsLogged = {setIsLogged} Delete = {deleteAccount} del = {() => setDeleteAccount(false)} language={language}/>
       <MyDiagnoses isOpen={myDiagnoses} onClose={() => setMyDiagnoses(false)} />
     </section>
   );
