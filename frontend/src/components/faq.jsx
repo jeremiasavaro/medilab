@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import '../assets/fontawesome-free/css/all.min.css';
 import faqData from '../assets/components-data/faqData.json';
 
 function FAQ({ language }) {
