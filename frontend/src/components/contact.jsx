@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useJwt } from "react-jwt";
 import contactData from '../assets/components-data/contactData.json';
 
-const Contact = ({ setIsLoged, setView, isLoged, language }) => {
+const Contact = ({ setIsLogged, setView, isLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -77,7 +77,7 @@ const Contact = ({ setIsLoged, setView, isLoged, language }) => {
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
-      if (isLoged){
+      if (isLogged){
         try {
           // Realiza una solicitud POST al servidor.
           const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {

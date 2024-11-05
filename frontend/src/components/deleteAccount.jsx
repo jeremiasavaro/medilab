@@ -1,46 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import "../assets/css/deleteAccount.css";
 import deleteAccData from "../assets/components-data/deleteAccountData.json"
+import {useJwt} from "react-jwt";
 
-const DeleteAccount = ({ setIsLoged, setView, Delete, del, language  }) => {
+const DeleteAccount = ({ setIsLogged, setView, Delete, del, language  }) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [message, setMessage] = useState('');
     // Usados para cambiar el idioma del contenido
     const [content, setContent] = useState(deleteAccData[language]);
+    const [token, setToken] = useState('');
+    const {decodedToken, isExpired} = useJwt(token);
 
     // Dependiendo del idioma, se muestra un texto u otro
     useEffect(() => {
         setContent(deleteAccData[language]);
     }, [language]);
 
+    useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setToken(data.token);
+        } else {
+          setMessage("No se pudo obtener el token");
+        }
+      } catch (error) {
+        setMessage('Error al obtener el token');
+      }
+    };
+
+    fetchToken();
+  }, []);
+
     if (!Delete) return null;
 
     const handleDeleteAccount = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('http://127.0.0.1:5000/user/deleteAccount', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ currentPassword }),
-            });
+        if (token && decodedToken) {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/user/deleteAccount', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token,
+                    },
+                    body: JSON.stringify({currentPassword}),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                setMessage(data.message);
-                setTimeout(() => {
-                    del();
-                    setView("home");
-                    setIsLoged(false);
-                }, 2000);
-            } else {
-                setMessage(data.error);
+                if (response.ok) {
+                    setMessage(data.message);
+                    setTimeout(() => {
+                        del();
+                        setView("home");
+                        setIsLogged(false);
+                    }, 2000);
+                } else {
+                    setMessage(data.error);
+                }
+            } catch (error) {
+                setMessage('Error en la eliminación de la cuenta');
             }
-        } catch (error) {
-            setMessage('Error en la eliminación de la cuenta');
         }
     };
 
