@@ -1,35 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import texts from "../assets/components-data/headerData.json";
 
-function Header({ setView, isLogged, setIsLogged , language, setLanguage }) {
-  // Usados para cambiar el idioma del contenido
+function Header({ setView, isLogged, setIsLogged, language, setLanguage }) {
   const [content, setContent] = useState(texts[language]);
 
-  // Dependiendo del idioma, se muestra un texto u otro
   useEffect(() => {
-    setContent(texts[language]); 
+    setContent(texts[language]);
   }, [language]);
-  
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const [dropdownOpen, setDropdownOpen] = useState({ language: false, account: false });
+
+  const toggleDropdown = (dropdown) => {
+    setDropdownOpen((prevState) => ({
+      ...prevState,
+      [dropdown]: !prevState[dropdown]
+    }));
   };
 
-  //Cuando se deslogee, seteamos en falso isLogged, y lo mandamos a home con esta variable cambiada
   const handleLogout = () => {
     setIsLogged(false);
-    setView("home"); 
-    setIsDropdownOpen(false); // Cerrar desplegable
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver al inicio
+    setView("home");
+    setDropdownOpen({ language: false, account: false });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  
+
   const handleChangeLanguage = (lang) => {
     setLanguage(lang);
-    setIsDropdownOpen(false); // Cerrar desplegable
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver al inicio
+    setDropdownOpen({ ...dropdownOpen, language: false });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  
+
+  const DropdownMenu = ({ title, items, dropdown }) => (
+    <li className="dropdown">
+      <a href="#" className="active" onClick={() => toggleDropdown(dropdown)}>
+        {title} <i className="bi bi-chevron-down ms-1"></i>
+      </a>
+      {dropdownOpen[dropdown] && (
+        <ul className="dropdown-menu">
+          {items.map((item, index) => (
+            <li key={index}>
+              <a href={item.href} onClick={item.action}>
+                {item.icon && <i className={`bi ${item.icon} me-2`}></i>}
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+
+  const languageItems = [
+    { href: "#english", label: content.languageDropdown.english, action: () => handleChangeLanguage("en") },
+    { href: "#spanish", label: content.languageDropdown.spanish, action: () => handleChangeLanguage("es") }
+  ];
+
+  const accountItems = isLogged
+    ? [
+        { href: "#account", label: content.accountDropdown.loggedIn.myAccount, icon: "bi-person-circle", action: () => setView("account") },
+        { href: "#logout", label: content.accountDropdown.loggedIn.logout, icon: "bi-box-arrow-right", action: handleLogout }
+      ]
+    : [
+        { href: "#login", label: content.accountDropdown.notLoggedIn.login, icon: "bi-box-arrow-in-right", action: () => setView("login") },
+        { href: "#register", label: content.accountDropdown.notLoggedIn.register, icon: "bi-person-plus", action: () => setView("register") }
+      ];
 
   return (
     <header id="header" className="header sticky-top">
@@ -66,67 +100,8 @@ function Header({ setView, isLogged, setIsLogged , language, setLanguage }) {
               <li><a href="#gallery" className="active">{content.menuItems.gallery}</a></li>
               <li><a href="#faq" className="active">{content.menuItems.faq}</a></li>
               <li><a href="#contact" className="active">{content.menuItems.contact}</a></li>
-              <li className="dropdown">
-                <a href="#" className="active" onClick={toggleDropdown}>
-                  {content.languageDropdown.title} <i className="bi bi-chevron-down ms-1"></i>
-                </a>
-                {isDropdownOpen && (
-                  <ul className="dropdown-menu">
-                      <>
-                        <li>
-                          <a href="#english" onClick={() => handleChangeLanguage("en")}>
-                            {content.languageDropdown.english}
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#spanish" onClick={() => handleChangeLanguage("es")}>
-                            {content.languageDropdown.spanish}
-                          </a>
-                        </li>
-                      </>
-                  </ul>
-                )}
-              </li>
-              <li className="dropdown">
-                <a href="#" className="active" onClick={toggleDropdown}>
-                  {content.accountDropdown.title} <i className="bi bi-chevron-down ms-1"></i>
-                </a>
-                {isDropdownOpen && (
-                  <ul className="dropdown-menu">
-                    {isLogged ? (
-                      <>
-                        <li>
-                          <a href="#account" onClick={() => setView("account")}>
-                            <i className="bi bi-person-circle me-2"></i>
-                            {content.accountDropdown.loggedIn.myAccount}
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#logout" onClick={handleLogout}>
-                            <i className="bi bi-box-arrow-right me-2"></i>
-                            {content.accountDropdown.loggedIn.logout}
-                          </a>
-                        </li>
-                      </>
-                    ) : (
-                      <>
-                        <li>
-                          <a href="#login" onClick={() => setView("login")}>
-                            <i className="bi bi-box-arrow-in-right me-2"></i>
-                            {content.accountDropdown.notLoggedIn.login}
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#register" onClick={() => setView("register")}>
-                            <i className="bi bi-person-plus me-2"></i>
-                            {content.accountDropdown.notLoggedIn.register}
-                          </a>
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                )}
-              </li>
+              <DropdownMenu title={content.languageDropdown.title} items={languageItems} dropdown="language" />
+              <DropdownMenu title={content.accountDropdown.title} items={accountItems} dropdown="account" />
             </ul>
             <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
           </nav>
