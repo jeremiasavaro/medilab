@@ -2,43 +2,20 @@ import React, { useState, useEffect } from 'react';
 import "../assets/css/deleteAccount.css";
 import deleteAccData from "../assets/components-data/deleteAccountData.json"
 import {useJwt} from "react-jwt";
+import {useToken} from "../hooks/useToken";
 
 const DeleteAccount = ({ setIsLogged, setView, Delete, del, language  }) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [message, setMessage] = useState('');
     // Usados para cambiar el idioma del contenido
     const [content, setContent] = useState(deleteAccData[language]);
-    const [token, setToken] = useState('');
+    const {token, messageToken} = useToken();
     const {decodedToken, isExpired} = useJwt(token);
 
     // Dependiendo del idioma, se muestra un texto u otro
     useEffect(() => {
         setContent(deleteAccData[language]);
     }, [language]);
-
-    useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          setToken(data.token);
-        } else {
-          setMessage("No se pudo obtener el token");
-        }
-      } catch (error) {
-        setMessage('Error al obtener el token');
-      }
-    };
-
-    fetchToken();
-  }, []);
 
     if (!Delete) return null;
 
