@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "../assets/css/changePassword.css"
 import changePasswordData from "../assets/components-data/changePasswordData.json";
 import {useJwt} from "react-jwt";
+import { useToken } from '../hooks/useToken';
 
 const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language }) => {
 
@@ -10,46 +11,16 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language 
   const [repNewPassword, setRepNewPassword] = useState('');
   const [message, setMessage] = useState('');
   
-  const [token, setToken] = useState('');
-  const { decodedToken, isExpired } = useJwt(token);
+  const {token, messageToken} = useToken();
+  const {decodedToken, isExpired } = useJwt(token || '');
   
   // Usados para cambiar el idioma del contenido
   const [content, setContent] = useState(changePasswordData[language]);
-
-  // Dependiendo del idioma, se muestra un texto u otro
-  useEffect(() => {
-    setContent(changePasswordData[language]);
-  }, [language]);
-
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:5000/auth/obtainToken', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          setToken(data.token);
-        } else {
-          setMessage("No se pudo obtener el token");
-        }
-      } catch (error) {
-        setMessage('Error al obtener el token');
-      }
-    };
-
-    fetchToken();
-  }, []);
 
   if (!isOpen) return null;
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
-
     if (token && decodedToken) {
       try {
         const response = await fetch('http://127.0.0.1:5000/user/change_password', {
