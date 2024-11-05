@@ -1,0 +1,20 @@
+{
+  "en": {
+    "welcome": "Welcome to Medilab",
+    "dni": "DNI",
+    "password": "Password",
+    "login": "Login",
+    "notRegistered": "If you're not registered",
+    "click": "click here",
+    "mainPage": "Back to main page"
+  },
+  "es": {
+    "welcome": "Bienvenido a Medilab",
+    "dni": "DNI",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "notRegistered": "Si no estás registrado",
+    "click": "haz click aquí",
+    "mainPage": "Volver a la página principal"
+  }
+}

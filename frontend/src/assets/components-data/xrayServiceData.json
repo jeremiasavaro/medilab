@@ -1,0 +1,34 @@
+{
+  "en": {
+    "backButton": "Back",
+    "sectionTitle": "Fast Diagnostics with Medilab",
+    "info": "Info",
+    "scanning": "Scanning...",
+    "startScanning": "Start Scanning",
+    "processing": "Processing...",
+    "downloadPDF": "Download Diagnosis PDF",
+    "uploadXRay": "Upload your X-Ray",
+    "doctors": "Recommended doctors",
+    "doctorsName": "Name",
+    "doctorsSpeciality": "Speciality",
+    "doctorsID": "DNI",
+    "contactEmail": "Contact email",
+    "closeButton": "Close"
+  },
+  "es": {
+    "backButton": "Volver",
+    "sectionTitle": "Diagnósticos rápidos con Medilab",
+    "info": "Info",
+    "scanning": "Escaneando...",
+    "startScanning": "Comenzar Escaneo",
+    "processing": "Procesando...",
+    "downloadPDF": "Descargar PDF del diagnóstico",
+    "uploadXRay": "Sube tu Radiografía",
+    "doctors": "Doctores recomendados",
+    "doctorsName": "Nombre",
+    "doctorsSpeciality": "Especialidad",
+    "doctorsID": "DNI",
+    "contactEmail": "Email de contacto",
+    "closeButton": "Cerrar"
+  }
+}

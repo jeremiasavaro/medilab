@@ -3,7 +3,7 @@ import jwt
 import bcrypt
 from .__init__ import *
 from db.functions_db import get_patient, get_password, insert_patient
-from utils import handle_options_requests, make_response, token
+from utils import make_response, token
 
 # Endpoint used for obtaining the token
 @auth.route('/obtainToken', methods=['GET'])

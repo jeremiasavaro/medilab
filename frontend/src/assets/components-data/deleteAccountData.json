@@ -1,0 +1,14 @@
+{
+  "en": {
+    "confirmDelete": "Confirm delete",
+    "currentPassword": "Current password",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "es": {
+    "confirmDelete": "Confirmar eliminación",
+    "currentPassword": "Contraseña actual",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  }
+}

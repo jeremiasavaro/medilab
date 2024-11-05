@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
-import infoData from '../infoData.json';
+import infoData from '../assets/components-data/infoData.json';
+import xrayData from '../assets/components-data/xrayServiceData.json';
 
-const XrayService = ({ setView }) => {
+const XrayService = ({ setView, language }) => {
   const [message, setMessage] = useState('');
   const [openSection, setOpenSection] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -18,7 +19,18 @@ const XrayService = ({ setView }) => {
 
   const { decodedToken, isExpired } = useJwt(token);
 
-  const [data] = useState(infoData);  // Datos de la sección de información
+  // Usados para cambiar el idioma del contenido
+  const [content, setContent] = useState(xrayData[language]);
+  const [data, setData] = useState(infoData[language]);
+
+  // Dependiendo del idioma, se muestra un texto u otro
+  useEffect(() => {
+    setContent(xrayData[language]);
+  }, [language]);
+
+  useEffect(() => {
+    setData(infoData[language]);
+  }, [language]);
 
   const tableRef = useRef(null); // Referencia a la tabla
 
@@ -128,15 +140,15 @@ const XrayService = ({ setView }) => {
       if (tableRef.current) {
         tableRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 0);  // Un pequeño retraso para permitir que React termine el renderizado
+    }, 0);
   };
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:5000/doctors');  // Cambia a la URL correcta de tu API
+        const response = await fetch('http://localhost:5000/inquiries/doctors');
         const data = await response.json();
-        console.log('Doctors data:', data); // Verificar los datos aquí
+        console.log('Doctors data:', data);
         setDoctors(data);
         setLoading(false);
       } catch (error) {
@@ -150,11 +162,11 @@ const XrayService = ({ setView }) => {
 
   return (
     <section id="xray-section" className="contentXray">
-      <button className="buttonBack" onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i>  Back</button>
-      <header className="title">Faster Diagnostics with X-RAI
+      <button className="buttonBack" onClick={() => setView('home')}><i className="fa-solid fa-right-to-bracket"></i> {content.backButton}</button>
+      <header className="title">{content.sectionTitle}
       <button className="toggle-button" onClick={() => openOverlaySection('info')}>
           <i className="bi-info-circle-fill"> </i>
-          Info
+        {content.info}
         </button>
       </header>
       <div className="xrayServices-container">
@@ -175,15 +187,15 @@ const XrayService = ({ setView }) => {
               />
             </div>
 
-            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}><i className="fa-solid fa-expand"></i> {isScanning ? 'Scanning...' : 'Start Scanning'}
+            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}><i className="fa-solid fa-expand"></i> {isScanning ? content.scanning : content.startScanning}
               <br></br>
             </button>
-            {isScanning && <div className="loading">Procesando...</div>}
+            {isScanning && <div className="loading"> {content.processing}</div>}
 
             <br></br>
             {pdfBlob && (
               <button className="download-button"
-              onClick={handleDownloadClick}><i className="fa-regular fa-file-pdf"></i> Download Diagnosis PDF
+              onClick={handleDownloadClick}><i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
               </button>
             )}
           </>
@@ -191,21 +203,21 @@ const XrayService = ({ setView }) => {
 
         {isUploadVisible && (  // Mostrar el botón de Upload solo si isUploadVisible es true
           <label htmlFor="xray-upload" className="xray-file-upload">
-            Upload your X-RAY
+            {content.uploadXRay}
           </label>
         )}
         {showTable && (
           <div ref={tableRef}>
             <hr className="divider" />
-            <h2 className='h2'><b>Recommended doctors</b></h2>
+            <h2 className='h2'><b>{content.doctors}</b></h2>
             <div className="table-container">
               <table className="doctor-table">
                 <thead>
                   <tr>
-                    <th>Name and surname</th>
-                    <th>Speciality</th>
-                    <th>DNI</th>
-                    <th>contact email</th>
+                    <th>{content.doctorsName}</th>
+                    <th>{content.doctorsSpeciality}</th>
+                    <th>{content.doctorsID}</th>
+                    <th>{content.contactEmail}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -227,7 +239,7 @@ const XrayService = ({ setView }) => {
       <div className="overlay-section active">
         <div className="overlay-content">
           <h2>
-            <i className="bi bi-info-square-fill"></i> INFO
+            <i className="bi bi-info-square-fill"></i> {content.info}
           </h2>
 
           {/* Sección "Sobre Nosotros" */}
@@ -264,7 +276,7 @@ const XrayService = ({ setView }) => {
           <h3>{data.credits.title}</h3>
           <p>{data.credits.content}</p>
 
-          <button onClick={closeOverlaySection}>Close</button>
+          <button onClick={closeOverlaySection}>{content.closeButton}</button>
         </div>
       </div>
     )}

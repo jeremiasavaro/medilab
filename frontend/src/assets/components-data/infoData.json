@@ -1,0 +1,85 @@
+{ "en": {
+  "aboutUs": {
+    "title": "About Us",
+    "content": "We are a group of students from the National University of Río Cuarto, with the task of creating a website that integrates artificial intelligence, we decided to do it in the field of medicine. Our goal is to use technology to help improve early disease detection through X-rays, although we emphasize that the use of this tool does not replace professional medical consultation."
+  },
+  "methodology": {
+    "title": "Methodology Used",
+    "content": [
+      "For automatic diagnosis, we use two artificial intelligence models:",
+      {
+        "model1": {
+          "name": "VGG16",
+          "type": "Convolutional Neural Network",
+          "description": "This model is based on pre-trained deep networks architecture, adapted to detect specific patterns in X-ray images."
+        }
+      },
+      {
+        "model2": {
+          "name": "SVM",
+          "type": "Support Vector Machines Classifier",
+          "description": "It uses advanced mathematical techniques to classify X-rays as normal or abnormal, based on representative feature vectors."
+        }
+      }
+    ]
+  },
+  "detectedDiseases": {
+    "title": "Detected Diseases",
+    "list": [
+      "Pneumonia",
+      "Tuberculosis",
+      "COVID-19"
+    ]
+  },
+    "disclaimer": {
+        "title": "Important Notice",
+        "content": "The results provided by this tool should not be considered as a definitive medical diagnosis. If you have any doubts or concerns about your health, we strongly recommend that you consult with a healthcare professional for an appropriate diagnosis."
+    },
+    "credits": {
+        "title": "Acknowledgements",
+        "content": "This project has been possible thanks to the collaborative effort of students and teachers from the National University of Río Cuarto, who have supported us at every stage of development."
+    }
+},
+  "es": {
+    "aboutUs": {
+      "title": "Sobre Nosotros",
+      "content": "Somos un grupo de estudiantes de la Universidad Nacional de Río Cuarto, con la tarea de realizar una página web en la que integremos inteligencia artificial, decidimos hacerlo en el campo de la medicina. Nuestro objetivo es utilizar la tecnología para ayudar a mejorar la detección temprana de enfermedades mediante radiografías, aunque destacamos que el uso de esta herramienta no reemplaza la consulta médica profesional."
+    },
+    "methodology": {
+      "title": "Metodología Utilizada",
+      "content": [
+        "Para el diagnóstico automático, utilizamos dos modelos de inteligencia artificial:",
+        {
+          "model1": {
+            "name": "VGG16",
+            "type": "Red Neuronal Convolucional",
+            "description": "Este modelo se basa en una arquitectura de redes profundas preentrenadas, adaptadas para detectar patrones específicos en radiografías."
+          }
+        },
+        {
+          "model2": {
+            "name": "SVM",
+            "type": "Clasificador de Máquinas de Vectores de Soporte",
+            "description": "Utiliza técnicas matemáticas avanzadas para clasificar las radiografías como normales o anormales, basándose en vectores representativos de características."
+          }
+        }
+      ]
+    },
+    "detectedDiseases": {
+      "title": "Enfermedades Detectadas",
+      "list": [
+        "Neumonía",
+        "Tuberculosis",
+        "COVID-19"
+      ]
+    },
+    "disclaimer": {
+      "title": "Aviso Importante",
+      "content": "Los resultados proporcionados por esta herramienta no deben ser considerados como un diagnóstico médico definitivo. Si tiene alguna duda o preocupación acerca de su salud, le recomendamos encarecidamente que consulte con un profesional de la salud para un diagnóstico adecuado."
+    },
+    "credits": {
+      "title": "Agradecimientos",
+      "content": "Este proyecto ha sido posible gracias al esfuerzo colaborativo de estudiantes y docentes de la Universidad Nacional de Río Cuarto, quienes nos han apoyado en cada etapa del desarrollo."
+    }
+  }
+}

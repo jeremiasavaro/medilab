@@ -4,17 +4,23 @@ import React, { useState, useEffect } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import imgMale from '../assets/img/doctors/docMale.png';
 import imgFemale from '../assets/img/doctors/docFemale.webp';
+import texts from "../assets/components-data/doctorsData.json";
 
-function Doctors() {
+function Doctors({language}) {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [content, setContent] = useState(texts[language]);
+
+  useEffect(() => {
+    setContent(texts[language]); 
+  }, [language]);
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch('http://localhost:5000/doctors');  // Cambia a la URL correcta de tu API
+        const response = await fetch('http://localhost:5000/inquiries/doctors'); 
         const data = await response.json();
-        console.log('Doctors data:', data); // Verificar los datos aquí
+        console.log('Doctors data:', data);
         setDoctors(data);
         setLoading(false);
       } catch (error) {
@@ -33,8 +39,8 @@ function Doctors() {
   return (
     <section id="doctors" className="doctors section">
       <div className="container section-title" data-aos="fade-up">
-        <h2>Doctors</h2>
-        <p>These are the professionals we have.</p>
+        <h2>{content.title}</h2>
+        <p>{content.phrase}</p>
       </div>
 
       <Carousel controls={true} indicators={false} interval={null}>

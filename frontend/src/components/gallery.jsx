@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import pic1 from "../assets/img/gallery/gallery-1.jpg";
 import pic2 from "../assets/img/gallery/gallery-2.jpg";
 import pic3 from "../assets/img/gallery/gallery-3.jpg";
@@ -7,6 +7,7 @@ import pic5 from "../assets/img/gallery/gallery-5.jpg";
 import pic6 from "../assets/img/gallery/gallery-6.jpg";
 import pic7 from "../assets/img/gallery/gallery-7.jpg";
 import pic8 from "../assets/img/gallery/gallery-8.jpg";
+import galleryData from '../assets/components-data/galleryData.json';
 
 const galleryImages = [
   { src: pic1 },
@@ -19,12 +20,21 @@ const galleryImages = [
   { src: pic8 }
 ];
 
-const Gallery = () => {
+const Gallery = ({ language }) => {
+
+  // Usados para cambiar el idioma del contenido
+  const [content, setContent] = useState(galleryData[language]);
+
+  // Dependiendo del idioma, se muestra un texto u otro
+  useEffect(() => {
+    setContent(galleryData[language]);
+  }, [language]);
+
   return (
     <section id="gallery" className="gallery section">
       <div className="container section-title" data-aos="fade-up">
-        <h2>Gallery</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <h2>{content.sectionTitle}</h2>
+        <p>{content.sectionIntroduction}</p>
       </div>
       <div className="container-fluid" data-aos="fade-up" data-aos-delay="100">
         <div className="row g-0">
