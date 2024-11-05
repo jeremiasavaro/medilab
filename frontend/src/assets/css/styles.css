@@ -1616,6 +1616,47 @@ html {
     color: var(--accent-color);
   }
   
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  
+  .faq-active .faq-answer {
+    max-height: 200px; /* Ajusta este valor según sea necesario */
+  }
+
+  .faq .faq-container .faq-item {
+    margin-bottom: 15px;
+  }
+  
+  .faq .faq-container .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .faq .faq-container .faq-toggle {
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .faq .faq-container .faq-active .faq-toggle {
+    transform: rotate(180deg);
+    color: var(--accent-color);
+  }
+  
+  .faq .faq-container .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out; /* Ajusta el tiempo de la animación aquí */
+  }
+  
+  .faq .faq-container .faq-answer.show {
+    max-height: 200px; /* Ajusta este valor según sea necesario */
+  }
+
   /*--------------------------------------------------------------
   # Testimonials Section
   --------------------------------------------------------------*/

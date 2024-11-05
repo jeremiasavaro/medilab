@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import faqData from '../assets/components-data/faqData.json';
 
 function FAQ({ language }) {
@@ -30,13 +31,15 @@ function FAQ({ language }) {
                   className={`faq-item ${activeIndex === index ? 'faq-active' : ''}`}
                   onClick={() => toggleFAQ(index)}
                 >
-                  <h3>{item.question}</h3>
-                  {activeIndex === index && (
-                    <div className="faq-content">
-                      <p>{item.answer}</p>
-                    </div>
-                  )}
-                  <i className="faq-toggle bi bi-chevron-right"></i>
+                  <div className="faq-question">
+                    <h3>{item.question}</h3>
+                    <span className={`faq-toggle ${activeIndex === index ? 'rotate' : ''}`}>
+                      <i className={`fas ${activeIndex === index ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                    </span>
+                  </div>
+                  <div className={`faq-answer ${activeIndex === index ? 'show' : ''}`}>
+                    <p>{item.answer}</p>
+                  </div>
                 </div>
               ))}
             </div>
