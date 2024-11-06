@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useJwt } from "react-jwt";
 import contactData from '../assets/components-data/contactData.json';
 
-function infoItem({aosDelay, h3, p }) {
+function InfoItem({aosDelay, h3, p}) {
   return (
     <div className="info-item d-flex" data-aos="fade-up" data-aos-delay={aosDelay}>
       <i className="bi bi-telephone flex-shrink-0"></i>
@@ -36,7 +36,7 @@ function ContentForm({divClass, inp, val, handleChange, ph, name}) {
   }
   
 }
-const Contact = ({ setView, isLoged, language }) => {
+const Contact = ({ setView, isLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -111,7 +111,7 @@ const Contact = ({ setView, isLoged, language }) => {
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
-      if (isLoged){
+      if (isLogged){
         try {
           // Realiza una solicitud POST al servidor.
           const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {
@@ -157,9 +157,9 @@ const Contact = ({ setView, isLoged, language }) => {
       <div className="container" data-aos="fade-up" data-aos-delay="100">
         <div className="row gy-4">
           <div className="col-lg-4">
-            <infoItem aosDelay={300} h3={content.location} p={`${content.address}, ${content.postalCode}`} />
-            <infoItem aosDelay={"400"} h3={content.callUs} p={content.phoneNumber}/>
-            <infoItem aosDelay={"500"} h3={content.emailUs} p={content.email}/>
+            <InfoItem aosDelay={300} h3={content.location} p={`${content.address}, ${content.postalCode}`} />
+            <InfoItem aosDelay={"400"} h3={content.callUs} p={content.phoneNumber}/>
+            <InfoItem aosDelay={"500"} h3={content.emailUs} p={content.email}/>
           </div>
 
           <div className="col-lg-8">
