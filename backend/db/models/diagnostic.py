@@ -13,4 +13,4 @@ class Diagnostic(db.Model):
     patient = db.relationship('Patient', backref=db.backref('diagnostics', lazy=True))
 
     def __repr__(self):
-        return f'<Diagnostic cod={self.cod} res={self.res}>'
+        return f'<Diagnostic cod={self.cod} res={self.res} description={self.description}> image_diagnostic={self.image_diagnostic} dni={self.dni} date_result={self.date_result}'

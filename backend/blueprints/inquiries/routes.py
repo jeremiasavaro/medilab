@@ -2,6 +2,7 @@ from flask import jsonify, request
 from utils import *
 from db.models import *
 from .__init__ import inquiries
+from db.functions_db import *
 
 # Endpoint used for sending a contact message
 @inquiries.route('/contact', methods=['POST'])
@@ -25,7 +26,20 @@ def get_doctors():
         'first_name': doctor.first_name,
         'last_name': doctor.last_name,
         'speciality': doctor.speciality,
-        'email': doctor.email
+        'email': doctor.email,
+        'gender': doctor.gender
     } for doctor in doctors]
     
     return jsonify(doctors_list)
+
+# Endpoint used for obtain the diagnoses of the current user
+@inquiries.route('/my_diagnoses', methods=['GET'])
+def get_diagnoses():
+    diagnoses = get_diagnostics(1)
+    diagnoses_list = [{
+        'image_diagnostic': diagnostic.image_diagnostic,
+        'date_result': diagnostic.date_result,
+        'dni': diagnostic.dni
+    } for diagnostic in diagnoses]
+    
+    return jsonify(diagnoses_list)

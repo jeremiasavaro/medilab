@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+.modal-overlay-diagnoses {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% + 60px);
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+.modal-content-diagnoses {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 900px;
+    max-width: 60%; 
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+.modal-content-diagnoses ul li {
+    color: black; /* Estilo para los elementos <li> */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Para los inputs de una sola columna, como el textarea */
+.form-group.full-width {
+    grid-column: span 2; /* Hace que ocupe las dos columnas */
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-buttons button {
+    margin-right: 10px; 
+}
+
+.modal-buttons button:last-child {
+    margin-right: 0; 
+}
+
+.message{
+    margin-top: 15px;
+    color: #e74c3c;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.h1-myDiagnoses {
+    color: black;
+}
