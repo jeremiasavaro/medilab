@@ -15,7 +15,7 @@ def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_
         email=email,
         phone_number=phone_number,
         date_birth=date_birth_obj,
-        age= calculate_age(date_birth),
+         age=calculate_age(date_birth_obj),
         nationality=nationality,
         province=province,
         locality=locality,
@@ -28,7 +28,7 @@ def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_
     db.session.commit()
 
 
-def delete_patient(db, dni):
+def delete_patient(dni):
     patient = Patient.query.filter_by(dni=dni).first()
     
     if patient:
@@ -63,7 +63,10 @@ def modify_image_patient(dni, imagePatient):
 def modify_patient(dni, firstName, lastName, email, phoneNumber, date_birth, nationality, province, locality, postalCode, address, gender, imagePatient=None):
     patient = Patient.query.filter_by(dni=dni).first()
 
-    date_obj = datetime.strptime(date_birth, '%Y-%m-%d')
+    try:
+        date_obj = datetime.strptime(date_birth, '%Y-%m-%d').date()
+    except ValueError:
+        date_obj = datetime.strptime(date_birth, '%a, %d %b %Y %H:%M:%S %Z').date()
 
     if patient:
         patient.first_name = firstName
@@ -91,7 +94,7 @@ def get_password(dni):
 
 def calculate_age(dateBirth):
     today = datetime.today()
-    birth_date = datetime.strptime(dateBirth, '%Y-%m-%d').date()
+    birth_date = dateBirth
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
 

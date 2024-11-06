@@ -1,6 +1,7 @@
 # tests/test_inquiries.py
 from conftest import *
 
+# tests for endpoint contact
 def test_contact_valid_data(client):
     data = {
         'firstName' : 'user_name',
@@ -27,6 +28,8 @@ def test_contact_invalid_data(client):
     assert response.status_code == 400
     assert response.json == {'error': 'Data missing'} 
 
+
+# tests for endpoint doctors
 def test_doctors_table(client):
     response = client.get('/inquiries/doctors')
 

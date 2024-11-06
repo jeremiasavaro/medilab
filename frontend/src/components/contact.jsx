@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useJwt } from "react-jwt";
+import contactData from '../assets/components-data/contactData.json';
 
-const Contact = ({setIsLoged, setView, isLoged}) => {
+const Contact = ({ setIsLogged, setView, isLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -11,6 +12,14 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
   const { decodedToken, isExpired } = useJwt(token);
   
   const [message, setMessage] = useState('');
+
+  // Usados para cambiar el idioma del contenido
+  const [content, setContent] = useState(contactData[language]);
+
+  // Dependiendo del idioma, se muestra un texto u otro
+  useEffect(() => {
+    setContent(contactData[language]);
+  }, [language]);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -68,7 +77,7 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
-      if (isLoged){
+      if (isLogged){
         try {
           // Realiza una solicitud POST al servidor.
           const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {
@@ -98,8 +107,8 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
   return (
     <section id="contact" className="contact section">
       <div className="container section-title" data-aos="fade-up">
-        <h2>Contact</h2>
-        <p>If you have any questions or recommendations, please contact us.</p>
+        <h2>{content.sectionTitle}</h2>
+        <p>{content.sectionInfo}</p>
       </div>
       <div className="mb-5" data-aos="fade-up" data-aos-delay="200">
       <iframe
@@ -117,22 +126,22 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
             <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
               <i className="bi bi-geo-alt flex-shrink-0"></i>
               <div>
-                <h3>Location</h3>
-                <p>Universidad Nacional de Río Cuarto, 5800</p>
+                <h3>{content.location}</h3>
+                <p>{content.address}, {content.postalCode}</p>
               </div>
             </div>
             <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
               <i className="bi bi-telephone flex-shrink-0"></i>
               <div>
-                <h3>Call Us</h3>
-                <p>+54 358 600 1336</p>
+                <h3>{content.callUs}</h3>
+                <p>{content.phoneNumber}</p>
               </div>
             </div>
             <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
               <i className="bi bi-envelope flex-shrink-0"></i>
               <div>
-                <h3>Email Us</h3>
-                <p>medilab@dc.exa.unrc.edu.ar</p>
+                <h3>{content.emailUs}</h3>
+                <p>{content.email}</p>
               </div>
             </div>
           </div>
@@ -143,34 +152,34 @@ const Contact = ({setIsLoged, setView, isLoged}) => {
                   <input type="text"
                          value={firstName}
                          onChange={(e) => setFirstName(e.target.value)}
-                         className="form-control" placeholder="First Name" required/>
+                         className="form-control" placeholder={content.firstName} required/>
                 </div>
                 <div className="col-md-6">
                   <input type="text"
                          value={lastName}
                          onChange={(e) => setLastName(e.target.value)}
-                         className="form-control" placeholder="Last Name" required/>
+                         className="form-control" placeholder={content.lastName} required/>
                 </div>
                 <div className="col-md-12">
                   <input type="email"
                          value={email}
                          onChange={(e) => setEmail(e.target.value)}
-                         className="form-control" name="email" placeholder="Your Email" required/>
+                         className="form-control" name="email" placeholder={content.userEmail} required/>
                 </div>
                 <div className="col-md-12">
                   <input type="text"
                          value={subject}
                          onChange={(e) => setSubject(e.target.value)}
-                         className="form-control" name="subject" placeholder="Subject" required/>
+                         className="form-control" name="subject" placeholder={content.subject} required/>
                 </div>
                 <div className="col-md-12">
                   <textarea
                       value={userMessage}
                       onChange={(e) => setUserMessage(e.target.value)}
-                      className="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                      className="form-control" name="message" rows="6" placeholder={content.message} required></textarea>
                 </div>
                 <div className="col-md-12 text-center">
-                  <button type="submit">Send Message</button>
+                  <button type="submit">{content.sendMessage}</button>
                 </div>
               </div>
             </form>

@@ -18,17 +18,21 @@ data = {
     'gender': 'Male'
 }
 
-def test_obtaint_token(client):
+# tests for endpoint obtainToken
+def test_obtain_token(client):
     response = client.get('/auth/obtainToken')
 
     assert response.status_code == 200
     assert 'token' in response.json
 
+
+# tests for endpoint register
 def test_user_registration(client):
     response = client.post('/auth/register', json=data)
 
     assert response.status_code == 200
     assert response.json == {'message': 'Register completed successfully'}
+
 
 def test_user_registration_missing_data(client):
     missing_data = {
@@ -50,6 +54,7 @@ def test_user_registration_missing_data(client):
 
     assert response.status_code == 400
     assert response.json == {'error': 'Data missing'}
+
 
 def test_user_registration_password_dont_match(client):
     invalid_data = {
@@ -73,6 +78,7 @@ def test_user_registration_password_dont_match(client):
     assert response.status_code == 400
     assert response.json == {'error': 'Passwords don\'t match'}
 
+
 def test_user_registration_user_already_exists(client):
     response = client.post('/auth/register', json=data)
     response = client.post('/auth/register', json=data)
@@ -81,6 +87,7 @@ def test_user_registration_user_already_exists(client):
     assert response.json == {'error': 'User already exists'}
 
 
+# tests for endpoint login
 def test_user_login(client):
     client.post('/auth/register', json=data)
 
@@ -115,10 +122,10 @@ def test_user_login_invalid_dni(client):
     assert response.status_code == 401
     assert response.json == {'error': 'No user registered with that DNI'}
 
+
 def test_user_login_incorrect_credentials(client):
     client.post('/auth/register', json=data)
 
-    # Now attempt to login
     login_data = {
         'dni': '12345678',
         'password': 'wrong_password'
