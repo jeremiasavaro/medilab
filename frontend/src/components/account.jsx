@@ -7,6 +7,7 @@ import { useJwt } from "react-jwt";
 import accountData from '../assets/components-data/accountData.json';
 import { useToken } from '../hooks/useToken';
 import MyDiagnoses from './myDiagnoses';
+import { useObtainData } from "../hooks/useObtainData";
 
 const Account = ({ setView, setIsLogged, language }) => {
   const [firstName, setFirstName] = useState('');
@@ -41,44 +42,7 @@ const Account = ({ setView, setIsLogged, language }) => {
     setContent(accountData[language]);
   }, [language]);
 
-  useEffect(() => {
-    const setData = async () => {
-      if (token && decodedToken) {
-        try {
-          const response = await fetch('http://127.0.0.1:5000/user/obtainData', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token,
-            },
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setDni(data.dni);
-            setEmail(data.email);
-            setPhone(data.phone);
-            setAddress(data.address);
-            setBirthDate(data.birthDate);
-            setNationality(data.nationality);
-            setProvince(data.province);
-            setLocality(data.locality);
-            setPostalCode(data.postalCode);
-            setGender(data.gender);
-            setImageUrl(data.imagePatient);
-          } else {
-            setMessage("No se pudo obtener los datos");
-          }
-        } catch (error) {
-          setMessage('Error al obtener los datos');
-        }
-      }
-    }
-
-    setData();
-  }, [token, decodedToken, isExpired]);
+  useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setPhone, setAddress, setBirthDate, setNationality, setProvince, setLocality, setPostalCode, setGender, setImageUrl, setMessage);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
