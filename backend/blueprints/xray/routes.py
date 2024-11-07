@@ -18,7 +18,7 @@ repo_id = "MatiasPellizzari/Xray"
 models_info = {
     "pneumonia": ("Xray/modelo_vgg16_finetuned_neumonia.h5", "keras"),
     "pneumonia_2": ("Xray/trained_model_svm_pneumonia.pkl", "svm"),
-    # "covid": "Xray/modelo_vgg16_finetuned_covid.keras", NOT WORKING
+    "covid": ("Xray/modelo_vgg16_finetuned_covid.h5", "keras"),
     # "tuberculosis": "Xray/modelo_vgg16_finetuned_tuberculosis.keras" NOT WORKING
 }
 
@@ -67,27 +67,37 @@ def predict_image(model, image, model_type):
 
 
 
-# Endpoint to generate diagnosis report from uploaded image
 @xray.route('/xray_diagnosis', methods=['POST'])
 def xray_diagnosis():
     # Ensure 'image_url' is provided in the form data
     if 'image_url' not in request.form:
         return make_response({'error': 'No image_url provided'}, 400)
-    
-    # Define the model type to use; change to "pneumonia_2" for the .pkl SVM model. Or "pneumonia" for the .h5 VGG16 model.
-    model_type = "pneumonia"
 
-    # Select the appropriate model and preprocessing function
-    model = models[model_type]
-    preprocess_function = preprocess_image_svm if models_info[model_type][1] == "svm" else preprocess_image_h5
-    
     # Load and preprocess the image from the provided URL
     image_url = request.form['image_url']
     image = load_image(image_url)
-    processed_image = preprocess_function(image)
+    
+    diseases_accepted = []
 
-    # Get diagnosis probabilities
-    disease_percentage, normal_percentage = predict_image(model, processed_image, models_info[model_type][1])
+    for model_name, model in models.items():
+        model_type = models_info[model_name][1]  # Get the model type ('svm' or 'keras')
+        preprocess_function = preprocess_image_svm if model_type == "svm" else preprocess_image_h5
+        processed_image = preprocess_function(image)
+        
+        # Log model information for debugging
+        print(f"Processing model '{model_name}' with type '{model_type}'.")
+
+        # Call predict_image with the correct model type
+        try:
+            disease_percentage, normal_percentage = predict_image(model, processed_image, model_type)
+        except ValueError as e:
+            print(f"Error in predict_image: {e}")
+            return make_response({'error': str(e)}, 500)
+
+        if disease_percentage > 80:
+            diseases_accepted.append((disease_percentage, normal_percentage, model_name))
+            print(f"{model_name.upper()}: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%")
+
 
     # Decode the user token and check patient information
     encoded_token = request.headers.get('Authorization')
@@ -103,18 +113,15 @@ def xray_diagnosis():
     patient_name = f"{patient.first_name} {patient.last_name}"
     diagnosis_date = datetime.today()
 
-    # Create the PDF report with diagnosis information and probabilities
-    if disease_percentage > normal_percentage:
-        diag = f"PNEUMONIA: {disease_percentage:.2f}%"
-        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "pneumonia", disease_percentage, normal_percentage)
+    pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "healthy", disease_percentage if diseases_accepted else 0,normal_percentage)
+    if not diseases_accepted:
+        insert_diagnostic("healthy", "healthy", image_url, dni)
     else:
-        diag = f"NORMAL: {normal_percentage:.2f}%"
-        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "healthy", disease_percentage, normal_percentage)
+        for diagnosis in diseases_accepted:
+            disease_percentage, normal_percentage, model_name = diagnosis
+            res = f"{model_name.upper()}: {disease_percentage:.2f}%"
+            pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, model_name, disease_percentage,normal_percentage)
+            des = f"{model_name.upper()}: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
+            insert_diagnostic(res, des, image_url, dni)
 
-    des = f"PNEUMONIA: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
-    # Uncomment and use to insert diagnosis in the database
-    # code_diag = insert_diagnostic(diag, des, image_url, dni)
-
-    # Set the file name based on patient details and diagnosis date
-    file_name = f"{dni}-{diagnosis_date}-{patient}.pdf"
-    return send_file(pdf_buffer, as_attachment=True, download_name=file_name, mimetype='application/pdf')
+    return send_file(pdf_buffer, as_attachment=True, download_name=f"{dni}-{diagnosis_date}-{patient_name}.pdf", mimetype='application/pdf')
