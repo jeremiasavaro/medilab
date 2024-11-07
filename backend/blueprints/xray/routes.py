@@ -59,7 +59,7 @@ def xray_diagnosis():
 
     for model in models:
         disease_percentage, normal_percentage = predict_image(models[model], processed_image)
-        if disease_percentage > 80:
+        if disease_percentage > 70:
             diseases_accepted.append((disease_percentage, normal_percentage, model))
             print(f"{model.upper}: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%")  #just for debugging
 
