@@ -27,37 +27,35 @@ const MyDiagnoses = ({ isOpen, onClose }) => {
 
     return (
         <div className="modal-overlay-diagnoses">
-            <div className="modal-content-diagnoses">
-                <h1 className='h1-myDiagnoses'><b>Diagnoses of patient with DNI ...</b></h1>
-                <br />
-                {message && <p className="message">{message}</p>}
-                <ul>
-                    {myDiagnoses.map((diagnosis, index) => (
-                        <li key={index}>
-                            {diagnosis.image_diagnostic && (
-                                <div>
-                                <br/>
-                                <img
-                                    src={diagnosis.image_diagnostic}
-                                    className="profile-pic"
-                                    alt="Uploaded"
-                                    style={{maxWidth: '200px', borderRadius: '0%'}}
-                                />
-                                </div>
-                            )}
-                            <br></br>
-                            Dni: {diagnosis.dni} 
-                            <br></br>
-                            Date: {diagnosis.date_result}
-                        </li>
-                    ))}
-                </ul>
+          <div className="modal-content-diagnoses">
+            <h1 className='h1-myDiagnoses'><b>Diagnoses of patient with DNI ...</b></h1>
+            <br />
+            {message && <p className="message">{message}</p>}
+            <div className="diagnoses-grid">
+              {myDiagnoses.map((diagnosis, index) => (
+                <div key={index} className="diagnosis-card">
+                  {diagnosis.image_diagnostic && (
+                    <div className="diagnosis-image">
+                      <img
+                        src={diagnosis.image_diagnostic}
+                        className="profile-pic"
+                        alt="Uploaded"
+                      />
+                    </div>
+                  )}
+                  <div className="diagnosis-info">
+                    <p><b>DNI:</b> {diagnosis.dni}</p>
+                    <p><b>Date:</b> {diagnosis.date_result}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="modal-buttons">
-                <button type="button" onClick={onClose}>Back</button>
+              <button type="button" onClick={onClose}>Back</button>
             </div>
-            </div>
+          </div>
         </div>
-    );
-};
-
+      );
+    }
+    
 export default MyDiagnoses;
