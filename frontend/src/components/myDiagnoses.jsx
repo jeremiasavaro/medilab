@@ -1,26 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import "../assets/css/myDiagnoses.css";
+import {useJwt} from "react-jwt";
+import {useToken} from '../hooks/useToken';
 
 const MyDiagnoses = ({ isOpen, onClose }) => {
     const [myDiagnoses, setMyDiagnoses] = useState([]);
     const [message, setMessage] = useState('');
+    const {token, messageToken} = useToken();
+    const {decodedToken, isExpired} = useJwt(token);
 
-    // Usa useEffect sin condiciones y controla el fetch dentro de él
     useEffect(() => {
+      if (token && decodedToken && isOpen) {
         const fetchMyDiagnoses = async () => {
-            if (!isOpen) return; // Solo realiza la llamada si el modal está abierto
-            try {
-                const response = await fetch('http://127.0.0.1:5000/inquiries/my_diagnoses');
-                const data = await response.json();
-                setMyDiagnoses(data);
-            } catch (error) {
-                console.error('Error fetching my diagnoses:', error);
-                setMessage('Error fetching diagnoses'); 
+          try {
+            const response = await fetch('http://127.0.0.1:5000/inquiries/my_diagnoses', {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+            },
+            });
+    
+            if (!response.ok) {
+              throw new Error(`Failed to fetch diagnoses. Status: ${response.status} - ${response.statusText}`);
             }
+    
+            const data = await response.json();
+            console.log("Received data:", data);
+    
+            // Asegúrate de que sea un arreglo
+            setMyDiagnoses(Array.isArray(data) ? data : []);
+          } catch (error) {
+            console.error('Error fetching my diagnoses:', error);
+            setMessage(`Error fetching diagnoses: ${error.message}`); // Mostrar el mensaje de error completo
+            setMyDiagnoses([]);  // Configura un arreglo vacío en caso de error
+          }
         };
-
+    
         fetchMyDiagnoses();
-    }, [isOpen]); // useEffect depende de isOpen
+      }
+    }, [isOpen, token, decodedToken]);
+    
+    
 
     // Si no está abierto, retorna null directamente
     if (!isOpen) return null;
