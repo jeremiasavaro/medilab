@@ -1,8 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useJwt } from "react-jwt";
 import contactData from '../assets/components-data/contactData.json';
+import { useObtainData } from "../hooks/useObtainData";
 
-const Contact = ({ setIsLogged, setView, isLogged, language }) => {
+function InfoItem({aosDelay, h3, p }) {
+  return (
+    <div className="info-item d-flex" data-aos="fade-up" data-aos-delay={aosDelay}>
+      <i className="bi bi-telephone flex-shrink-0"></i>
+      <div>
+        <h3>{h3}</h3>
+        <p>{p}</p>
+      </div>
+    </div>
+  );
+}
+
+function ContentForm({divClass, inp, val, handleChange, ph, name}) {
+  if (name === null) {
+    return (
+      <div className={divClass}>
+        <input type={inp}
+               value={val}
+               onChange={handleChange}
+               className="form-control" placeholder={ph} required/>
+      </div>
+    );
+  } else {
+    return (
+      <div className={divClass}>
+        <input type={inp}
+               value={val}
+               onChange={handleChange}
+               className="form-control" name= {name} placeholder={ph} required/>
+      </div>
+    );
+  }
+  
+}
+
+const Contact = ({ setView, isLoged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -45,39 +81,12 @@ const Contact = ({ setIsLogged, setView, isLogged, language }) => {
     fetchToken();
   }, []);
 
-  useEffect(() => {
-    const setData = async () => {
-      if (token && decodedToken) {
-        try {
-          const response = await fetch('http://127.0.0.1:5000/user/obtainData', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token,
-            },
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setEmail(data.email);
-          } else {
-            setMessage("No se pudo obtener los datos");
-          }
-        } catch (error) {
-          setMessage('Error al obtener los datos');
-        }
-      }
-    }
-
-    setData();
-  }, [token, decodedToken, isExpired]);
+    useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setMessage);
   
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
-      if (isLogged){
+      if (isLoged){
         try {
           // Realiza una solicitud POST al servidor.
           const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {
@@ -123,55 +132,18 @@ const Contact = ({ setIsLogged, setView, isLogged, language }) => {
       <div className="container" data-aos="fade-up" data-aos-delay="100">
         <div className="row gy-4">
           <div className="col-lg-4">
-            <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-              <i className="bi bi-geo-alt flex-shrink-0"></i>
-              <div>
-                <h3>{content.location}</h3>
-                <p>{content.address}, {content.postalCode}</p>
-              </div>
-            </div>
-            <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-              <i className="bi bi-telephone flex-shrink-0"></i>
-              <div>
-                <h3>{content.callUs}</h3>
-                <p>{content.phoneNumber}</p>
-              </div>
-            </div>
-            <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
-              <i className="bi bi-envelope flex-shrink-0"></i>
-              <div>
-                <h3>{content.emailUs}</h3>
-                <p>{content.email}</p>
-              </div>
-            </div>
+            <InfoItem aosDelay={300} h3={content.location} p={`${content.address}, ${content.postalCode}`} />
+            <InfoItem aosDelay={"400"} h3={content.callUs} p={content.phoneNumber}/>
+            <InfoItem aosDelay={"500"} h3={content.emailUs} p={content.email}/>
           </div>
+
           <div className="col-lg-8">
             <form onSubmit={handleContact}>
               <div className="row gy-4">
-                <div className="col-md-6">
-                  <input type="text"
-                         value={firstName}
-                         onChange={(e) => setFirstName(e.target.value)}
-                         className="form-control" placeholder={content.firstName} required/>
-                </div>
-                <div className="col-md-6">
-                  <input type="text"
-                         value={lastName}
-                         onChange={(e) => setLastName(e.target.value)}
-                         className="form-control" placeholder={content.lastName} required/>
-                </div>
-                <div className="col-md-12">
-                  <input type="email"
-                         value={email}
-                         onChange={(e) => setEmail(e.target.value)}
-                         className="form-control" name="email" placeholder={content.userEmail} required/>
-                </div>
-                <div className="col-md-12">
-                  <input type="text"
-                         value={subject}
-                         onChange={(e) => setSubject(e.target.value)}
-                         className="form-control" name="subject" placeholder={content.subject} required/>
-                </div>
+                <ContentForm divClass={"col-md-6"} inp={"text"} val={firstName} handleChange={(e) => setFirstName(e.target.value)} ph={content.firstName} />
+                <ContentForm divClass={"col-md-6"} inp={"text"} val={lastName} handleChange={(e) => setLastName(e.target.value)} ph={content.lastName} />
+                <ContentForm divClass={"col-md-12"} inp={"email"} val={email} handleChange={(e) => setEmail(e.target.value)} ph={content.userEmail} name={"email"}/>
+                <ContentForm divClass={"col-md-12"} inp={"text"} val={subject} handleChange={(e) => setSubject(e.target.value)} ph={content.subject} name={"subject"}/>
                 <div className="col-md-12">
                   <textarea
                       value={userMessage}

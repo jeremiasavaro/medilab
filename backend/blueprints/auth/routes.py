@@ -54,10 +54,22 @@ def register():
         return make_response({'error': 'User already exists'}, 409)
 
     encoded_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
-    insert_patient(
-        data['dni'], data['firstName'], data['lastName'], encoded_password,
-        data['email'], data['phone'], data['birthDate'], data['nationality'],
-        data['province'], data['locality'], data['postalCode'], data['address'],
-        data['gender']
-    )
+    patient_data = {
+        'dni': data['dni'],
+        'firstName': data['firstName'],
+        'lastName': data['lastName'],
+        'password': encoded_password,
+        'email': data['email'],
+        'phone': data['phone'],
+        'birthDate': data['birthDate'],
+        'nationality': data['nationality'],
+        'province': data['province'],
+        'locality': data['locality'],
+        'postalCode': data['postalCode'],
+        'address': data['address'],
+        'gender': data['gender']
+    }
+
+    insert_patient(patient_data)
+    
     return make_response({'message': 'Register completed successfully'}, 200)

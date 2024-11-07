@@ -99,7 +99,6 @@ def xray_diagnosis():
             diseases_accepted.append((disease_percentage, normal_percentage, model_name))
             print(f"{model_name.upper()}: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%")
 
-
     # Decode the user token and check patient information
     encoded_token = request.headers.get('Authorization')
     decoded_token, error_response = decode_token(encoded_token)

@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/Login.css';
-import loginData from '../assets/components-data/loginData.json'
+import loginData from '../assets/components-data/loginData.json';
 
-const Login = ({ view, setView, isLogged, setIsLogged, language }) => {
-  const [dni, setDni] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({ setView, setIsLogged, language }) => {
+  const [formData, setFormData] = useState({ dni: '', password: '' });
   const [message, setMessage] = useState('');
-  // Usados para cambiar el idioma del contenido
   const [content, setContent] = useState(loginData[language]);
 
-  // Dependiendo del idioma, se muestra un texto u otro
   useEffect(() => {
     setContent(loginData[language]);
   }, [language]);
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,18 +23,16 @@ const Login = ({ view, setView, isLogged, setIsLogged, language }) => {
       const response = await fetch('http://127.0.0.1:5000/auth/login', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ dni, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage(data.message);
-        setIsLogged(true); // Cambia a true si el login es exitoso
-        setView('home')
+        setIsLogged(true);
+        setView('home');
       } else {
         setMessage(data.error);
       }
@@ -41,57 +41,33 @@ const Login = ({ view, setView, isLogged, setIsLogged, language }) => {
     }
   };
 
+  const renderLink = (text, view) => (
+    <span onClick={() => setView(view)} className="hover-link">{text}</span>
+  );
+
   return (
-    <div className='gen'>
+    <div className="gen">
       <div className="login-container">
         <div className="login-form">
-          <br />
           <h2><b>{content.welcome}</b></h2>
-          <br />
           <form onSubmit={handleLogin}>
-            <div className="input-group">
-              <label htmlFor="dni">{content.dni}</label>
-              <input
-                type="text"
-                id="dni"
-                value={dni}
-                onChange={(e) => setDni(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="password">{content.password}</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+            {['dni', 'password'].map((field) => (
+              <div key={field} className="input-group">
+                <label htmlFor={field}>{content[field]}</label>
+                <input
+                  type={field === 'password' ? 'password' : 'text'}
+                  id={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            ))}
             <button type="submit" className="login-btn">{content.login}</button>
             {message && <p className="message">{message}</p>}
           </form>
-          <p>
-            <br />
-            {content.notRegistered},{' '}
-            <span
-              onClick={() => setView("register")}
-              className="hover-link"
-            >
-              {content.click}
-            </span>
-          </p>
-          <p>
-            {' '}
-            <span
-              onClick={() => {
-                setView("home");
-              }}
-              className="hover-link"
-            >
-              {content.mainPage}
-            </span>
-          </p>
+          <p>{content.notRegistered}, {renderLink(content.click, 'register')}</p>
+          <p>{renderLink(content.mainPage, 'home')}</p>
         </div>
       </div>
     </div>
