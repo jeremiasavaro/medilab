@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/Account.css';
-import ChangePassword from './changePassword';
-import ConfirmModifications from './confirmModifications';
-import DeleteAccount from './deleteAccount' 
+import ChangePassword from './ChangePassword';
+import ConfirmModifications from './ConfirmModifications';
+import DeleteAccount from './DeleteAccount' 
 import { useJwt } from "react-jwt";
 import accountData from '../assets/components-data/accountData.json';
 import { useToken } from '../hooks/useToken';
-import MyDiagnoses from './myDiagnoses';
+import MyDiagnoses from './MyDiagnoses';
 import { useObtainData } from "../hooks/useObtainData";
 
 const Account = ({ setView, setIsLogged, language }) => {
