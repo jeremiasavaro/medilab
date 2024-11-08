@@ -24,7 +24,7 @@ const Account = ({ setView, setIsLogged, language }) => {
   const [gender, setGender] = useState('');
   const [message, setMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+  const [image_url, setImage_url] = useState('');
 
   const {token, messageToken } = useToken();   // Usamos el hook de token para obtener el token
   const { decodedToken, isExpired } = useJwt(token || '');
@@ -42,7 +42,7 @@ const Account = ({ setView, setIsLogged, language }) => {
     setContent(accountData[language]);
   }, [language]);
 
-  useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setPhone, setAddress, setBirthDate, setNationality, setProvince, setLocality, setPostalCode, setGender, setImageUrl, setMessage);
+  useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setPhone, setAddress, setBirthDate, setNationality, setProvince, setLocality, setPostalCode, setGender, setImage_url, setMessage);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -61,7 +61,7 @@ const Account = ({ setView, setIsLogged, language }) => {
         });
 
         const data = await response.json();
-        setImageUrl(data.imageUrl);
+        setImage_url(data.image_url);
       } catch (error) {
         console.error('Error uploading the image:', error);
       }
@@ -110,42 +110,44 @@ const Account = ({ setView, setIsLogged, language }) => {
           <SidebarItem icon="fa-solid fa-right-to-bracket" label={content.mainPage} onClick={() => setView('home')} />
         </ul>
       </div>
+
       <div className="account-container">
         <div className="account-content">
           <h1><b>{content.personalData}</b></h1>
           <div className="profile-section">
             <div className="profile-info">
-              <div>
+            <div>
                 <input
                     id="file-upload"
                     type="file"
                     style={{display: 'none'}}
                     onChange={handleFileChange}
                 />
-                {imageUrl && (
+                {image_url && (
                     <div>
                       <br/>
                       <img
-                          src={imageUrl}
+                          src={image_url}
                           className="profile-pic"
                           alt="Uploaded"
                           style={{maxWidth: '200px', borderRadius: '50%'}}
                       />
                     </div>
                 )}
-                {imageUrl && (
+                {image_url && (
                   <label htmlFor="file-upload" className="custom-file-upload">
                     {content.changeImage}
                 </label>
                 )}
-                {!imageUrl && (
+                {!image_url && (
                   <label htmlFor="file-upload" className="custom-file-upload">
                     {content.profileImage}
                 </label>
                 )}
-              </div>
-              <br></br>
+              <br/>
             </div>
+            </div>
+            <br></br>
             <form className="horizontal-form" onSubmit={handleAccount}>
               <div className="account-form">
                 <FormGroup label={content.name} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
@@ -175,6 +177,8 @@ const Account = ({ setView, setIsLogged, language }) => {
           </div>
         </div>
       </div>
+
+      {/* Modal components */}
       <ChangePassword language={language} isOpen={isChangePasswordModalOpen} onClose={() => setChangePasswordModalOpen(false)} />
       <ConfirmModifications
         notConfirmed={confirmModifications}
