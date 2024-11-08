@@ -61,7 +61,7 @@ const Account = ({ setView, setIsLogged, language }) => {
         });
 
         const data = await response.json();
-        setImageUrl(data.image_url);
+        setImageUrl(data.imageUrl);
       } catch (error) {
         console.error('Error uploading the image:', error);
       }
@@ -110,13 +110,41 @@ const Account = ({ setView, setIsLogged, language }) => {
           <SidebarItem icon="fa-solid fa-right-to-bracket" label={content.mainPage} onClick={() => setView('home')} />
         </ul>
       </div>
-
       <div className="account-container">
         <div className="account-content">
           <h1><b>{content.personalData}</b></h1>
           <div className="profile-section">
             <div className="profile-info">
-              {/* Profile picture logic here */}
+              <div>
+                <input
+                    id="file-upload"
+                    type="file"
+                    style={{display: 'none'}}
+                    onChange={handleFileChange}
+                />
+                {imageUrl && (
+                    <div>
+                      <br/>
+                      <img
+                          src={imageUrl}
+                          className="profile-pic"
+                          alt="Uploaded"
+                          style={{maxWidth: '200px', borderRadius: '50%'}}
+                      />
+                    </div>
+                )}
+                {imageUrl && (
+                  <label htmlFor="file-upload" className="custom-file-upload">
+                    {content.changeImage}
+                </label>
+                )}
+                {!imageUrl && (
+                  <label htmlFor="file-upload" className="custom-file-upload">
+                    {content.profileImage}
+                </label>
+                )}
+              </div>
+              <br></br>
             </div>
             <form className="horizontal-form" onSubmit={handleAccount}>
               <div className="account-form">
@@ -147,8 +175,6 @@ const Account = ({ setView, setIsLogged, language }) => {
           </div>
         </div>
       </div>
-
-      {/* Modal components */}
       <ChangePassword language={language} isOpen={isChangePasswordModalOpen} onClose={() => setChangePasswordModalOpen(false)} />
       <ConfirmModifications
         notConfirmed={confirmModifications}
