@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useJwt } from "react-jwt";
 import contactData from '../assets/components-data/contactData.json';
+import { useObtainData } from "../hooks/useObtainData";
 
 function InfoItem({aosDelay, h3, p}) {
   return (
@@ -79,34 +80,7 @@ const Contact = ({ setView, isLogged, language }) => {
     fetchToken();
   }, []);
 
-  useEffect(() => {
-    const setData = async () => {
-      if (token && decodedToken) {
-        try {
-          const response = await fetch('http://127.0.0.1:5000/user/obtainData', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token,
-            },
-          });
-
-          const data = await response.json();
-          if (response.ok) {
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-            setEmail(data.email);
-          } else {
-            setMessage("No se pudo obtener los datos");
-          }
-        } catch (error) {
-          setMessage('Error al obtener los datos');
-        }
-      }
-    }
-
-    setData();
-  }, [token, decodedToken, isExpired]);
+    useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setMessage);
   
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
