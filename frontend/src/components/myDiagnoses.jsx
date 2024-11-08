@@ -2,12 +2,20 @@ import React, { useEffect, useState } from 'react';
 import "../assets/css/myDiagnoses.css";
 import {useJwt} from "react-jwt";
 import {useToken} from '../hooks/useToken';
+import { useObtainData } from '../hooks/useObtainData';
 
 const MyDiagnoses = ({ isOpen, onClose }) => {
     const [myDiagnoses, setMyDiagnoses] = useState([]);
     const [message, setMessage] = useState('');
+    const [messageData, setMessageData] = useState('');
+    const [dni, setDni] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const {token, messageToken} = useToken();
     const {decodedToken, isExpired} = useJwt(token);
+
+    useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
 
     useEffect(() => {
       if (token && decodedToken && isOpen) {
@@ -48,7 +56,7 @@ const MyDiagnoses = ({ isOpen, onClose }) => {
     return (
         <div className="modal-overlay-diagnoses">
           <div className="modal-content-diagnoses">
-            <h1 className='h1-myDiagnoses'><b>Diagnoses of patient with DNI ...</b></h1>
+            <h1 className='h1-myDiagnoses'><b>Diagnoses of patient {firstName} {lastName} with DNI: {dni}</b></h1>
             <br />
             {message && <p className="message">{message}</p>}
             <div className="diagnoses-grid">
@@ -64,7 +72,6 @@ const MyDiagnoses = ({ isOpen, onClose }) => {
                     </div>
                   )}
                   <div className="diagnosis-info">
-                    <p><b>DNI:</b> {diagnosis.dni}</p>
                     <p><b>Date:</b> {diagnosis.date_result}</p>
                   </div>
                 </div>
