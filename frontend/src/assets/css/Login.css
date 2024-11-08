@@ -20,6 +20,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: white; /* Asegura que el fondo del formulario sea blanco */
   font-family: 'Poppins', sans-serif;
+  color: #000000;
 }
 
 .login-container h2 {
@@ -59,7 +60,7 @@
 .login-btn {
   width: 100%;
   padding: 10px;
-  background-color: 273aa4;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -69,5 +70,5 @@
 }
 
 .login-btn:hover {
-  background-color: 273aa4;
+  background-color: #273aa4;
 }
