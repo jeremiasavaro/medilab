@@ -6,6 +6,14 @@ import xrayData from '../assets/components-data/xrayServiceData.json';
 import { useToken } from '../hooks/useToken';
 import { useGetDoctors } from '../hooks/useGetDoctors';
 
+// Componente para el botón de retorno
+const BackButton = ({ onClick, label }) => (
+  <button className="buttonBack" onClick={onClick}>
+    <i className="fa-solid fa-right-to-bracket"></i> {label}
+  </button>
+);
+
+// Componente de tabla de doctores
 const DoctorTable = ({ doctors, content, tableRef }) => (
   <div ref={tableRef}>
     <hr className="divider" />
@@ -36,44 +44,49 @@ const DoctorTable = ({ doctors, content, tableRef }) => (
 );
 
 const XrayService = ({ setView, language }) => {
-  const [message, setMessage] = useState('');
-  const [openSection, setOpenSection] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [pdfBlob, setPdfBlob] = useState(null);
-  const [isUploadVisible, setIsUploadVisible] = useState(true);
-  const [isScanning, setIsScanning] = useState(false);
-  const [showTable, setShowTable] = useState(false);
-  const [content, setContent] = useState(xrayData[language]);
-  const [data, setData] = useState(infoData[language]);
+  const [state, setState] = useState({
+    message: '',
+    openSection: '',
+    imageUrl: '',
+    selectedFile: null,
+    pdfBlob: null,
+    isUploadVisible: true,
+    isScanning: false,
+    showTable: false,
+    content: xrayData[language],
+    data: infoData[language],
+  });
 
-  const tableRef = useRef(null); // Referencia a la tabla
-
-  const {token, messageToken} = useToken();
+  const tableRef = useRef(null);
+  const { token, messageToken } = useToken();
   const { decodedToken, isExpired } = useJwt(token);
-
-  const {doctors, mesaggeDoctors} = useGetDoctors();
+  const { doctors, mesaggeDoctors } = useGetDoctors();
 
   useEffect(() => {
-    setContent(xrayData[language]);
-    setData(infoData[language]);
+    setState((prev) => ({
+      ...prev,
+      content: xrayData[language],
+      data: infoData[language],
+    }));
   }, [language]);
 
   const handleFileUpload = async (file) => {
     if (!file) return;
     const formData = new FormData();
     formData.append('file', file);
-    if(token && decodedToken) {
+    if (token && decodedToken) {
       try {
         const response = await fetch('http://localhost:5000/image/upload_xray_photo', {
           method: 'POST',
           headers: { 'Authorization': token },
           body: formData,
         });
-
         const data = await response.json();
-        setImageUrl(data.image_url);
-        setIsUploadVisible(false);
+        setState((prev) => ({
+          ...prev,
+          imageUrl: data.image_url,
+          isUploadVisible: false,
+        }));
       } catch (error) {
         console.error('Error uploading the image:', error);
       }
@@ -82,17 +95,16 @@ const XrayService = ({ setView, language }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setSelectedFile(file);
+    setState((prev) => ({ ...prev, selectedFile: file }));
     handleFileUpload(file);
   };
 
   const handleScanClick = async () => {
-    if (!imageUrl) return console.log('No hay imagen cargada.');
-
-    setIsScanning(true);
+    if (!state.imageUrl) return console.log('No hay imagen cargada.');
+    setState((prev) => ({ ...prev, isScanning: true }));
     const formData = new FormData();
-    formData.append('image_url', imageUrl);
-    if(token && decodedToken) {
+    formData.append('image_url', state.imageUrl);
+    if (token && decodedToken) {
       try {
         const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
           headers: { 'Authorization': token },
@@ -101,27 +113,25 @@ const XrayService = ({ setView, language }) => {
           body: formData,
         });
         const blob = await response.blob();
-        setPdfBlob(blob);
+        setState((prev) => ({ ...prev, pdfBlob: blob }));
       } catch (error) {
         console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
       } finally {
-        setIsScanning(false);
+        setState((prev) => ({ ...prev, isScanning: false }));
       }
     }
   };
 
   const handleDownloadClick = () => {
-    if (!pdfBlob) return;
-
-    const url = window.URL.createObjectURL(pdfBlob);
+    if (!state.pdfBlob) return;
+    const url = window.URL.createObjectURL(state.pdfBlob);
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', 'diagnosis.pdf');
     document.body.appendChild(link);
     link.click();
     link.parentNode.removeChild(link);
-
-    setShowTable(true);
+    setState((prev) => ({ ...prev, showTable: true }));
     setTimeout(() => {
       if (tableRef.current) {
         tableRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -129,14 +139,14 @@ const XrayService = ({ setView, language }) => {
     }, 0);
   };
 
-  const openOverlaySection = (sectionName) => setOpenSection(sectionName);
-  const closeOverlaySection = () => setOpenSection('');
+  const openOverlaySection = (sectionName) => setState((prev) => ({ ...prev, openSection: sectionName }));
+  const closeOverlaySection = () => setState((prev) => ({ ...prev, openSection: '' }));
+
+  const { content, data } = state;
 
   return (
     <section id="xray-section" className="contentXray">
-      <button className="buttonBack" onClick={() => setView('home')}>
-        <i className="fa-solid fa-right-to-bracket"></i> {content.backButton}
-      </button>
+      <BackButton onClick={() => setView('home')} label={content.backButton} />
       <header className="title">
         {content.sectionTitle}
         <button className="toggle-button" onClick={() => openOverlaySection('info')}>
@@ -146,17 +156,17 @@ const XrayService = ({ setView, language }) => {
       <div className="xrayServices-container">
         <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
 
-        {imageUrl && (
+        {state.imageUrl && (
           <>
             <div className="xray-pic-container">
-              <img src={imageUrl} className="xray-pic" alt="Uploaded" />
+              <img src={state.imageUrl} className="xray-pic" alt="Uploaded" />
             </div>
-            <button className="scan-button" onClick={handleScanClick} disabled={isScanning}>
-              <i className="fa-solid fa-expand"></i> {isScanning ? content.scanning : content.startScanning}
+            <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
+              <i className="fa-solid fa-expand"></i> {state.isScanning ? content.scanning : content.startScanning}
             </button>
-            {isScanning && <div className="loading">{content.processing}</div>}
-            <br></br>
-            {pdfBlob && (
+            {state.isScanning && <div className="loading">{content.processing}</div>}
+            <br />
+            {state.pdfBlob && (
               <button className="download-button" onClick={handleDownloadClick}>
                 <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
               </button>
@@ -164,39 +174,43 @@ const XrayService = ({ setView, language }) => {
           </>
         )}
 
-        {isUploadVisible && (
+        {state.isUploadVisible && (
           <label htmlFor="xray-upload" className="xray-file-upload">
             {content.uploadXRay}
           </label>
         )}
 
-        {doctors && showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
+        {doctors && state.showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
       </div>
 
-      {openSection === 'info' && (
-        <div className="overlay-section active">
-          <div className="overlay-content">
-            <h2><i className="bi bi-info-square-fill"></i> {content.info}</h2>
-            <h3>{data.aboutUs.title}</h3>
-            <p>{data.aboutUs.content}</p>
-            <h3>{data.methodology.title}</h3>
-            <p>{data.methodology.content[0]}</p>
-            <ul>
-              <li><strong>{data.methodology.content[1].model1.name}:</strong> {data.methodology.content[1].model1.description}</li>
-              <li><strong>{data.methodology.content[2].model2.name}:</strong> {data.methodology.content[2].model2.description}</li>
-            </ul>
-            <h3>{data.detectedDiseases.title}</h3>
-            <ul>{data.detectedDiseases.list.map((disease, index) => <li key={index}>- {disease}</li>)}</ul>
-            <h3>{data.disclaimer.title}</h3>
-            <p>{data.disclaimer.content}</p>
-            <h3>{data.credits.title}</h3>
-            <p>{data.credits.content}</p>
-            <button onClick={closeOverlaySection}>{content.closeButton}</button>
-          </div>
-        </div>
+      {state.openSection === 'info' && (
+        <OverlaySection content={data} closeOverlaySection={closeOverlaySection} />
       )}
     </section>
   );
 };
+
+const OverlaySection = ({ content, closeOverlaySection }) => (
+  <div className="overlay-section active">
+    <div className="overlay-content">
+      <h2><i className="bi bi-info-square-fill"></i> {content.info}</h2>
+      <h3>{content.aboutUs.title}</h3>
+      <p>{content.aboutUs.content}</p>
+      <h3>{content.methodology.title}</h3>
+      <p>{content.methodology.content[0]}</p>
+      <ul>
+        <li><strong>{content.methodology.content[1].model1.name}:</strong> {content.methodology.content[1].model1.description}</li>
+        <li><strong>{content.methodology.content[2].model2.name}:</strong> {content.methodology.content[2].model2.description}</li>
+      </ul>
+      <h3>{content.detectedDiseases.title}</h3>
+      <ul>{content.detectedDiseases.list.map((disease, index) => <li key={index}>- {disease}</li>)}</ul>
+      <h3>{content.disclaimer.title}</h3>
+      <p>{content.disclaimer.content}</p>
+      <h3>{content.credits.title}</h3>
+      <p>{content.credits.content}</p>
+      <button onClick={closeOverlaySection}>{content.closeButton}</button>
+    </div>
+  </div>
+);
 
 export default XrayService;
