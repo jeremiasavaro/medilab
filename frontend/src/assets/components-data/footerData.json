@@ -1,0 +1,18 @@
+{
+  "en": {
+    "universityName": "Universidad Nacional de Río Cuarto",
+    "postalCode": "5800",
+    "phone": "Phone",
+    "phoneNumber": "+54 358 600 1336",
+    "email": "medilab@dc.exa.unrc.edu.ar",
+    "copyrightInfo": "All Rights Reserved"
+  },
+  "es": {
+    "universityName": "Universidad Nacional de Río Cuarto",
+    "postalCode": "5800",
+    "phone": "Teléfono",
+    "phoneNumber": "+54 358 600 1336",
+    "email": "medilab@dc.exa.unrc.edu.ar",
+    "copyrightInfo": "Todos los derechos reservados"
+  }
+}

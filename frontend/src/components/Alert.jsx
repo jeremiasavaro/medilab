@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "../assets/css/Alert.css";
+import alertData from "../assets/components-data/alertData.json";
 
-const Alert = ({ setView }) => {
+const Alert = ({ setView, language }) => {
+    const [content, setContent] = useState(alertData[language]);
+
+  useEffect(() => {
+    setContent(alertData[language]);
+  }, [language]);
+
   return (
     <div className="modal-overlay">
     <div className="modal-content">
-        <h1>Sorry, you must be logged for make this action.</h1>
+        <h1>{content.alertMessage}</h1>
         <div className="modal-buttons">
-            <button className="login-button" onClick={() => setView('login')}>Go to log in</button>
-            <button className="back-button" onClick={() => setView('home')}>Back to main page</button>
+            <button className="login-button" onClick={() => setView('login')}>{content.loginMessage}</button>
+            <button className="back-button" onClick={() => setView('home')}>{content.backMessage}</button>
         </div>
     </div>
     </div>

@@ -16,35 +16,45 @@ def load_image(image_url):
     return image
 
 
-def preprocess_image(image):
-    # Redimensiona la imagen a 224x224 (o la resolución que necesite tu modelo)
+def preprocess_image_h5(image):
+    # Resize the image to 224x224 (or the resolution required by the model)
     image = image.resize((224, 224))
 
-    # Convierte la imagen a un array de NumPy
+    # Convert the image to a NumPy array
     image_array = np.array(image)
 
-    # Verifica si la imagen tiene solo un canal (blanco y negro) y expándelo a 3 canales (RGB)
+    # Check if the image has only one channel (grayscale) and expand it to 3 channels (RGB)
     if image_array.ndim == 2:
         image_array = np.stack((image_array,) * 3, axis=-1)
 
-    # Asegúrate de que tiene la forma (224, 224, 3)
-    assert image_array.shape == (224, 224, 3), f"Imagen no tiene la forma correcta: {image_array.shape}"
+    # Ensure it has the shape (224, 224, 3)
+    assert image_array.shape == (224, 224, 3), f"Image does not have the correct shape: {image_array.shape}"
 
-    # Normaliza la imagen para que sus valores estén entre 0 y 1
+    # Normalize the image to have values between 0 and 1
     image_array = image_array / 255.0
 
-    # Expande las dimensiones para incluir el batch size (1, 224, 224, 3)
+    # Expand dimensions to include batch size (1, 224, 224, 3)
     image_array = np.expand_dims(image_array, axis=0)
 
     return image_array
 
+def preprocess_image_svm(image):
+    # Define image size
+    IMG_SIZE = (512, 512)
+    # Resize the image and convert it to grayscale
+    img = image.convert('L')
+    img = img.resize((IMG_SIZE))  # Ensure this size matches the one used during training
+    img_array = np.array(img).flatten()  # Flatten the image to a 1D vector
+    return img_array.reshape(1, -1)  # Reshape for prediction (1, number_of_features)
+
 def encode_image_to_base64(image):
+    # Encode the image to base64 format
     buffered = BytesIO()
     image.save(buffered, format="JPEG")
     return base64.b64encode(buffered.getvalue()).decode('utf-8')
 
-def create_diagnosis_pdf(patient_name, diagnosis_date, diagnosis, diagnosis_prob):
-    
+def create_diagnosis_pdf(patient_name, diagnosis_date, diagnosis, disease_prob, normal_prob):
+     # Load the JSON file containing diagnosis data
     with open('diagnosis_data.json', 'r') as f:
         diagnosis_data = json.load(f)
 
@@ -57,34 +67,34 @@ def create_diagnosis_pdf(patient_name, diagnosis_date, diagnosis, diagnosis_prob
     body_style = ParagraphStyle('BodyText', fontName='Helvetica', fontSize=12, spaceAfter=12)
     subtitle_style = ParagraphStyle('Subtitle', fontName='Helvetica-Bold', fontSize=14, textColor=colors.darkblue, spaceAfter=12)
 
-    #
+    # Report title
     elements.append(Paragraph("Medical Diagnosis Report", title_style))
     elements.append(Spacer(1, 12))
 
-    # Información del paciente y fecha
+    # Patient and date information
     elements.append(Paragraph(f"Patient: {patient_name}", body_style))
     elements.append(Paragraph(f"Diagnosis Date: {diagnosis_date}", body_style))
     elements.append(Spacer(1, 12))
 
-    # Obtener el diagnóstico del archivo JSON
+    # Retrieve diagnosis information from JSON file
     diagnosis_info = diagnosis_data.get(diagnosis, diagnosis_data["healthy"])
 
-    #Añadir título, descripción y tratamiento
+    # Add title, description, and treatment
     elements.append(Paragraph(diagnosis_info["title"], subtitle_style))
     elements.append(Paragraph(diagnosis_info["description"], body_style))
     elements.append(Spacer(1, 12))
     elements.append(Paragraph(diagnosis_info["treatment"], body_style))
     elements.append(Spacer(1, 12))
 
-    #Conclusión con la probabilidad
+    # Conclusion with both probabilities
     if diagnosis == "healthy":
-        conclusion = f"The patient, {patient_name}, has a {diagnosis_prob:.2f}% likelihood of being {diagnosis}."
+        conclusion = f"The patient, {patient_name}, is healthy with a {normal_prob:.2f}% probability."
     else:
-        conclusion = f"The patient, {patient_name}, has a {diagnosis_prob:.2f}% likelihood of having {diagnosis}."
+        conclusion = f"The patient, {patient_name}, has a {disease_prob:.2f}% likelihood of having {diagnosis} and a {normal_prob:.2f}% likelihood of being healthy."
     elements.append(Paragraph(conclusion, body_style))
     elements.append(Spacer(1, 12))
 
-    #Construir y devolver el PDF
+    # Build and return the PDF
     pdf.build(elements)
     pdf_buffer.seek(0)
 

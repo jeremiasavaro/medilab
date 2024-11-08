@@ -1,0 +1,23 @@
+{
+  "en": {
+    "sectionTitle": "Services",
+    "sectionIntroduction": "At Medilab, we offer a range of cutting-edge services designed to streamline the diagnostic process and enhance patient care.",
+    "firstComponentTitle": "Automated X-ray Diagnostics",
+    "firstComponentDescription": "Receive accurate diagnostics from your X-ray images within minutes. Our AI analyzes radiographs to detect potential anomalies with exceptional precision.",
+    "secondComponentTitle": "Personalized Medical Recommendations",
+    "secondComponentDescription": "Automatically connect with the most suitable specialists based on your diagnosis. We provide a list of recommended doctors to continue your treatment seamlessly.",
+    "thirdComponentTitle": "Professional PDF Report Generation",
+    "thirdComponentDescription": "Receive a detailed and professional report in PDF format with your X-ray diagnosis. Ideal for sharing with other healthcare professionals or for your personal records."
+  },
+  "es": {
+    "sectionTitle": "Servicios",
+    "sectionIntroduction": "En Medilab, ofrecemos una variedad de servicios de vanguardia diseñados para agilizar el proceso de diagnóstico y mejorar la atención al paciente.",
+    "firstComponentTitle": "Diagnósticos de rayos X automatizados",
+    "firstComponentDescription": "Reciba diagnósticos precisos de sus imágenes de rayos X en minutos. Nuestra IA analiza radiografías para detectar posibles anomalías con una precisión excepcional.",
+    "secondComponentTitle": "Recomendaciones médicas personalizadas",
+    "secondComponentDescription": "Conéctese automáticamente con los especialistas más adecuados según su diagnóstico. Proporcionamos una lista de médicos recomendados para continuar su tratamiento sin problemas.",
+    "thirdComponentTitle": "Generación de informes profesionales en PDF",
+    "thirdComponentDescription": "Reciba un informe detallado y profesional en formato PDF con su diagnóstico de rayos X. Ideal para compartir con otros profesionales de la salud o para sus registros personales."
+
+  }
+}

@@ -1,7 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-.modal-overlay {
+.modal-overlay-confirmModifications {
     position: fixed;
     top: 0;
     left: 0;
@@ -15,7 +15,7 @@
     color: white;
 }
 
-.modal-content {
+.modal-content-confirmModifications {
     background: white;
     padding: 20px;
     border-radius: 8px;

@@ -1,0 +1,36 @@
+{
+  "en": {
+    "sectionTitle": "Contact",
+    "sectionInfo": "If you have any questions or recommendations, please contact us.",
+    "location": "Location",
+    "address": "Universidad Nacional de Río Cuarto",
+    "postalCode": "5800",
+    "callUs": "Call us",
+    "phoneNumber": "+54 358 600 1336",
+    "emailUs": "Email us",
+    "email": "medilab@dc.exa.unrc.edu.ar",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "userEmail": "Your Email",
+    "subject": "Subject",
+    "message": "Message",
+    "sendMessage": "Send Message"
+  },
+  "es": {
+    "sectionTitle": "Contacto",
+    "sectionInfo": "Si tienes alguna pregunta o recomendación, por favor contáctanos.",
+    "location": "Ubicación",
+    "address": "Universidad Nacional de Río Cuarto",
+    "postalCode": "5800",
+    "callUs": "Llámanos",
+    "phoneNumber": "+54 358 600 1336",
+    "emailUs": "Envíanos un email",
+    "email": "medilab@dc.exa.unrc.edu.ar",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "userEmail": "Tu Email",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "sendMessage": "Enviar Mensaje"
+  }
+}
