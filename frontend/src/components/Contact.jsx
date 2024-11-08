@@ -3,7 +3,7 @@ import { useJwt } from "react-jwt";
 import contactData from '../assets/components-data/contactData.json';
 import { useObtainData } from "../hooks/useObtainData";
 
-function InfoItem({aosDelay, h3, p }) {
+function InfoItem({aosDelay, h3, p}) {
   return (
     <div className="info-item d-flex" data-aos="fade-up" data-aos-delay={aosDelay}>
       <i className="bi bi-telephone flex-shrink-0"></i>
@@ -37,8 +37,7 @@ function ContentForm({divClass, inp, val, handleChange, ph, name}) {
   }
   
 }
-
-const Contact = ({ setView, isLoged, language }) => {
+const Contact = ({ setView, isLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -86,7 +85,7 @@ const Contact = ({ setView, isLoged, language }) => {
   // Función que maneja el envío del formulario.
   const handleContact = async (e) => {
     e.preventDefault(); // Previene el comportamiento por defecto del formulario (recargar la página).
-      if (isLoged){
+      if (isLogged){
         try {
           // Realiza una solicitud POST al servidor.
           const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {
