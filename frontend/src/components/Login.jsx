@@ -66,6 +66,7 @@ const Login = ({ setView, setIsLogged, language }) => {
             <button type="submit" className="login-btn">{content.login}</button>
             {message && <p className="message">{message}</p>}
           </form>
+          <br></br>
           <p>{content.notRegistered}, {renderLink(content.click, 'register')}</p>
           <p>{renderLink(content.mainPage, 'home')}</p>
         </div>
