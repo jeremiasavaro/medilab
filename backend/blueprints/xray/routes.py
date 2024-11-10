@@ -21,7 +21,7 @@ models_info = {
     "covid": ("Xray/modelo_vgg16_finetuned_covid.h5", "keras"),
     "tuberculosis_2": ("Xray/trained_model_svm_tuberculosis.pkl", "svm"),
     "covid_2": ("Xray/trained_model_svm_covid.pkl", "svm"),
-    # "tuberculosis": "Xray/modelo_vgg16_finetuned_tuberculosis.keras" NOT WORKING
+    "tuberculosis": ("Xray/modelo_vgg16_finetuned_tuberculosis.h5","keras"), 
 }
 
 # Function to load models based on their type (Keras or SVM)
