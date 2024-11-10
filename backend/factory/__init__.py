@@ -25,7 +25,7 @@ cloudinary_config(
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
-def create_app(config_class):
+def create_app(config_class=None):
     app = Flask(__name__)
 
     # Configure CORS with support for credentials and allow all origins
