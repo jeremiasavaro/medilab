@@ -38,7 +38,7 @@ function ContentForm({divClass, inp, val, handleChange, ph, name}) {
   
 }
 
-const Contact = ({ setView, isLoged, language }) => {
+const Contact = ({ setView, isLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
