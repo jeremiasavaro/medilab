@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../assets/css/Account.css';
 import ChangePassword from './ChangePassword';
 import ConfirmModifications from './ConfirmModifications';
-import DeleteAccount from './DeleteAccount' 
+import DeleteAccount from './DeleteAccount';
 import { useJwt } from "react-jwt";
 import accountData from '../assets/components-data/accountData.json';
 import { useToken } from '../hooks/useToken';
@@ -10,43 +10,59 @@ import MyDiagnoses from './MyDiagnoses';
 import { useObtainData } from "../hooks/useObtainData";
 
 const Account = ({ setView, setIsLogged, language }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [dni, setDni] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [nationality, setNationality] = useState('');
-  const [province, setProvince] = useState('');
-  const [locality, setLocality] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [gender, setGender] = useState('');
-  const [message, setMessage] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [image_url, setImage_url] = useState('');
+  const [state, setState] = useState({
+    firstName: '',
+    lastName: '',
+    dni: '',
+    email: '',
+    phone: '',
+    address: '',
+    birthDate: '',
+    nationality: '',
+    province: '',
+    locality: '',
+    postalCode: '',
+    gender: '',
+    message: '',
+    selectedFile: null,
+    image_url: '',
+    isChangePasswordModalOpen: false,
+    deleteAccount: false,
+    confirmModifications: false,
+    myDiagnoses: false,
+    content: accountData[language],
+  });
 
-  const {token, messageToken } = useToken();   // Usamos el hook de token para obtener el token
+  const { token } = useToken();
   const { decodedToken, isExpired } = useJwt(token || '');
 
-
-  const [isChangePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
-  const [deleteAccount, setDeleteAccount] = useState(false);
-  const [confirmModifications, setConfirmModifications] = useState(false);
-  const [myDiagnoses, setMyDiagnoses] = useState(false);
-  // Usados para cambiar el idioma del contenido
-  const [content, setContent] = useState(accountData[language]);
-
-  // Dependiendo del idioma, se muestra un texto u otro
   useEffect(() => {
-    setContent(accountData[language]);
+    setState((prev) => ({
+      ...prev,
+      content: accountData[language],
+    }));
   }, [language]);
 
-  useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setPhone, setAddress, setBirthDate, setNationality, setProvince, setLocality, setPostalCode, setGender, setImage_url, setMessage);
+  useObtainData(token, decodedToken, isExpired,
+    (firstName) => setState((prev) => ({ ...prev, firstName })),
+    (lastName) => setState((prev) => ({ ...prev, lastName })),
+    (email) => setState((prev) => ({ ...prev, email })),
+    (dni) => setState((prev) => ({ ...prev, dni })),
+    (phone) => setState((prev) => ({ ...prev, phone })),
+    (address) => setState((prev) => ({ ...prev, address })),
+    (birthDate) => setState((prev) => ({ ...prev, birthDate })),
+    (nationality) => setState((prev) => ({ ...prev, nationality })),
+    (province) => setState((prev) => ({ ...prev, province })),
+    (locality) => setState((prev) => ({ ...prev, locality })),
+    (postalCode) => setState((prev) => ({ ...prev, postalCode })),
+    (gender) => setState((prev) => ({ ...prev, gender })),
+    (image_url) => setState((prev) => ({ ...prev, image_url })),
+    (message) => setState((prev) => ({ ...prev, message }))
+  );
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    setSelectedFile(file);
+    setState((prev) => ({ ...prev, selectedFile: file }));
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
@@ -61,13 +77,12 @@ const Account = ({ setView, setIsLogged, language }) => {
         });
 
         const data = await response.json();
-        setImage_url(data.image_url);
+        setState((prev) => ({ ...prev, image_url: data.image_url }));
       } catch (error) {
         console.error('Error uploading the image:', error);
       }
     }
   };
-
 
   const handleAccount = async (e) => {
     e.preventDefault();
@@ -97,14 +112,16 @@ const Account = ({ setView, setIsLogged, language }) => {
     </li>
   );
 
+  const { content } = state;
+
   return (
     <section id="account" className="contentAccount">
       <div className="sidebar">
         <div className="logo">{content.yourProfile}</div>
         <ul>
-          <SidebarItem icon="fa-solid fa-notes-medical" label={content.myDiagnoses} onClick={() => setMyDiagnoses(true)} />
-          <SidebarItem icon="fa-solid fa-key" label={content.changePassword} onClick={() => setChangePasswordModalOpen(true)} />
-          <SidebarItem icon="fa-solid fa-trash" label={content.deleteAccount} onClick={() => setDeleteAccount(true)} className="delete" />
+          <SidebarItem icon="fa-solid fa-notes-medical" label={content.myDiagnoses} onClick={() => setState((prev) => ({ ...prev, myDiagnoses: true }))} />
+          <SidebarItem icon="fa-solid fa-key" label={content.changePassword} onClick={() => setState((prev) => ({ ...prev, isChangePasswordModalOpen: true }))} />
+          <SidebarItem icon="fa-solid fa-trash" label={content.deleteAccount} onClick={() => setState((prev) => ({ ...prev, deleteAccount: true }))} className="delete" />
         </ul>
         <ul>
           <SidebarItem icon="fa-solid fa-right-to-bracket" label={content.mainPage} onClick={() => setView('home')} />
@@ -116,90 +133,83 @@ const Account = ({ setView, setIsLogged, language }) => {
           <h1><b>{content.personalData}</b></h1>
           <div className="profile-section">
             <div className="profile-info">
-            <div>
+              <div>
                 <input
-                    id="file-upload"
-                    type="file"
-                    style={{display: 'none'}}
-                    onChange={handleFileChange}
+                  id="file-upload"
+                  type="file"
+                  style={{ display: 'none' }}
+                  onChange={handleFileChange}
                 />
-                {image_url && (
-                    <div>
-                      <br/>
-                      <img
-                          src={image_url}
-                          className="profile-pic"
-                          alt="Uploaded"
-                          style={{maxWidth: '200px', borderRadius: '50%'}}
-                      />
-                    </div>
+                {state.image_url && (
+                  <div>
+                    <br />
+                    <img
+                      src={state.image_url}
+                      className="profile-pic"
+                      alt="Uploaded"
+                      style={{ maxWidth: '200px', borderRadius: '50%' }}
+                    />
+                  </div>
                 )}
-                {image_url && (
-                  <label htmlFor="file-upload" className="custom-file-upload">
-                    {content.changeImage}
+                <label htmlFor="file-upload" className="custom-file-upload">
+                  {state.image_url ? content.changeImage : content.profileImage}
                 </label>
-                )}
-                {!image_url && (
-                  <label htmlFor="file-upload" className="custom-file-upload">
-                    {content.profileImage}
-                </label>
-                )}
-              <br/>
+                <br />
+              </div>
             </div>
-            </div>
-            <br></br>
+            <br />
             <form className="horizontal-form" onSubmit={handleAccount}>
               <div className="account-form">
-                <FormGroup label={content.name} value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                <FormGroup label={content.lastName} value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                <FormGroup label={content.id} value={dni} onChange={(e) => setDni(e.target.value)} />
-                <FormGroup label={content.email} value={email} onChange={(e) => setEmail(e.target.value)} />
-                <FormGroup label={content.phone} value={phone} onChange={(e) => setPhone(e.target.value)} />
-                <FormGroup label={content.address} value={address} onChange={(e) => setAddress(e.target.value)} />
-                <FormGroup label={content.birthDate} type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} />
-                <FormGroup label={content.nationality} value={nationality} onChange={(e) => setNationality(e.target.value)} />
-                <FormGroup label={content.province} value={province} onChange={(e) => setProvince(e.target.value)} />
-                <FormGroup label={content.locality} value={locality} onChange={(e) => setLocality(e.target.value)} />
-                <FormGroup label={content.postalCode} value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
+                <FormGroup label={content.name} value={state.firstName} onChange={(e) => setState((prev) => ({ ...prev, firstName: e.target.value }))} />
+                <FormGroup label={content.lastName} value={state.lastName} onChange={(e) => setState((prev) => ({ ...prev, lastName: e.target.value }))} />
+                <FormGroup label={content.id} value={state.dni} onChange={(e) => setState((prev) => ({ ...prev, dni: e.target.value }))} />
+                <FormGroup label={content.email} value={state.email} onChange={(e) => setState((prev) => ({ ...prev, email: e.target.value }))} />
+                <FormGroup label={content.phone} value={state.phone} onChange={(e) => setState((prev) => ({ ...prev, phone: e.target.value }))} />
+                <FormGroup label={content.address} value={state.address} onChange={(e) => setState((prev) => ({ ...prev, address: e.target.value }))} />
+                <FormGroup label={content.birthDate} type="date" value={state.birthDate} onChange={(e) => setState((prev) => ({ ...prev, birthDate: e.target.value }))} />
+                <FormGroup label={content.nationality} value={state.nationality} onChange={(e) => setState((prev) => ({ ...prev, nationality: e.target.value }))} />
+                <FormGroup label={content.province} value={state.province} onChange={(e) => setState((prev) => ({ ...prev, province: e.target.value }))} />
+                <FormGroup label={content.locality} value={state.locality} onChange={(e) => setState((prev) => ({ ...prev, locality: e.target.value }))} />
+                <FormGroup label={content.postalCode} value={state.postalCode} onChange={(e) => setState((prev) => ({ ...prev, postalCode: e.target.value }))} />
                 <FormGroup
                   label={content.gender}
                   type="select"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  value={state.gender}
+                  onChange={(e) => setState((prev) => ({ ...prev, gender: e.target.value }))}
                   options={[content.male, content.female, content.other]}
                 />
-                <button type="submit" className="submit-button" onClick={() => setConfirmModifications(true)}>
+                <button type="submit" className="submit-button" onClick={() => setState((prev) => ({ ...prev, confirmModifications: true }))}>
                   {content.saveChanges}
                 </button>
               </div>
             </form>
-            {message && <p className="message">{message}</p>}
+            {state.message && <p className="message">{state.message}</p>}
           </div>
         </div>
       </div>
 
       {/* Modal components */}
-      <ChangePassword language={language} isOpen={isChangePasswordModalOpen} onClose={() => setChangePasswordModalOpen(false)} />
+      <ChangePassword language={language} isOpen={state.isChangePasswordModalOpen} onClose={() => setState((prev) => ({ ...prev, isChangePasswordModalOpen: false }))} />
       <ConfirmModifications
-        notConfirmed={confirmModifications}
-        confirmed={() => setConfirmModifications(false)}
-        firstName={firstName}
-        lastName={lastName}
-        email={email}
-        phone={phone}
-        dni={dni}
-        address={address}
-        nationality={nationality}
-        province={province}
-        locality={locality}
-        birthDate={birthDate}
-        postalCode={postalCode}
-        gender={gender}
-        message={message}
+        notConfirmed={state.confirmModifications}
+        confirmed={() => setState((prev) => ({ ...prev, confirmModifications: false }))}
+        firstName={state.firstName}
+        lastName={state.lastName}
+        email={state.email}
+        phone={state.phone}
+        dni={state.dni}
+        address={state.address}
+        nationality={state.nationality}
+        province={state.province}
+        locality={state.locality}
+        birthDate={state.birthDate}
+        postalCode={state.postalCode}
+        gender={state.gender}
+        message={state.message}
         language={language}
       />
-      <DeleteAccount setView={setView} setIsLogged={setIsLogged} Delete={deleteAccount} del={() => setDeleteAccount(false)} language={language} />
-      <MyDiagnoses isOpen={myDiagnoses} onClose={() => setMyDiagnoses(false)} language={language} />
+      <DeleteAccount setView={setView} setIsLogged={setIsLogged} Delete={state.deleteAccount} del={() => setState((prev) => ({ ...prev, deleteAccount: false }))} language={language} />
+      <MyDiagnoses isOpen={state.myDiagnoses} onClose={() => setState((prev) => ({ ...prev, myDiagnoses: false }))} language={language} />
     </section>
   );
 };
