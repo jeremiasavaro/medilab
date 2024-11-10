@@ -1,3 +1,4 @@
+#medilab\backend\blueprints\image\routes.py
 from flask import Flask, request
 from flask_cors import CORS
 from io import BytesIO
