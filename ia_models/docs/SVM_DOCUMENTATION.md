@@ -133,6 +133,31 @@ for i in range(5):  # Muestra solo las primeras 5 como ejemplo
     print(f"Predicción: {y_pred[i]}, Probabilidad de clase 0 (normal): {y_pred_proba[i][0]:.2f}, Probabilidad de clase 1 (neumonía): {y_pred_proba[i][1]:.2f}")
 ```
 
+## Predicciones con probabilidades
+
+```bash
+Predicciones acertadas - Clase Normal:
+Etiqueta real: Normal, Predicción: Normal, Probabilidad de clase 0 (Normal): 99.90%, Probabilidad de clase 1 (Neumonía): 0.10%
+Etiqueta real: Normal, Predicción: Normal, Probabilidad de clase 0 (Normal): 85.80%, Probabilidad de clase 1 (Neumonía): 14.20%
+Etiqueta real: Normal, Predicción: Normal, Probabilidad de clase 0 (Normal): 100.00%, Probabilidad de clase 1 (Neumonía): 0.00%
+Etiqueta real: Normal, Predicción: Normal, Probabilidad de clase 0 (Normal): 76.25%, Probabilidad de clase 1 (Neumonía): 23.75%
+Etiqueta real: Normal, Predicción: Normal, Probabilidad de clase 0 (Normal): 56.67%, Probabilidad de clase 1 (Neumonía): 43.33%
+
+Predicciones acertadas - Clase Neumonía:
+Etiqueta real: Neumonía, Predicción: Neumonía, Probabilidad de clase 0 (Normal): 0.87%, Probabilidad de clase 1 (Neumonía): 99.13%
+Etiqueta real: Neumonía, Predicción: Neumonía, Probabilidad de clase 0 (Normal): 18.15%, Probabilidad de clase 1 (Neumonía): 81.85%
+Etiqueta real: Neumonía, Predicción: Neumonía, Probabilidad de clase 0 (Normal): 0.00%, Probabilidad de clase 1 (Neumonía): 100.00%
+Etiqueta real: Neumonía, Predicción: Neumonía, Probabilidad de clase 0 (Normal): 38.94%, Probabilidad de clase 1 (Neumonía): 61.06%
+
+Predicciones fallidas - Clase Normal:
+Etiqueta real: Normal, Predicción: Neumonía, Probabilidad de clase 0 (Normal): 3.43%, Probabilidad de clase 1 (Neumonía): 96.57%
+Etiqueta real: Normal, Predicción: Neumonía, Probabilidad de clase 0 (Normal): 44.96%, Probabilidad de clase 1 (Neumonía): 55.04%
+
+Predicciones fallidas - Clase Neumonía:
+Etiqueta real: Neumonía, Predicción: Normal, Probabilidad de clase 0 (Normal): 97.28%, Probabilidad de clase 1 (Neumonía): 2.72%
+Etiqueta real: Neumonía, Predicción: Normal, Probabilidad de clase 0 (Normal): 57.93%, Probabilidad de clase 1 (Neumonía): 42.07%
+```
+
 ## Vizualización de imagen
 
 Aqui se puede observar una imagen de la clase normal de los datos que toma el modelo para entrenarse. Esta imagen son los `512x512` píxeles representados nuevamente en una imagen.
@@ -147,5 +172,50 @@ plt.show()
 ![primer_elemento_claseNormal](images/normal_img_representation_from_trained_data.jpg)
 *Figura 4: una imagen perteneciente a la clase Normal.*
 
-## Cross-Validaton
+## Cross-Validation
 
+Se realiza una validación cruzada para evaluar la estabilidad y rendimiento del modelo SVM. Esto permite comprobar cómo se comporta el modelo con diferentes particiones del conjunto de datos de entrenamiento y obtener una medida más robusta de su precisión.
+
+```python
+from sklearn.model_selection import cross_val_score
+
+# Realizar validación cruzada con 3 particiones
+scores = cross_val_score(svm_model, X_train, y_train, cv=3, scoring="accuracy")
+print("Cross-Validation Scores:", scores)
+print("Mean Accuracy:", scores.mean())
+```
+
+```bash
+Cross-Validation Scores: [0.95416667 0.95827538 0.9596662 ]
+Mean Accuracy: 0.9573694174007109
+```
+
+## Evaluación de Presicion, Recall y Threshold
+
+En esta sección, se vuelve a imprimir el **reporte de clasificación** para analizar los datos junto al **recall** y el **threshold**.
+
+```python
+print("\nRe-imprimiendo el reporte de clasificación:")
+print(classification_report(y_val, y_pred))
+```
+
+```bash
+Re-imprimiendo el reporte de clasificación:
+              precision    recall  f1-score   support
+
+           0       0.97      0.96      0.97       281
+           1       0.95      0.97      0.96       259
+
+    accuracy                           0.96       540
+   macro avg       0.96      0.97      0.96       540
+weighted avg       0.97      0.96      0.96       540
+```
+
+## Gráfica de Precisión y Recall en Función del Threshold
+
+Para comprender mejor el comportamiento del modelo y ajustar el threshold de decisión, se calcula y grafica la relación entre **precisión** y **recall** a medida que varía el threshold. Este gráfico ayuda a visualizar cómo cambia el rendimiento del modelo al exigir mayor confianza para clasificar una instancia como **PNEUMONIA**.
+
+![Gráfico de Precisión y Recall vs Threshold](images\precision-recall-vs-threshold.png)
+*Figura 5*
+
+Este gráfico permite decidir un threshold óptimo que mantenga un buen equilibrio entre precisión y recall, lo cual es crítico en aplicaciones de diagnóstico médico donde se busca minimizar tanto falsos positivos como falsos negativos.
