@@ -28,6 +28,6 @@ def image_upload():
     if not get_patient(dni):
         return make_response({'error': 'User not found'}, 404)
 
-    if request.path == '/upload_image':
+    if request.path == '/image/upload_image':
         modify_image_patient(dni, image_url)
     return make_response({'image_url': image_url}, 200)

@@ -27,9 +27,20 @@ def app():
             date_birth=date(1985, 5, 15),  
             age=39, 
             gender="Female"  
-        )        
+        )   
+
+
+        test_my_diagnoses = Diagnostic (
+            cod= 1,
+            res='Pneumonia',
+            description='The model detected signs of pneumonia with 85% confidence.',
+            date_result=date(2024,12,11),
+            image_diagnostic='http://example.com/images/diagnostic1.jpg',
+            dni=12345678
+        )     
         
-        db.session.add(test_doctor)
+        db.session.add(test_doctor)       
+        db.session.add(test_my_diagnoses)        
         db.session.commit()
 
     yield app
