@@ -1,4 +1,5 @@
 from flask import request, send_file, jsonify, make_response
+from flask import Response
 from utils import *
 from .__init__ import *
 from db.functions_db import get_patient, insert_diagnostic, get_diagnostics_by_code
@@ -78,6 +79,10 @@ def xray_diagnosis():
     # Load and preprocess the image from the provided URL
     image_url = request.form['image_url']
     image = load_image(image_url)
+
+    # Check if `load_image` returned an error response
+    if isinstance(image, Response) and image.status_code != 200:
+        return image  # Return the error response directly
     
     diseases_accepted = []
 

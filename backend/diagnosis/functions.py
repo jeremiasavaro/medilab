@@ -3,6 +3,7 @@ import numpy as np
 import base64
 import json
 from PIL import Image
+from utils import *
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -11,9 +12,15 @@ from io import BytesIO
 
 
 def load_image(image_url):
-    response = requests.get(image_url)
-    image = Image.open(BytesIO(response.content))
-    return image
+    try:
+        response = requests.get(image_url)
+        response.raise_for_status()  # Check if the request was successful
+
+        image = Image.open(BytesIO(response.content))
+        return image
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching image: {e}")
+        return make_response({'error': 'Error when loading the image'}, 401)
 
 
 def preprocess_image_h5(image):

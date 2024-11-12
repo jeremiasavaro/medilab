@@ -1,5 +1,8 @@
 #test/test_xray.py
 from conftest import *
+from unittest.mock import patch
+import requests
+
 
 def test_xray_diagnosis_no_image_url(client): 
     # Log in to get the token
@@ -20,3 +23,24 @@ def test_xray_diagnosis_no_image_url(client):
     # Check the response status and content
     assert response.status_code == 400
     assert response.json == {'error': 'No image_url provided'}
+
+@patch('requests.get')
+def test_xray_diagnosis_invalid_image_url(mock_get, client):
+    # Mock the requests.get to raise a ConnectionError
+    mock_get.side_effect = requests.exceptions.ConnectionError("Failed to resolve")
+
+    # Log in to get the token
+    login_data = {'dni': '12345678', 'password': 'secure_password'}
+    login_response = client.post('/auth/login', json=login_data)
+    token = login_response.get_json().get('token')
+
+    # Set the Authorization header
+    headers = {"Authorization": token}
+
+    # Pass an invalid image URL
+    data = {'image_url': 'https://invalid_url'}
+    response = client.post('/xray/xray_diagnosis', headers=headers, data=data)
+
+    # Assert that the response indicates an error
+    assert response.status_code == 401  # or whatever status code you expect for this case
+    assert response.json == {'error': 'Error when loading the image'}
