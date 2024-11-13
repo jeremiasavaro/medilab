@@ -219,3 +219,72 @@ Para comprender mejor el comportamiento del modelo y ajustar el threshold de dec
 *Figura 5*
 
 Este gráfico permite decidir un threshold óptimo que mantenga un buen equilibrio entre precisión y recall, lo cual es crítico en aplicaciones de diagnóstico médico donde se busca minimizar tanto falsos positivos como falsos negativos.
+
+## Confusion Matrix
+
+![Gráfico de Confusion Matrix](images\confusion_matrix.png)
+*Figura 6*
+
+## Comparativa de metricas antes y después del ajuste del threshold
+
+```bash
+Reporte de clasificación sin threshold ajustado:
+------------------------------------------------
+Precisión (0): 0.9746
+Recall (0): 0.9573
+F1 Score (0): 0.9659
+
+Precisión (1): 0.9545
+Recall (1): 0.9730
+F1 Score (1): 0.9637
+Accuracy: 0.9648
+
+Reporte de clasificación con threshold ajustado:
+------------------------------------------------
+Precisión (0): 0.9479
+Recall (0): 0.9715
+F1 Score (0): 0.9596
+
+Precisión (1): 0.9683
+Recall (1): 0.9421
+F1 Score (1): 0.9550
+Accuracy: 0.9574
+```
+
+## Curva ROC y AUC
+
+![Gráfico de Confusion Matrix](images\ROC_curve.png)
+*Figura 7*
+
+**Alta Precisión:** El modelo tiene una alta precisión en la clasificación, lo que implica que tiene un bajo número de falsos positivos y falsos negativos.
+
+**Confiabilidad:** confiar en las predicciones del modelo, especialmente si el objetivo es detectar una condición crítica como la neumonía.
+
+## Guardar el modelo entrenado
+
+Una vez entrenado el modelo, es importante guardarlo para su uso futuro sin necesidad de volver a entrenarlo.
+
+```python
+import joblib
+from google.colab import files
+
+joblib.dump(svm_model, 'trained_model_svm_pneumonia.pkl')
+files.download('trained_model_svm_pneumonia.pkl')
+```
+
+El formato .pkl es un formato de serialización de Python que permite guardar objetos Python en disco.
+
+## Aclaraciones importantes
+
+En el análisis del dataset se utilizó una función para detectar **imágenes duplicadas**, con el objetivo de demostrar que existen datos redundantes que afectan negativamente el entrenamiento del modelo. La presencia de duplicados y de posibles **errores de etiquetado** compromete la calidad del dataset.
+Esto induce al modelo a aprender patrones que no generalizan correctamente, perjudicando su rendimiento en fases de evaluación y test. Esto evidencia que el dataset no es completamente confiable y puede impactar los resultados de predicción en un entorno real, especialmente en tareas críticas como el diagnóstico médico.
+
+**Google colab** fue una herramienta de gran utilidad a la hora de trabajar en el apartado de AI pero utilizamos la version gratuita disponible. Esto fue tambien un problema ya que nos presentamos con conflictos a la hora de entrenar los modelos o en momentos en los que teniamos largas sesiones de trabajo. Se nos terminaba la cuota gratuita o se ocupaba toda la ram disponible para utilizar. En otras palabras, el **poder de computo** fue un problema a la hora del entrenamiento y evaluación de los modelos.
+
+Por otro lado, hoy por hoy es posible subir el modelo entrenado a **Hugging Face** pero no utilizarlo remotamente desde la app web ya que no es el formato ideal para compartir modelos en Hugging Face.
+
+Hugging Face tiene su propio formato para almacenar modelos y recomienda guardar los modelos en formato compatible con PyTorch o TensorFlow.
+
+Migrar el modelo actualmente desarrollado a TensorFlow o Keras implicaría reestructurar varias partes del código, ya que el proceso de modelado, entrenamiento y evaluación es diferente al de scikit-learn.
+
+Entonces se subió el modelo entrenado al repositorio de Hugging Face, luego desde la app se descarga y se utiliza localmente.
