@@ -20,7 +20,7 @@ def load_image(image_url):
         return image
     except requests.exceptions.RequestException as e:
         print(f"Error fetching image: {e}")
-        return make_response({'error': 'Error when loading the image'}, 401)
+        return make_response({'error': 'Error when loading the image'}, 400)
 
 
 def preprocess_image_h5(image):

@@ -42,5 +42,13 @@ def test_xray_diagnosis_invalid_image_url(mock_get, client):
     response = client.post('/xray/xray_diagnosis', headers=headers, data=data)
 
     # Assert that the response indicates an error
-    assert response.status_code == 401  # or whatever status code you expect for this case
+    assert response.status_code == 400
     assert response.json == {'error': 'Error when loading the image'}
+
+def test_xray_diagnosis_missing_authorization(client):
+    # Make the POST request without Authorization header
+    data = {'image_url': 'https://valid-image-url.com/image.jpg'}
+    response = client.post('/xray/xray_diagnosis', data=data)
+
+    # Expect unauthorized (401) access due to missing Authorization header
+    assert response.status_code == 401

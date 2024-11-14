@@ -72,6 +72,12 @@ def predict_image(model, image, model_type):
 
 @xray.route('/xray_diagnosis', methods=['POST'])
 def xray_diagnosis():
+    # Check for Authorization header first
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({"error": "Authorization header missing"}), 401
+
+
     # Ensure 'image_url' is provided in the form data
     if 'image_url' not in request.form:
         return make_response({'error': 'No image_url provided'}, 400)
