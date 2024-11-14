@@ -15,26 +15,26 @@
   background-image: url('../img/b.jpg');
   background-size: cover;
   font-family: 'Poppins', sans-serif;
-  color:#0580df;
+  color: #0580df;
 }
 
 .modal-content {
-  background-color: #000; /* Fondo negro */
   color: white;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   text-align: center;
   margin: 0 auto;
+  width: 45%;
   border: 1px solid #ddd;
-  border-radius: 10px;
   font-family: 'Poppins', sans-serif;
 }
 
 .modal-content h1 {
-  font-size: 18px;
+  font-size: 24px;
   margin-bottom: 20px;
   font-weight: 700;
+  color: #0580df;
 }
 
 .modal-buttons {
