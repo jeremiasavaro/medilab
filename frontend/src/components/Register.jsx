@@ -96,12 +96,12 @@ const Register = ({ setView, language }) => {
           <div className="input-group">
             <label htmlFor="gender">{content.gender}</label>
             <select
-              id="gender"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              ref={(el) => (inputRefs.current.gender = el)}
-              onKeyDown={(e) => handleKeyPress(e, "password")}
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                ref={(el) => (inputRefs.current.gender = el)}
+                onKeyDown={(e) => handleKeyPress(e, "password")}
             >
               <option value="">{content.select}</option>
               <option value="Male">{content.male}</option>
@@ -113,6 +113,7 @@ const Register = ({ setView, language }) => {
           {renderInput("repPassword", "password", content.confirmPassword, null)}
           <button type="submit">{content.register}</button>
         </form>
+        <br></br>
         <p>{content.alreadyHaveAccount}{' '}
           <span onClick={() => setView("login")} className="hover-link">{content.clickHere}</span>
         </p>
