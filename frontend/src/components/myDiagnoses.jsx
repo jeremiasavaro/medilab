@@ -17,6 +17,7 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   const { decodedToken, isExpired } = useJwt(token);
   const [content, setContent] = useState(xrayData[language]);
   const [pdfBlob, setPdfBlob] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);  // Estado para controlar la animación de cierre
 
   useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
 
@@ -38,21 +39,17 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
           const data = await response.json();
           console.log("Received data:", data);
 
-          // Asegúrate de que sea un arreglo
           setMyDiagnoses(Array.isArray(data) ? data : []);
         } catch (error) {
           console.error('Error fetching my diagnoses:', error);
-          setMessage(`Error fetching diagnoses: ${error.message}`); // Mostrar el mensaje de error completo
-          setMyDiagnoses([]);  // Configura un arreglo vacío en caso de error
+          setMessage(`Error fetching diagnoses: ${error.message}`);
+          setMyDiagnoses([]);
         }
       };
 
       fetchMyDiagnoses();
     }
   }, [isOpen, token, decodedToken]);
-
-  // Si no está abierto, retorna null directamente
-  if (!isOpen) return null;
 
   const handleDownloadClick = () => {
     if (!pdfBlob) return;
@@ -64,10 +61,20 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
     document.body.appendChild(link);
     link.click();
     link.parentNode.removeChild(link);
-    };
+  };
+
+  const handleClose = () => {
+    setIsClosing(true);  // Activa la animación de salida
+    setTimeout(() => {
+      setIsClosing(false);  // Resetea el estado después de la animación
+      onClose();            // Llama a la función de cierre
+    }, 300);  // Tiempo en milisegundos de la animación de salida
+  };
+
+  if (!isOpen && !isClosing) return null;  // Retorna null si no está abierto o en animación de cierre
 
   return (
-    <div className="modal-overlay-diagnoses">
+    <div className={`modal-overlay-diagnoses ${isClosing ? 'closing' : ''}`}>
       <div className="modal-content-diagnoses">
         <h1 className='h1-myDiagnoses'><b>Diagnoses of patient {firstName} {lastName} with DNI: {dni}</b></h1>
         <br />
@@ -94,7 +101,7 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
           ))}
         </div>
         <div className="modal-buttons">
-          <button type="button" onClick={onClose}>Back</button>
+          <button type="button" onClick={handleClose}>Back</button>
         </div>
       </div>
     </div>

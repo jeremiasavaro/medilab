@@ -13,32 +13,58 @@
     font-family: 'Poppins', sans-serif;
     color: white;
     overflow: auto;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content-diagnoses {
     background: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 12px;
     width: 900px;
     max-width: 60%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     text-align: center;
     max-height: 80%;
     overflow-y: auto;
     color: #333;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .h1-myDiagnoses {
-    color: #222;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 15px;
+    color: #333;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+}
+
+.h1-myDiagnoses::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 60px;
+    height: 4px;
+    background-color: #0580df;
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(0, 128, 255, 0.6);
 }
 
 .diagnoses-grid {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     align-items: center;
 }
 
@@ -47,16 +73,17 @@
     align-items: center;
     background: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     width: 100%;
     max-width: 800px;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .diagnosis-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .diagnosis-image {
@@ -69,8 +96,13 @@
 .diagnosis-image img {
     width: 100px;
     height: 100px;
-    border-radius: 6px;
+    border-radius: 10px;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.diagnosis-image img:hover {
+    transform: scale(1.1);
 }
 
 .diagnosis-info {
@@ -93,12 +125,16 @@
     padding: 10px 15px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .download-button:hover {
     background-color: #036bb5;
+    transform: translateY(-2px);
 }
 
 .download-button i {
@@ -118,37 +154,28 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
 }
 
 .modal-buttons button:hover {
     background-color: #333;
+    transform: translateY(-2px);
 }
 
 .message {
     margin-top: 15px;
     color: #e74c3c;
     text-align: center;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-.h1-myDiagnoses {
-    color: #333;
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 20px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-    position: relative;
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
 }
 
-.h1-myDiagnoses::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 50px;
-    height: 3px;
-    background-color: #0580df;
-    border-radius: 2px;
+.modal-overlay-diagnoses.closing .modal-content-diagnoses {
+    animation: fadeOut 0.3s ease-in-out forwards;
 }
