@@ -1,3 +1,4 @@
+#backend\diagnosis\functions.py
 import requests
 import numpy as np
 import base64
@@ -8,12 +9,17 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from io import BytesIO
+from reportlab.lib.units import inch
+from reportlab.platypus import Image
+from PIL import Image as PilImage
+import os
 
 
 def load_image(image_url):
     response = requests.get(image_url)
-    image = Image.open(BytesIO(response.content))
+    image = PilImage.open(BytesIO(response.content))
     return image
+
 
 
 def preprocess_image_h5(image):
@@ -76,6 +82,33 @@ def create_diagnosis_pdf(patient_name, diagnosis_date, diseases_accepted):
         'SmallText', fontName='Helvetica', fontSize=10,
         textColor=colors.gray
     )
+
+    # Insert logo in the PDF document
+    # Define the path of the logo relative to the current file's location
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    logo_path = os.path.join(base_dir, '../../frontend/src/assets/img/medilab/medilag_logo1.png')
+
+    # Check if the logo file exists
+    if os.path.exists(logo_path):
+        # Get the original dimensions of the image
+        with PilImage.open(logo_path) as img:
+            width, height = img.size
+
+        # Define the desired width or height while maintaining aspect ratio
+        desired_width = 2 * inch
+        aspect_ratio = height / width
+        scaled_height = desired_width * aspect_ratio  # Adjust height based on the width
+
+        # Create the Image object with the adjusted dimensions
+        logo = Image(logo_path, width=desired_width, height=scaled_height)
+        logo.hAlign = 'CENTER'
+
+        # Add the logo and a spacer to the elements list
+        elements.append(logo)
+        elements.append(Spacer(1, 12))
+    else:
+        print(f"Logo path does not exist: {logo_path}")
+    # End logo in PDF module
 
     # Report title
     elements.append(Paragraph("Medical Diagnosis Report", title_style))
