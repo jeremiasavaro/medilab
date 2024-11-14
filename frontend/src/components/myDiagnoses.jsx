@@ -3,8 +3,9 @@ import "../assets/css/myDiagnoses.css";
 import { useJwt } from "react-jwt";
 import { useToken } from '../hooks/useToken';
 import { useObtainData } from '../hooks/useObtainData';
+import xrayData from '../assets/components-data/xrayServiceData.json';
 
-const MyDiagnoses = ({ isOpen, onClose }) => {
+const MyDiagnoses = ({ isOpen, onClose, language }) => {
   const [myDiagnoses, setMyDiagnoses] = useState([]);
   const [message, setMessage] = useState('');
   const [messageData, setMessageData] = useState('');
@@ -14,6 +15,8 @@ const MyDiagnoses = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const { token, messageToken } = useToken();
   const { decodedToken, isExpired } = useJwt(token);
+  const [content, setContent] = useState(xrayData[language]);
+  const [pdfBlob, setPdfBlob] = useState(null);
 
   useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
 
@@ -51,6 +54,18 @@ const MyDiagnoses = ({ isOpen, onClose }) => {
   // Si no está abierto, retorna null directamente
   if (!isOpen) return null;
 
+  const handleDownloadClick = () => {
+    if (!pdfBlob) return;
+
+    const url = window.URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'diagnosis.pdf');
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+    };
+
   return (
     <div className="modal-overlay-diagnoses">
       <div className="modal-content-diagnoses">
@@ -72,6 +87,9 @@ const MyDiagnoses = ({ isOpen, onClose }) => {
               <div className="diagnosis-info">
                 <p><b>Date:</b> {new Date(diagnosis.date_result).toLocaleDateString()}</p>
               </div>
+              <button className="download-button" onClick={handleDownloadClick}>
+                <i className="fa-regular fa-file-pdf"></i> Download PDF
+              </button>
             </div>
           ))}
         </div>
