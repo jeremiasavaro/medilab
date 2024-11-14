@@ -141,7 +141,7 @@ def xray_diagnosis():
         for disease, percentage in diseases_accepted:
             insert_diagnostic(disease, f"{percentage:.2f}%", image_url, dni)
     else:
-        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "healthy", 0, image_url)
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, [])
         insert_diagnostic("healthy", "healthy", image_url, dni)
 
     return send_file(pdf_buffer, as_attachment=True, download_name=f"{dni}-{diagnosis_date}-{patient_name}.pdf", mimetype='application/pdf')
