@@ -5,6 +5,7 @@ import infoData from '../assets/components-data/infoData.json';
 import xrayData from '../assets/components-data/xrayServiceData.json';
 import { useToken } from '../hooks/useToken';
 import { useGetDoctors } from '../hooks/useGetDoctors';
+import Spinner from './Spinner';
 
 // Componente para el botón de retorno
 const BackButton = ({ onClick, label }) => (
@@ -99,6 +100,8 @@ const XrayService = ({ setView, language }) => {
     handleFileUpload(file);
   };
 
+  let timer;
+
   const handleScanClick = async () => {
     if (!state.imageUrl) return console.log('No hay imagen cargada.');
     setState((prev) => ({ ...prev, isScanning: true }));
@@ -117,7 +120,11 @@ const XrayService = ({ setView, language }) => {
       } catch (error) {
         console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
       } finally {
-        setState((prev) => ({ ...prev, isScanning: false }));
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+          setState((prev) => ({ ...prev, isScanning: false }));
+        }, 3000);
       }
     }
   };
@@ -164,7 +171,7 @@ const XrayService = ({ setView, language }) => {
             <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
               <i className="fa-solid fa-expand"></i> {state.isScanning ? content.scanning : content.startScanning}
             </button>
-            {state.isScanning && <div className="loading">{content.processing}</div>}
+            {state.isScanning && <Spinner />}
             <br />
             {state.pdfBlob && (
               <button className="download-button" onClick={handleDownloadClick}>
@@ -214,3 +221,6 @@ const OverlaySection = ({ content, closeOverlaySection }) => (
 );
 
 export default XrayService;
+
+
+
