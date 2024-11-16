@@ -8,7 +8,7 @@
 }
 
 body, html {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #f9f9f9;
   background-size: cover; 
   background-position: center; 
@@ -53,7 +53,7 @@ body, html {
   text-align: center;
   padding: 20px 0;
   font-size: 26px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 5;
 }
@@ -91,30 +91,6 @@ body, html {
   font-size: 16px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.changeXray {
-  display: inline-block;
-  padding: 12px 30px;
-  background-color: #0580df; /* Mismo color que el resto de tus botones */
-  color: white;
-  font-family: 'Roboto', sans-serif; /* Asegura que use Roboto */
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-top: 20px;
-}
-
-.changeXray:hover {
-  background-color: #006bb3; /* Un tono más oscuro en hover */
-}
-
-.changeXray:active {
-  background-color: #004f8c; /* Aún más oscuro cuando se presiona */
-  transform: translateY(0);
-}
-
 
 /* Overlay section */
 .overlay-section {
@@ -174,19 +150,6 @@ body, html {
 
 .overlay-content button:hover {
   background-color: #555;
-}
-
-/* Image upload button */
-.xray-file-upload {
-  padding: 10px 40px;
-  background-color: #0580df;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
 }
 
 /* Image container */
@@ -266,8 +229,8 @@ body, html {
   background-color: white;
   padding: 20px;
   max-width: 600px;
-  max-height: 80vh; /* Controla la altura máxima */
-  overflow-y: auto; /* Agrega desplazamiento vertical */
+  max-height: 80vh; 
+  overflow-y: auto; 
   border-radius: 8px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
   position: relative;

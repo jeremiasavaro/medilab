@@ -179,17 +179,17 @@ const XrayService = ({ setView, language }) => {
                 <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
               </button>
             )}
-            <label htmlFor="change-file-button" className="changeXray">
+            <button className="download-button" onClick={() => document.getElementById('change-file-button').click()} >
               {content.changeXRay}
-            </label>
+            </button>
             <input id="change-file-button" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
           </>
         )}
 
         {state.isUploadVisible && (
-          <label htmlFor="xray-upload" className="xray-file-upload">
+          <button className="download-button" onClick={() => document.getElementById('xray-upload').click()}>
             {content.uploadXRay}
-          </label>
+          </button>
         )}
 
         {doctors && state.showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
