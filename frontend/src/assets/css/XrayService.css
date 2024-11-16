@@ -10,11 +10,11 @@
 body, html {
   font-family: 'Roboto', sans-serif;
   color: #f9f9f9;
-  background-size: cover; /* Ajusta la imagen para que cubra toda la pantalla */
-  background-position: center; /* Centra la imagen en la pantalla */
-  background-repeat: no-repeat; /* Evita que la imagen se repita */
-  height: 100vh; /* Asegura que cubra el 100% de la altura del viewport */
-  margin: 0; /* Elimina cualquier margen en la página */
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
+  height: 100vh; 
+  margin: 0; 
 }
 
 /* Main container */
@@ -50,7 +50,7 @@ body, html {
   width: 100%;
   background-color: #0580df;
   color: #f9f9f9;
-  text-align: center;  /* Mantener el título centrado */
+  text-align: center;
   padding: 20px 0;
   font-size: 26px;
   font-family: 'Roboto', sans-serif;
@@ -61,9 +61,9 @@ body, html {
 /* Toggle buttons */
 .toggle-button {
   position: absolute;
-  left: 20px;  /* Coloca el botón "Info" a 20px del borde izquierdo */
-  top: 50%;    /* Centra verticalmente en relación con el encabezado */
-  transform: translateY(-50%); /* Ajuste para que esté perfectamente centrado verticalmente */
+  left: 20px;  
+  top: 50%;    
+  transform: translateY(-50%); 
   padding: 10px;
   background-color: #050404;
   color: white;
@@ -91,6 +91,30 @@ body, html {
   font-size: 16px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.changeXray {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #0580df; /* Mismo color que el resto de tus botones */
+  color: white;
+  font-family: 'Roboto', sans-serif; /* Asegura que use Roboto */
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.changeXray:hover {
+  background-color: #006bb3; /* Un tono más oscuro en hover */
+}
+
+.changeXray:active {
+  background-color: #004f8c; /* Aún más oscuro cuando se presiona */
+  transform: translateY(0);
+}
+
 
 /* Overlay section */
 .overlay-section {

@@ -109,6 +109,9 @@ const XrayService = ({ setView, language }) => {
     formData.append('image_url', state.imageUrl);
     if (token && decodedToken) {
       try {
+        timer = setTimeout(() => {
+          setState((prev) => ({ ...prev, isScanning: false }));
+        }, 4000);
         const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
           headers: { 'Authorization': token },
           method: 'POST',
@@ -119,12 +122,10 @@ const XrayService = ({ setView, language }) => {
         setState((prev) => ({ ...prev, pdfBlob: blob }));
       } catch (error) {
         console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+        setState((prev) => ({ ...prev, isScanning: false }));
       } finally {
+        setState((prev) => ({ ...prev, isScanning: false }));
         clearTimeout(timer);
-
-        timer = setTimeout(() => {
-          setState((prev) => ({ ...prev, isScanning: false }));
-        }, 3000);
       }
     }
   };
@@ -169,15 +170,19 @@ const XrayService = ({ setView, language }) => {
               <img src={state.imageUrl} className="xray-pic" alt="Uploaded" />
             </div>
             <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
-              <i className="fa-solid fa-expand"></i> {state.isScanning ? content.scanning : content.startScanning}
+              <i className="fa-solid fa-expand"></i> {content.startScanning}
             </button>
-            {state.isScanning && <Spinner />}
+            {state.isScanning && <Spinner content={content} />}
             <br />
             {state.pdfBlob && (
               <button className="download-button" onClick={handleDownloadClick}>
                 <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
               </button>
             )}
+            <label htmlFor="change-file-button" className="changeXray">
+              {content.changeXRay}
+            </label>
+            <input id="change-file-button" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
           </>
         )}
 
