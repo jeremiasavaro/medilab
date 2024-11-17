@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { IoMdArrowBack } from "react-icons/io";
+import { IoInformationCircle } from "react-icons/io5";
 import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
 import infoData from '../assets/components-data/infoData.json';
@@ -6,13 +8,6 @@ import xrayData from '../assets/components-data/xrayServiceData.json';
 import { useToken } from '../hooks/useToken';
 import { useGetDoctors } from '../hooks/useGetDoctors';
 import Spinner from './Spinner';
-
-// Componente para el botón de retorno
-const BackButton = ({ onClick, label }) => (
-  <button className="buttonBack" onClick={onClick}>
-    <i className="fa-solid fa-right-to-bracket"></i> {label}
-  </button>
-);
 
 // Componente de tabla de doctores
 const DoctorTable = ({ doctors, content, tableRef }) => (
@@ -163,13 +158,30 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
   return (
     <section id="xray-section" className="contentXray">
       <div className={isTransitioning=="out" ? "transitionOut-active" : "contentXray"}>
-        <BackButton onClick={() => setView('home')} label={content.backButton} />
-        <header className="title">
-          {content.sectionTitle}
-          <button className="toggle-button" onClick={() => openOverlaySection('info')}>
-            <i className="bi-info-circle-fill"></i> {content.info}
-          </button>
-        </header>
+      <header className="xray-header-container">
+        <div className="xray-header-content">
+          <div className="xray-header-left">
+            <button
+              onClick={() => setView('home')}
+              aria-label="Go back"
+              className="xray-header-back-button"
+            >
+              <IoMdArrowBack className="header-icon" />
+            </button>
+            <h1 className="xray-header-title">Medilab</h1>
+          </div>
+
+          <div className="xray-header-right">
+            <button
+              onClick={() => openOverlaySection('info')}
+              aria-label="Show information"
+              className="xray-header-info-button"
+            >
+              <IoInformationCircle className="header-icon" />
+            </button>
+          </div>
+        </div>
+      </header>
         <div className="xrayServices-container">
           <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
 
@@ -236,6 +248,3 @@ const OverlaySection = ({ content, closeOverlaySection }) => (
 );
 
 export default XrayService;
-
-
-

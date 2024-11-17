@@ -54,19 +54,82 @@ body::before {
 }
 
 /* Header */
-.title {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #0580df;
-  color: #f9f9f9;
-  text-align: center;
-  padding: 20px 0;
-  font-size: 26px;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 5;
+.xray-header-container {
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  width: 100%; /* Ocupa todo el ancho */
+  height: 80px; /* Ajusta el alto del encabezado */
+  background-color: #0580df; /* Fondo */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+  position: fixed; /* Encabezado fijo */
+  top: 0; /* Ubicación en la parte superior */
+  left: 0; /* Inicio en el borde izquierdo */
+  z-index: 1000; /* Superposición sobre otros elementos */
+}
+
+.xray-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
+  margin: 0 auto; 
+}
+
+.xray-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.xray-header-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-left: 12px;
+  margin-top: 25px;
+}
+
+.xray-header-icon {
+  width: 30px;
+  height: 30px;
+  color: #8ca2d3;
+}
+
+button.xray-back-button {
+  position: absolute;
+  left: 16px; /* Separación del borde izquierdo */
+  top: 16px; /* Separación del borde superior */
+}
+
+button.xray-info-button {
+  position: absolute;
+  right: 16px; /* Separación del borde derecho */
+  top: 16px; /* Separación del borde superior */
+}
+
+.xray-header-back-button,
+.xray-header-info-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  font-size: 25px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.xray-header-back-button:hover,
+.xray-header-info-button:hover {
+  background-color: #2176b8;
+}
+
+.xray-header-right {
+  position: relative;
 }
 
 /* Toggle buttons */
