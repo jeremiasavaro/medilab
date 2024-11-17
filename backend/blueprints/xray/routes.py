@@ -19,7 +19,7 @@ repo_id = "MatiasPellizzari/Xray"
 models_info = {
     "pneumonia": ("Xray/modelo_vgg16_finetuned_neumonia.h5", "keras"),
     "pneumonia_2": ("Xray/trained_model_svm_pneumonia.pkl", "svm"),
-    "tuberculosis": ("Xray/modelo_vgg16_finetuned_tuberculosis.h5", "keras"), 
+    "tuberculosis": ("Xray/modelo_vgg16_finetuned_tuberculosis.h5", "keras"),
     "tuberculosis_2": ("Xray/trained_model_svm_tuberculosis.pkl", "svm"),
     "covid": ("Xray/modelo_vgg16_finetuned_covid.h5", "keras"),
     "covid_2": ("Xray/trained_model_svm_covid.pkl", "svm"),
@@ -64,7 +64,7 @@ def predict_image(model, image, model_type):
         normal_percentage = classes[0][1] * 100
     else:
         raise ValueError(f"Model type '{model_type}' not supported.")        
-    
+
     usado= "VGG16" if model_type == "keras" else "SVM"
     print(f"In {usado} Disease Percentage: {disease_percentage}, Normal Percentage: {normal_percentage}")
     return disease_percentage, normal_percentage
@@ -72,9 +72,11 @@ def predict_image(model, image, model_type):
 
 @xray.route('/xray_diagnosis', methods=['POST'])
 def xray_diagnosis():
+    # Ensure 'image_url' is provided in the form data
     if 'image_url' not in request.form:
         return make_response({'error': 'No image_url provided'}, 400)
 
+    # Load and preprocess the image from the provided URL
     image_url = request.form['image_url']
     image = load_image(image_url)
     diseases_accepted = []
@@ -87,14 +89,14 @@ def xray_diagnosis():
     for disease in ["pneumonia", "tuberculosis", "covid"]:
         primary_model_name = f"{disease}"
         secondary_model_name = f"{disease}_2"
-        
+
         # Chequeo primario
         primary_model = models[primary_model_name]
         model_type = models_info[primary_model_name][1]
         preprocess_function = preprocess_image_svm if model_type == "svm" else preprocess_image_h5
         processed_image = preprocess_function(image)
         primary_disease_percentage, primary_normal_percentage = predict_image(primary_model, processed_image, model_type)
-        
+
         if primary_disease_percentage > primary_threshold:
             diseases_accepted.append((disease, primary_disease_percentage))
             print(f"El modelo principal detectó enfermedad con un porcentaje de: {primary_disease_percentage}")

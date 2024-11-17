@@ -1,4 +1,4 @@
-# tests/test_auth.py
+#medilab\backend\test\test_auth.py
 from conftest import *
 
 data = {
