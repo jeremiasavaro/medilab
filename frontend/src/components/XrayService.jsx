@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IoMdArrowBack } from "react-icons/io";
-import { IoInformationCircle } from "react-icons/io5";
+import { IoMdArrowBack } from 'react-icons/io';
+import { IoInformationCircle } from 'react-icons/io5';
 import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
 import infoData from '../assets/components-data/infoData.json';
