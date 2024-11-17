@@ -62,9 +62,9 @@ def modify_patient(patient_data):
     patient = Patient.query.filter_by(dni=patient_data['dni']).first()
 
     try:
-        date_obj = datetime.strptime(date_birth, '%Y-%m-%d').date()
+        date_obj = datetime.strptime(patient_data['birthDate'], '%Y-%m-%d').date()
     except ValueError:
-        date_obj = datetime.strptime(date_birth, '%a, %d %b %Y %H:%M:%S %Z').date()
+        date_obj = datetime.strptime(patient_data['birthDate'], '%a, %d %b %Y %H:%M:%S %Z').date()
 
     if patient:
         patient.first_name = patient_data['firstName']

@@ -14,9 +14,17 @@ function Card({ title, description, aosdelay, classIcon }) {
   );
 }
 
-function HeroSection({ setView, language }) {
+function HeroSection({ setView, language, setIsTransitioning }) {
   // Usados para cambiar el idioma del contenido
   const [content, setContent] = useState(texts[language]);
+
+  const handleTransitionIn = (targetView) => {
+    setIsTransitioning("in");
+    setTimeout(() => {
+      setIsTransitioning("out");
+      setView(targetView); 
+    }, 1500); 
+  };
 
   // Dependiendo del idioma, se muestra un texto u otro
   useEffect(() => {
@@ -38,7 +46,7 @@ function HeroSection({ setView, language }) {
               <h3>{content.xrayServiceTitle}</h3>
               <p>{content.xrayServiceDescription}</p>
               <div className="text-center">
-                <a href="#xrayService" onClick={() => setView("xrayService")} className="more-btn">
+                <a href="#xrayService" onClick={() => handleTransitionIn("xrayService")} className="more-btn">
                   <span>{content.accessService}</span>
                   <i className="bi bi-chevron-right"></i>
                 </a>

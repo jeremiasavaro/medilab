@@ -4,7 +4,7 @@ import changePasswordData from "../assets/components-data/changePasswordData.jso
 import {useJwt} from "react-jwt";
 import { useToken } from '../hooks/useToken';
 
-function passwordInput({id, content, value, handleChange}) {
+function PasswordInput({id, content, value, handleChange}) {
   return (
     <div className="form-group">
       <label htmlFor={id}>{content}</label>
@@ -60,6 +60,7 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language 
         setMessage('Error en el cambio de contraseña');
       }
     }
+
   };
 
   return (
@@ -68,9 +69,9 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language 
         <h1 className='h1-changePassword'><b>{content.title}</b></h1>
         <br></br>
         <form onSubmit={handleChangePassword}>
-          <passwordInput id={"currentPassword"} content={content.currentPassword} value={currentPassword} handleChange={(e) => setCurrentPassword(e.target.value)}/>
-          <passwordInput id={"newPassword"} content={content.newPassword} value={newPassword} handleChange={(e) => setNewPassword(e.target.value)}/>
-          <passwordInput id={"repNewPassword"} content={content.confirmPassword} value={repNewPassword} handleChange={(e) => setRepNewPassword(e.target.value)}/>
+          <PasswordInput id={"currentPassword"} content={content.currentPassword} value={currentPassword} handleChange={(e) => setCurrentPassword(e.target.value)}/>
+          <PasswordInput id={"newPassword"} content={content.newPassword} value={newPassword} handleChange={(e) => setNewPassword(e.target.value)}/>
+          <PasswordInput id={"repNewPassword"} content={content.confirmPassword} value={repNewPassword} handleChange={(e) => setRepNewPassword(e.target.value)}/>
           <div className="modal-buttons">
             <button type="button" onClick={onClose}>{content.cancel}</button>
             <button type="submit">{content.changePassword}</button>
