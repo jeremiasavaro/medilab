@@ -9,7 +9,7 @@ import { useToken } from '../hooks/useToken';
 import MyDiagnoses from './MyDiagnoses';
 import { useObtainData } from "../hooks/useObtainData";
 
-const Account = ({ setView, setIsLogged, language }) => {
+const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransitioning }) => {
   const [state, setState] = useState({
     firstName: '',
     lastName: '',
@@ -35,6 +35,14 @@ const Account = ({ setView, setIsLogged, language }) => {
 
   const { token } = useToken();
   const { decodedToken, isExpired } = useJwt(token || '');
+
+  const handleTransitionOut = (targetView) => {
+    setIsTransitioning("out");
+    setTimeout(() => {
+      setIsTransitioning("null");
+      setView(targetView); 
+    }, 1500); 
+  };
 
   useEffect(() => {
     setState((prev) => ({
@@ -116,100 +124,102 @@ const Account = ({ setView, setIsLogged, language }) => {
 
   return (
     <section id="account" className="contentAccount">
-      <div className="sidebar">
-        <div className="logo">{content.yourProfile}</div>
-        <ul>
-          <SidebarItem icon="fa-solid fa-notes-medical" label={content.myDiagnoses} onClick={() => setState((prev) => ({ ...prev, myDiagnoses: true }))} />
-          <SidebarItem icon="fa-solid fa-key" label={content.changePassword} onClick={() => setState((prev) => ({ ...prev, isChangePasswordModalOpen: true }))} />
-          <SidebarItem icon="fa-solid fa-trash" label={content.deleteAccount} onClick={() => setState((prev) => ({ ...prev, deleteAccount: true }))} className="delete" />
-        </ul>
-        <ul>
-          <SidebarItem icon="fa-solid fa-right-to-bracket" label={content.mainPage} onClick={() => setView('home')} />
-        </ul>
-      </div>
+      <div className={isTransitioning=="out" ? "transitionOut-active" : "contentAccount"}>
+        <div className="sidebar">
+          <div className="logo">{content.yourProfile}</div>
+          <ul>
+            <SidebarItem icon="fa-solid fa-notes-medical" label={content.myDiagnoses} onClick={() => setState((prev) => ({ ...prev, myDiagnoses: true }))} />
+            <SidebarItem icon="fa-solid fa-key" label={content.changePassword} onClick={() => setState((prev) => ({ ...prev, isChangePasswordModalOpen: true }))} />
+            <SidebarItem icon="fa-solid fa-trash" label={content.deleteAccount} onClick={() => setState((prev) => ({ ...prev, deleteAccount: true }))} className="delete" />
+          </ul>
+          <ul>
+            <SidebarItem icon="fa-solid fa-right-to-bracket" label={content.mainPage} onClick={() => setView('home')} />
+          </ul>
+        </div>
 
-      <div className="account-container">
-        <div className="account-content">
-          <h1><b>{content.personalData}</b></h1>
-          <div className="profile-section">
-            <div className="profile-info">
-              <div>
-                <input
-                  id="file-upload"
-                  type="file"
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                />
-                {state.image_url && (
-                  <div>
-                    <br />
-                    <img
-                      src={state.image_url}
-                      className="profile-pic"
-                      alt="Uploaded"
-                      style={{ maxWidth: '200px', borderRadius: '50%' }}
-                    />
-                  </div>
-                )}
-                <label htmlFor="file-upload" className="custom-file-upload">
-                  {state.image_url ? content.changeImage : content.profileImage}
-                </label>
-                <br />
+        <div className="account-container">
+          <div className="account-content">
+            <h1><b>{content.personalData}</b></h1>
+            <div className="profile-section">
+              <div className="profile-info">
+                <div>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
+                  {state.image_url && (
+                    <div>
+                      <br />
+                      <img
+                        src={state.image_url}
+                        className="profile-pic"
+                        alt="Uploaded"
+                        style={{ maxWidth: '200px', borderRadius: '50%' }}
+                      />
+                    </div>
+                  )}
+                  <label htmlFor="file-upload" className="custom-file-upload">
+                    {state.image_url ? content.changeImage : content.profileImage}
+                  </label>
+                  <br />
+                </div>
               </div>
+              <br />
+              <form className="horizontal-form" onSubmit={handleAccount}>
+                <div className="account-form">
+                  <FormGroup label={content.name} value={state.firstName} onChange={(e) => setState((prev) => ({ ...prev, firstName: e.target.value }))} />
+                  <FormGroup label={content.lastName} value={state.lastName} onChange={(e) => setState((prev) => ({ ...prev, lastName: e.target.value }))} />
+                  <FormGroup label={content.id} value={state.dni} onChange={(e) => setState((prev) => ({ ...prev, dni: e.target.value }))} />
+                  <FormGroup label={content.email} value={state.email} onChange={(e) => setState((prev) => ({ ...prev, email: e.target.value }))} />
+                  <FormGroup label={content.phone} value={state.phone} onChange={(e) => setState((prev) => ({ ...prev, phone: e.target.value }))} />
+                  <FormGroup label={content.address} value={state.address} onChange={(e) => setState((prev) => ({ ...prev, address: e.target.value }))} />
+                  <FormGroup label={content.birthDate} type="date" value={state.birthDate} onChange={(e) => setState((prev) => ({ ...prev, birthDate: e.target.value }))} />
+                  <FormGroup label={content.nationality} value={state.nationality} onChange={(e) => setState((prev) => ({ ...prev, nationality: e.target.value }))} />
+                  <FormGroup label={content.province} value={state.province} onChange={(e) => setState((prev) => ({ ...prev, province: e.target.value }))} />
+                  <FormGroup label={content.locality} value={state.locality} onChange={(e) => setState((prev) => ({ ...prev, locality: e.target.value }))} />
+                  <FormGroup label={content.postalCode} value={state.postalCode} onChange={(e) => setState((prev) => ({ ...prev, postalCode: e.target.value }))} />
+                  <FormGroup
+                    label={content.gender}
+                    type="select"
+                    value={state.gender}
+                    onChange={(e) => setState((prev) => ({ ...prev, gender: e.target.value }))}
+                    options={[content.male, content.female, content.other]}
+                  />
+                  <button type="submit" className="submit-button" onClick={() => setState((prev) => ({ ...prev, confirmModifications: true }))}>
+                    {content.saveChanges}
+                  </button>
+                </div>
+              </form>
+              {state.message && <p className="message">{state.message}</p>}
             </div>
-            <br />
-            <form className="horizontal-form" onSubmit={handleAccount}>
-              <div className="account-form">
-                <FormGroup label={content.name} value={state.firstName} onChange={(e) => setState((prev) => ({ ...prev, firstName: e.target.value }))} />
-                <FormGroup label={content.lastName} value={state.lastName} onChange={(e) => setState((prev) => ({ ...prev, lastName: e.target.value }))} />
-                <FormGroup label={content.id} value={state.dni} onChange={(e) => setState((prev) => ({ ...prev, dni: e.target.value }))} />
-                <FormGroup label={content.email} value={state.email} onChange={(e) => setState((prev) => ({ ...prev, email: e.target.value }))} />
-                <FormGroup label={content.phone} value={state.phone} onChange={(e) => setState((prev) => ({ ...prev, phone: e.target.value }))} />
-                <FormGroup label={content.address} value={state.address} onChange={(e) => setState((prev) => ({ ...prev, address: e.target.value }))} />
-                <FormGroup label={content.birthDate} type="date" value={state.birthDate} onChange={(e) => setState((prev) => ({ ...prev, birthDate: e.target.value }))} />
-                <FormGroup label={content.nationality} value={state.nationality} onChange={(e) => setState((prev) => ({ ...prev, nationality: e.target.value }))} />
-                <FormGroup label={content.province} value={state.province} onChange={(e) => setState((prev) => ({ ...prev, province: e.target.value }))} />
-                <FormGroup label={content.locality} value={state.locality} onChange={(e) => setState((prev) => ({ ...prev, locality: e.target.value }))} />
-                <FormGroup label={content.postalCode} value={state.postalCode} onChange={(e) => setState((prev) => ({ ...prev, postalCode: e.target.value }))} />
-                <FormGroup
-                  label={content.gender}
-                  type="select"
-                  value={state.gender}
-                  onChange={(e) => setState((prev) => ({ ...prev, gender: e.target.value }))}
-                  options={[content.male, content.female, content.other]}
-                />
-                <button type="submit" className="submit-button" onClick={() => setState((prev) => ({ ...prev, confirmModifications: true }))}>
-                  {content.saveChanges}
-                </button>
-              </div>
-            </form>
-            {state.message && <p className="message">{state.message}</p>}
           </div>
         </div>
-      </div>
 
-      {/* Modal components */}
-      <ChangePassword language={language} isOpen={state.isChangePasswordModalOpen} onClose={() => setState((prev) => ({ ...prev, isChangePasswordModalOpen: false }))} />
-      <ConfirmModifications
-        notConfirmed={state.confirmModifications}
-        confirmed={() => setState((prev) => ({ ...prev, confirmModifications: false }))}
-        firstName={state.firstName}
-        lastName={state.lastName}
-        email={state.email}
-        phone={state.phone}
-        dni={state.dni}
-        address={state.address}
-        nationality={state.nationality}
-        province={state.province}
-        locality={state.locality}
-        birthDate={state.birthDate}
-        postalCode={state.postalCode}
-        gender={state.gender}
-        message={state.message}
-        language={language}
-      />
-      <DeleteAccount setView={setView} setIsLogged={setIsLogged} Delete={state.deleteAccount} del={() => setState((prev) => ({ ...prev, deleteAccount: false }))} language={language} />
-      <MyDiagnoses isOpen={state.myDiagnoses} onClose={() => setState((prev) => ({ ...prev, myDiagnoses: false }))} language={language} />
+        {/* Modal components */}
+        <ChangePassword language={language} isOpen={state.isChangePasswordModalOpen} onClose={() => setState((prev) => ({ ...prev, isChangePasswordModalOpen: false }))} />
+        <ConfirmModifications
+          notConfirmed={state.confirmModifications}
+          confirmed={() => setState((prev) => ({ ...prev, confirmModifications: false }))}
+          firstName={state.firstName}
+          lastName={state.lastName}
+          email={state.email}
+          phone={state.phone}
+          dni={state.dni}
+          address={state.address}
+          nationality={state.nationality}
+          province={state.province}
+          locality={state.locality}
+          birthDate={state.birthDate}
+          postalCode={state.postalCode}
+          gender={state.gender}
+          message={state.message}
+          language={language}
+        />
+        <DeleteAccount setView={setView} setIsLogged={setIsLogged} Delete={state.deleteAccount} del={() => setState((prev) => ({ ...prev, deleteAccount: false }))} language={language} />
+        <MyDiagnoses isOpen={state.myDiagnoses} onClose={() => setState((prev) => ({ ...prev, myDiagnoses: false }))} language={language} />
+      </div>
     </section>
   );
 };

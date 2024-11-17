@@ -36,6 +36,7 @@ function App() {
   const [view, setView] = useState("home");
   const [language, setLanguage] = useState('en');
   const [isLogged, setIsLogged] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState("null");
 
   const toggleLoginState = () => setIsLogged(!isLogged);
   const toggleForm = (formName) => setView(formName);
@@ -53,26 +54,24 @@ function App() {
       document.removeEventListener('scroll', setupNavMenuScrollspy);
     };
   }, []);
-
+  
   const renderView = () => {
     switch (view) {
       case "login":
-        return <Login setView={setView} setIsLogged={setIsLogged} language={language} />;
+        return <Login setView={setView} setIsLogged={setIsLogged} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "register":
-        return <Register setView={setView} language={language} />;
+        return <Register setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "xrayService":
-        return isLogged ? <XrayService setView={setView} language={language}/> : <Alert setView={setView} language={language}/>;
+        return isLogged ? <XrayService setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/> : <Alert setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "account":
-        return <Account setView={setView} setIsLogged={setIsLogged} language={language}/>;
-      case "Alert":
-        return <Alert setView={setView} language={language} />;
+        return <Account setView={setView} setIsLogged={setIsLogged} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "home":
       default:
         return (
-          <div>
+          <div className={isTransitioning=="in" ? "transitionIn-active" : ""}>
             <main className="main">
-              <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} />
-              <HeroSection setView={setView} language={language} />
+              <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning} />
+              <HeroSection setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>
               <About language={language}/>
               <ServicesSection language={language}/>
               <Doctors language={language}/>

@@ -37,10 +37,10 @@ export const useObtainData = (token, decodedToken, isExpired, setFirstName, setL
             setGender(data.gender);
             setImageUrl(data.imagePatient);
           } else {
-            setMessage('No se pudo obtener los datos');
+            //setMessage('No se pudo obtener los datos');
           }
         } catch (error) {
-          setMessage('Error al obtener los datos');
+          //setMessage('Error al obtener los datos');
         }
       }
     };

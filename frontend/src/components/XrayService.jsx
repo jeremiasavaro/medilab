@@ -44,7 +44,7 @@ const DoctorTable = ({ doctors, content, tableRef }) => (
   </div>
 );
 
-const XrayService = ({ setView, language }) => {
+const XrayService = ({ setView, language, setIsTransitioning, isTransitioning }) => {
   const [state, setState] = useState({
     message: '',
     openSection: '',
@@ -152,52 +152,62 @@ const XrayService = ({ setView, language }) => {
 
   const { content, data } = state;
 
+  const handleTransitionOut = (targetView) => {
+    setIsTransitioning("out");
+    setTimeout(() => {
+      setIsTransitioning("null");
+      setView(targetView); 
+    }, 1500); 
+  };
+
   return (
     <section id="xray-section" className="contentXray">
-      <BackButton onClick={() => setView('home')} label={content.backButton} />
-      <header className="title">
-        {content.sectionTitle}
-        <button className="toggle-button" onClick={() => openOverlaySection('info')}>
-          <i className="bi-info-circle-fill"></i> {content.info}
-        </button>
-      </header>
-      <div className="xrayServices-container">
-        <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
-
-        {state.imageUrl && (
-          <>
-            <div className="xray-pic-container">
-              <img src={state.imageUrl} className="xray-pic" alt="Uploaded" />
-            </div>
-            <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
-              <i className="fa-solid fa-expand"></i> {content.startScanning}
-            </button>
-            {state.isScanning && <Spinner content={content} />}
-            <br />
-            {state.pdfBlob && (
-              <button className="download-button" onClick={handleDownloadClick}>
-                <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
-              </button>
-            )}
-            <button className="download-button" onClick={() => document.getElementById('change-file-button').click()} >
-              {content.changeXRay}
-            </button>
-            <input id="change-file-button" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
-          </>
-        )}
-
-        {state.isUploadVisible && (
-          <button className="download-button" onClick={() => document.getElementById('xray-upload').click()}>
-            {content.uploadXRay}
+      <div className={isTransitioning=="out" ? "transitionOut-active" : "contentXray"}>
+        <BackButton onClick={() => setView('home')} label={content.backButton} />
+        <header className="title">
+          {content.sectionTitle}
+          <button className="toggle-button" onClick={() => openOverlaySection('info')}>
+            <i className="bi-info-circle-fill"></i> {content.info}
           </button>
+        </header>
+        <div className="xrayServices-container">
+          <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+
+          {state.imageUrl && (
+            <>
+              <div className="xray-pic-container">
+                <img src={state.imageUrl} className="xray-pic" alt="Uploaded" />
+              </div>
+              <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
+                <i className="fa-solid fa-expand"></i> {content.startScanning}
+              </button>
+              {state.isScanning && <Spinner content={content} />}
+              <br />
+              {state.pdfBlob && (
+                <button className="download-button" onClick={handleDownloadClick}>
+                  <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
+                </button>
+              )}
+              <button className="download-button" onClick={() => document.getElementById('change-file-button').click()} >
+                {content.changeXRay}
+              </button>
+              <input id="change-file-button" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+            </>
+          )}
+
+          {state.isUploadVisible && (
+            <button className="download-button" onClick={() => document.getElementById('xray-upload').click()}>
+              {content.uploadXRay}
+            </button>
+          )}
+
+          {doctors && state.showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
+        </div>
+
+        {state.openSection === 'info' && (
+          <OverlaySection content={data} closeOverlaySection={closeOverlaySection} />
         )}
-
-        {doctors && state.showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
       </div>
-
-      {state.openSection === 'info' && (
-        <OverlaySection content={data} closeOverlaySection={closeOverlaySection} />
-      )}
     </section>
   );
 };
