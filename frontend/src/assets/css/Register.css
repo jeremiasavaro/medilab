@@ -19,6 +19,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: white;
   font-family: 'Poppins', sans-serif;
+  color: #000000;
 }
 
 .register-container h2 {
@@ -51,7 +52,6 @@ button {
   font-size: 16px;
   cursor: pointer;
   font-weight: 700;
-  margin-top: 20px;
 }
 
 button:hover {

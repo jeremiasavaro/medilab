@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 from .database import db
 from .models import *
 from sqlalchemy.orm import *
@@ -65,6 +65,7 @@ def modify_patient(patient_data):
         date_obj = datetime.strptime(patient_data['birthDate'], '%Y-%m-%d').date()
     except ValueError:
         date_obj = datetime.strptime(patient_data['birthDate'], '%a, %d %b %Y %H:%M:%S %Z').date()
+
     if patient:
         patient.first_name = patient_data['firstName']
         patient.last_name = patient_data['lastName']

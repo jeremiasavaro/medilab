@@ -139,21 +139,52 @@ const Contact = ({ setView, isLogged, language }) => {
 
           <div className="col-lg-8">
             <form onSubmit={handleContact}>
-              <div className="row gy-4">
-                <ContentForm divClass={"col-md-6"} inp={"text"} val={firstName} handleChange={(e) => setFirstName(e.target.value)} ph={content.firstName} />
-                <ContentForm divClass={"col-md-6"} inp={"text"} val={lastName} handleChange={(e) => setLastName(e.target.value)} ph={content.lastName} />
-                <ContentForm divClass={"col-md-12"} inp={"email"} val={email} handleChange={(e) => setEmail(e.target.value)} ph={content.userEmail} name={"email"}/>
-                <ContentForm divClass={"col-md-12"} inp={"text"} val={subject} handleChange={(e) => setSubject(e.target.value)} ph={content.subject} name={"subject"}/>
-                <div className="col-md-12">
-                  <textarea
-                      value={userMessage}
-                      onChange={(e) => setUserMessage(e.target.value)}
-                      className="form-control" name="message" rows="6" placeholder={content.message} required></textarea>
-                </div>
-                <div className="col-md-12 text-center">
-                  <button type="submit">{content.sendMessage}</button>
-                </div>
+            <div className="row gy-4">
+              <ContentForm
+                divClass={"col-md-6"}
+                inp={"text"}
+                val={isLogged ? firstName : ''}
+                handleChange={(e) => setFirstName(e.target.value)}
+                ph={content.firstName}
+              />
+              <ContentForm
+                divClass={"col-md-6"}
+                inp={"text"}
+                val={isLogged ? lastName : ''}
+                handleChange={(e) => setLastName(e.target.value)}
+                ph={content.lastName}
+              />
+              <ContentForm
+                divClass={"col-md-12"}
+                inp={"email"}
+                val={isLogged ? email : ''}
+                handleChange={(e) => setEmail(e.target.value)}
+                ph={content.userEmail}
+                name={"email"}
+              />
+              <ContentForm
+                divClass={"col-md-12"}
+                inp={"text"}
+                val={isLogged ? subject : ''}
+                handleChange={(e) => setSubject(e.target.value)}
+                ph={content.subject}
+                name={"subject"}
+              />
+              <div className="col-md-12">
+                <textarea
+                  value={userMessage}
+                  onChange={(e) => setUserMessage(e.target.value)}
+                  className="form-control"
+                  name="message"
+                  rows="6"
+                  placeholder={content.message}
+                  required
+                ></textarea>
               </div>
+              <div className="col-md-12 text-center">
+                <button type="submit">{content.sendMessage}</button>
+              </div>
+            </div>
             </form>
           </div>
         </div>

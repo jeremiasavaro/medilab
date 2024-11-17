@@ -6,117 +6,176 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
     color: white;
-    overflow: auto; /* Permite el desplazamiento */
+    overflow: auto;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content-diagnoses {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
     width: 900px;
-    max-width: 60%; 
-    font-family: 'Poppins', sans-serif;
+    max-width: 60%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     text-align: center;
-    max-height: 80%; /* Limita la altura máxima */
-    overflow-y: auto; /* Permite el desplazamiento vertical */
+    max-height: 80%;
+    overflow-y: auto;
+    color: #333;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.h1-myDiagnoses {
+    color: #333;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+}
+
+.h1-myDiagnoses::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 60px;
+    height: 4px;
+    background-color: #0580df;
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(0, 128, 255, 0.6);
 }
 
 .diagnoses-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    justify-content: center;
+    align-items: center;
 }
 
 .diagnosis-card {
     display: flex;
+    align-items: center;
     background: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    align-items: center; /* Centra verticalmente los elementos en el card */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 800px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.diagnosis-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .diagnosis-image {
     flex-shrink: 0;
-    margin-right: 20px; /* Añade espacio a la derecha de la imagen */
-    padding-top: 45px;
-    padding-left: 15px;
+    margin-right: 20px;
+    padding-top: 50px;
+    padding-left: 10px;
 }
 
 .diagnosis-image img {
-    width: 100px; /* Tamaño de la imagen */
+    width: 100px;
     height: 100px;
-    border-radius: 2px; /* Bordes redondeados */
-    object-fit: cover; /* Asegura que la imagen mantenga su proporción */
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.diagnosis-image img:hover {
+    transform: scale(1.1);
 }
 
 .diagnosis-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centra el texto verticalmente en el card */
     text-align: left;
+    flex-grow: 1;
+    color: #444;
 }
 
 .diagnosis-info p {
-    color: black;
     margin: 5px 0;
+    font-size: 15px;
 }
 
-.form-group {
-    margin-bottom: 20px;
+.download-button {
+    background-color: #0580df;
+    color: #fff;
+    border: none;
+    width: 130px;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
+.download-button:hover {
+    background-color: #036bb5;
+    transform: translateY(-2px);
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Para los inputs de una sola columna, como el textarea */
-.form-group.full-width {
-    grid-column: span 2; /* Hace que ocupe las dos columnas */
+.download-button i {
+    margin-right: 5px;
 }
 
 .modal-buttons {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    font-family: 'Poppins', sans-serif;
+    justify-content: flex-end;
+    margin-top: 15px;
 }
 
 .modal-buttons button {
-    margin-right: 10px; 
+    background-color: #555;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
 }
 
-.modal-buttons button:last-child {
-    margin-right: 0; 
+.modal-buttons button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
 }
 
-.message{
+.message {
     margin-top: 15px;
     color: #e74c3c;
-    width: 100%;
-    justify-content: center;
     text-align: center;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-.h1-myDiagnoses {
-    color: black;
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
+}
+
+.modal-overlay-diagnoses.closing .modal-content-diagnoses {
+    animation: fadeOut 0.3s ease-in-out forwards;
 }
