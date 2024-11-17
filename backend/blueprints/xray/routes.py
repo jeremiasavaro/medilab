@@ -1,3 +1,4 @@
+#backend\blueprints\xray\routes.py
 from flask import request, send_file, jsonify, make_response
 from utils import *
 from .__init__ import *
@@ -18,9 +19,10 @@ repo_id = "MatiasPellizzari/Xray"
 models_info = {
     "pneumonia": ("Xray/modelo_vgg16_finetuned_neumonia.h5", "keras"),
     "pneumonia_2": ("Xray/trained_model_svm_pneumonia.pkl", "svm"),
+    "tuberculosis": ("Xray/modelo_vgg16_finetuned_tuberculosis.h5", "keras"), 
+    "tuberculosis_2": ("Xray/trained_model_svm_tuberculosis.pkl", "svm"),
     "covid": ("Xray/modelo_vgg16_finetuned_covid.h5", "keras"),
-    "tuberculosis": ("Xray/trained_model_svm_tuberculosis.pkl", "svm"),
-    # "tuberculosis_2": "Xray/modelo_vgg16_finetuned_tuberculosis.keras" NOT WORKING
+    "covid_2": ("Xray/trained_model_svm_covid.pkl", "svm"),
 }
 
 # Function to load models based on their type (Keras or SVM)
@@ -62,44 +64,64 @@ def predict_image(model, image, model_type):
         normal_percentage = classes[0][1] * 100
     else:
         raise ValueError(f"Model type '{model_type}' not supported.")        
-
-    print(f"Disease Percentage: {disease_percentage}, Normal Percentage: {normal_percentage}")
+    
+    usado= "VGG16" if model_type == "keras" else "SVM"
+    print(f"In {usado} Disease Percentage: {disease_percentage}, Normal Percentage: {normal_percentage}")
     return disease_percentage, normal_percentage
-
 
 
 @xray.route('/xray_diagnosis', methods=['POST'])
 def xray_diagnosis():
-    # Ensure 'image_url' is provided in the form data
     if 'image_url' not in request.form:
         return make_response({'error': 'No image_url provided'}, 400)
 
-    # Load and preprocess the image from the provided URL
     image_url = request.form['image_url']
     image = load_image(image_url)
-    
     diseases_accepted = []
 
-    for model_name, model in models.items():
-        model_type = models_info[model_name][1]  # Get the model type ('svm' or 'keras')
+    # Umbrales
+    primary_threshold = 70
+    secondary_threshold = 85
+
+
+    for disease in ["pneumonia", "tuberculosis", "covid"]:
+        primary_model_name = f"{disease}"
+        secondary_model_name = f"{disease}_2"
+        
+        # Chequeo primario
+        primary_model = models[primary_model_name]
+        model_type = models_info[primary_model_name][1]
         preprocess_function = preprocess_image_svm if model_type == "svm" else preprocess_image_h5
         processed_image = preprocess_function(image)
+        primary_disease_percentage, primary_normal_percentage = predict_image(primary_model, processed_image, model_type)
         
-        # Log model information for debugging
-        print(f"Processing model '{model_name}' with type '{model_type}'.")
+        if primary_disease_percentage > primary_threshold:
+            diseases_accepted.append((disease, primary_disease_percentage))
+            print(f"El modelo principal detectó enfermedad con un porcentaje de: {primary_disease_percentage}")
+            print("")
+        else:
+            # Chequeo secundario si el modelo principal no detecta enfermedad
+            secondary_model = models[secondary_model_name]
+            model_type_secondary = models_info[secondary_model_name][1]
+            preprocess_function_secondary = preprocess_image_svm if model_type_secondary == "svm" else preprocess_image_h5
+            processed_image_secondary = preprocess_function_secondary(image)
+            secondary_disease_percentage, _ = predict_image(secondary_model, processed_image_secondary, model_type_secondary)
 
-        # Call predict_image with the correct model type
-        try:
-            disease_percentage, normal_percentage = predict_image(model, processed_image, model_type)
-        except ValueError as e:
-            print(f"Error in predict_image: {e}")
-            return make_response({'error': str(e)}, 500)
+            # Promedio si el modelo secundario detecta enfermedad con un porcentaje alto
+            if secondary_disease_percentage > secondary_threshold:
+                avg_disease_percentage = (primary_disease_percentage + secondary_disease_percentage) / 2
+                if avg_disease_percentage > primary_threshold:
+                    print(f"El modelo secundario detectó enfermedad con promedio de modelo de {avg_disease_percentage}")
+                    print("")
+                    diseases_accepted.append((disease, avg_disease_percentage))
+                else:
+                    print(f"No se detectó enfermedad")
+                    print("")
+            else:
+                print(f"No se detectó enfermedad")
+                print("")
 
-        if disease_percentage > 80:
-            diseases_accepted.append((disease_percentage, normal_percentage, model_name))
-            print(f"{model_name.upper()}: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%")
-
-    # Decode the user token and check patient information
+    # Generación de PDF si hay enfermedades detectadas
     encoded_token = request.headers.get('Authorization')
     decoded_token, error_response = decode_token(encoded_token)
     if error_response:
@@ -113,15 +135,13 @@ def xray_diagnosis():
     patient_name = f"{patient.first_name} {patient.last_name}"
     diagnosis_date = datetime.today()
 
-    pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, "healthy", disease_percentage if diseases_accepted else 0,normal_percentage)
-    if not diseases_accepted:
-        insert_diagnostic("healthy", "healthy", image_url, dni)
+    if diseases_accepted:
+        #This function is not working properly, change the form of generation pdf
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, diseases_accepted)  # Disease percentages are included in diseases_accepted
+        for disease, percentage in diseases_accepted:
+            insert_diagnostic(disease, f"{percentage:.2f}%", image_url, dni)
     else:
-        for diagnosis in diseases_accepted:
-            disease_percentage, normal_percentage, model_name = diagnosis
-            res = f"{model_name.upper()}: {disease_percentage:.2f}%"
-            pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, model_name, disease_percentage,normal_percentage)
-            des = f"{model_name.upper()}: {disease_percentage:.2f}%, NORMAL: {normal_percentage:.2f}%"
-            insert_diagnostic(res, des, image_url, dni)
+        pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, [])
+        insert_diagnostic("healthy", "healthy", image_url, dni)
 
     return send_file(pdf_buffer, as_attachment=True, download_name=f"{dni}-{diagnosis_date}-{patient_name}.pdf", mimetype='application/pdf')

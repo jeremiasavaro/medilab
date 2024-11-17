@@ -16,7 +16,7 @@ def obtain_user_data():
     dni = decoded_token.get('dni')
     patient_data = get_patient(dni)
     if not patient_data:
-        return make_response({'error': 'Usuario no encontrado'}, 404)
+        return make_response({'error': 'User not found'}, 404)
 
     print(patient_data.date_birth)
 

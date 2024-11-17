@@ -1,61 +1,111 @@
 import React, { useEffect, useState } from 'react';
 import "../assets/css/myDiagnoses.css";
+import { useJwt } from "react-jwt";
+import { useToken } from '../hooks/useToken';
+import { useObtainData } from '../hooks/useObtainData';
+import xrayData from '../assets/components-data/xrayServiceData.json';
 
-const MyDiagnoses = ({ isOpen, onClose }) => {
-    const [myDiagnoses, setMyDiagnoses] = useState([]);
-    const [message, setMessage] = useState('');
+const MyDiagnoses = ({ isOpen, onClose, language }) => {
+  const [myDiagnoses, setMyDiagnoses] = useState([]);
+  const [message, setMessage] = useState('');
+  const [messageData, setMessageData] = useState('');
+  const [dni, setDni] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const { token, messageToken } = useToken();
+  const { decodedToken, isExpired } = useJwt(token);
+  const [content, setContent] = useState(xrayData[language]);
+  const [pdfBlob, setPdfBlob] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);  // Estado para controlar la animación de cierre
 
-    // Usa useEffect sin condiciones y controla el fetch dentro de él
-    useEffect(() => {
-        const fetchMyDiagnoses = async () => {
-            if (!isOpen) return; // Solo realiza la llamada si el modal está abierto
-            try {
-                const response = await fetch('http://127.0.0.1:5000/inquiries/my_diagnoses');
-                const data = await response.json();
-                setMyDiagnoses(data);
-            } catch (error) {
-                console.error('Error fetching my diagnoses:', error);
-                setMessage('Error fetching diagnoses'); 
-            }
-        };
+  useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
 
-        fetchMyDiagnoses();
-    }, [isOpen]); // useEffect depende de isOpen
+  useEffect(() => {
+    if (token && decodedToken && isOpen) {
+      const fetchMyDiagnoses = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:5000/inquiries/my_diagnoses', {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+            },
+          });
 
-    // Si no está abierto, retorna null directamente
-    if (!isOpen) return null;
+          if (!response.ok) {
+            throw new Error(`Failed to fetch diagnoses. Status: ${response.status} - ${response.statusText}`);
+          }
 
-    return (
-        <div className="modal-overlay-diagnoses">
-          <div className="modal-content-diagnoses">
-            <h1 className='h1-myDiagnoses'><b>Diagnoses of patient with DNI ...</b></h1>
-            <br />
-            {message && <p className="message">{message}</p>}
-            <div className="diagnoses-grid">
-              {myDiagnoses.map((diagnosis, index) => (
-                <div key={index} className="diagnosis-card">
-                  {diagnosis.image_diagnostic && (
-                    <div className="diagnosis-image">
-                      <img
-                        src={diagnosis.image_diagnostic}
-                        className="profile-pic"
-                        alt="Uploaded"
-                      />
-                    </div>
-                  )}
-                  <div className="diagnosis-info">
-                    <p><b>DNI:</b> {diagnosis.dni}</p>
-                    <p><b>Date:</b> {diagnosis.date_result}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="modal-buttons">
-              <button type="button" onClick={onClose}>Back</button>
-            </div>
-          </div>
-        </div>
-      );
+          const data = await response.json();
+          console.log("Received data:", data);
+
+          setMyDiagnoses(Array.isArray(data) ? data : []);
+        } catch (error) {
+          console.error('Error fetching my diagnoses:', error);
+          setMessage(`Error fetching diagnoses: ${error.message}`);
+          setMyDiagnoses([]);
+        }
+      };
+
+      fetchMyDiagnoses();
     }
-    
+  }, [isOpen, token, decodedToken]);
+
+  const handleDownloadClick = () => {
+    if (!pdfBlob) return;
+
+    const url = window.URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'diagnosis.pdf');
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  };
+
+  const handleClose = () => {
+    setIsClosing(true);  // Activa la animación de salida
+    setTimeout(() => {
+      setIsClosing(false);  // Resetea el estado después de la animación
+      onClose();            // Llama a la función de cierre
+    }, 300);  // Tiempo en milisegundos de la animación de salida
+  };
+
+  if (!isOpen && !isClosing) return null;  // Retorna null si no está abierto o en animación de cierre
+
+  return (
+    <div className={`modal-overlay-diagnoses ${isClosing ? 'closing' : ''}`}>
+      <div className="modal-content-diagnoses">
+        <h1 className='h1-myDiagnoses'><b>Diagnoses of patient {firstName} {lastName} with DNI: {dni}</b></h1>
+        <br />
+        {message && <p className="message">{message}</p>}
+        <div className="diagnoses-grid">
+          {myDiagnoses.map((diagnosis, index) => (
+            <div key={index} className="diagnosis-card">
+              {diagnosis.image_diagnostic && (
+                <div className="diagnosis-image">
+                  <img
+                    src={diagnosis.image_diagnostic}
+                    className="profile-pic"
+                    alt="Uploaded"
+                  />
+                </div>
+              )}
+              <div className="diagnosis-info">
+                <p><b>Date:</b> {new Date(diagnosis.date_result).toLocaleDateString()}</p>
+              </div>
+              <button className="download-button" onClick={handleDownloadClick}>
+                <i className="fa-regular fa-file-pdf"></i> Download PDF
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="modal-buttons">
+          <button type="button" onClick={handleClose}>Back</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default MyDiagnoses;

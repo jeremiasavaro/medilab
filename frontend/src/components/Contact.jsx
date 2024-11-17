@@ -3,7 +3,7 @@ import { useJwt } from "react-jwt";
 import contactData from '../assets/components-data/contactData.json';
 import { useObtainData } from "../hooks/useObtainData";
 
-function InfoItem({aosDelay, h3, p}) {
+function InfoItem({aosDelay, h3, p }) {
   return (
     <div className="info-item d-flex" data-aos="fade-up" data-aos-delay={aosDelay}>
       <i className="bi bi-telephone flex-shrink-0"></i>
@@ -37,6 +37,7 @@ function ContentForm({divClass, inp, val, handleChange, ph, name}) {
   }
   
 }
+
 const Contact = ({ setView, isLogged, language }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

@@ -8,7 +8,7 @@ import cloudinary.uploader
 load_dotenv()
 
 class Config(object):
-    #Configuracion comun para todos los ambientes
+    #Configuracion común para todos los ambientes
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -21,10 +21,10 @@ class DevelopmentConfig(Config):
     SECRET_KEY = os.getenv('SECRET_KEY')
     DEBUG = True
 
-
-class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+class TestingConfig:
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SECRET_KEY = os.getenv('SECRET_KEY')
     DEBUG = False
 
 config = {

@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 from .database import db
 from .models import *
 from sqlalchemy.orm import *
