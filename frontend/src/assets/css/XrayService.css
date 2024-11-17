@@ -56,8 +56,8 @@ body::before {
 /* Header */
 .title {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   background-color: #0580df;
   color: #f9f9f9;
@@ -84,6 +84,26 @@ body::before {
   width: 100px;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Botones */
+.scan-button,
+.download-button {
+  width: 400px;
+  margin: 7px 0;
+  padding: 10px;
+  background-color: #0580df;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.scan-button:hover,
+.download-button:hover {
+  background-color: #005bb5;
 }
 
 .toggle-button:hover {
