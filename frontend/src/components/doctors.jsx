@@ -5,36 +5,15 @@ import Carousel from 'react-bootstrap/Carousel';
 import imgMale from '../assets/img/doctors/docMale.png';
 import imgFemale from '../assets/img/doctors/docFemale.webp';
 import texts from "../assets/components-data/doctorsData.json";
+import { useGetDoctors } from '../hooks/useGetDoctors';
 
 function Doctors({language}) {
-  const [doctors, setDoctors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {doctors, mesaggeDoctors} = useGetDoctors();
   const [content, setContent] = useState(texts[language]);
 
   useEffect(() => {
     setContent(texts[language]); 
   }, [language]);
-
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/inquiries/doctors'); 
-        const data = await response.json();
-        console.log('Doctors data:', data);
-        setDoctors(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching doctors:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchDoctors();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <section id="doctors" className="doctors section">
@@ -44,7 +23,7 @@ function Doctors({language}) {
       </div>
 
       <Carousel controls={true} indicators={false} interval={null}>
-        {doctors.map((doctor, index) => {
+        {doctors && doctors.map((doctor, index) => {
           if (index % 2 !== 0) return null;
             return (
             <Carousel.Item key={doctor.id}>

@@ -16,7 +16,7 @@ def obtain_user_data():
     dni = decoded_token.get('dni')
     patient_data = get_patient(dni)
     if not patient_data:
-        return make_response({'error': 'Usuario no encontrado'}, 404)
+        return make_response({'error': 'User not found'}, 404)
 
     print(patient_data.date_birth)
 
@@ -53,11 +53,23 @@ def account():
     if not user or not bcrypt.checkpw(data['currentPassword'].encode('utf-8'), bytes(get_password(data['dni']))):
         return make_response({'error': 'Actual password isn\'t correct'}, 400)
 
-    modify_patient(
-        data['dni'], data['firstName'], data['lastName'], data['email'],
-        data['phone'], data['birthDate'], data['nationality'], data['province'],
-        data['locality'], data['postalCode'], data['address'], data['gender']
-    )
+    patient_data = {
+        'dni': data['dni'],
+        'firstName': data['firstName'],
+        'lastName': data['lastName'],
+        'email': data['email'],
+        'phone': data['phone'],
+        'birthDate': data['birthDate'],
+        'nationality': data['nationality'],
+        'province': data['province'],
+        'locality': data['locality'],
+        'postalCode': data['postalCode'],
+        'address': data['address'],
+        'gender': data['gender']
+    }
+
+
+    modify_patient(patient_data)
     return make_response({'message': 'Data modified successfully'}, 200)
 
 # Endpoint used for changing the password

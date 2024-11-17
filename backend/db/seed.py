@@ -24,6 +24,18 @@ doctors = [
 
 
 with app.app_context():
+    remove_doctors()
     for doctor in doctors:
-        insert_doctor(*doctor)
-
+        # Convertir la tupla en un diccionario con las claves correctas
+        doctor_data = {
+            'dni': doctor[0],
+            'speciality': doctor[1],
+            'firstName': doctor[2],
+            'lastName': doctor[3],
+            'email': doctor[4],
+            'phoneNumber': doctor[5],
+            'dateBirth': doctor[6],
+            'gender': doctor[7]
+        }
+        insert_doctor(doctor_data)
+    print("Doctors inserted successfully")

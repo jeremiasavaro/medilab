@@ -3,25 +3,24 @@ from .database import db
 from .models import *
 from sqlalchemy.orm import *
 
-def insert_patient(dni, first_name, last_name, encrypted_password, email, phone_number, date_birth, nationality,
-                   province, locality, postal_code, address, gender):
-    date_birth_obj = datetime.strptime(date_birth, "%Y-%m-%d").date()
+def insert_patient(patient_data):
+    date_birth_obj = datetime.strptime(patient_data['birthDate'], "%Y-%m-%d").date()
 
     new_patient = Patient(
-        dni=dni,
-        first_name=first_name,
-        last_name=last_name,
-        password=encrypted_password,
-        email=email,
-        phone_number=phone_number,
+        dni=patient_data['dni'],
+        first_name=patient_data['firstName'],
+        last_name=patient_data['lastName'],
+        password=patient_data['password'],
+        email=patient_data['email'],
+        phone_number=patient_data['phone'],
         date_birth=date_birth_obj,
         age=calculate_age(date_birth_obj),
-        nationality=nationality,
-        province=province,
-        locality=locality,
-        postal_code=postal_code,
-        address=address,
-        gender=gender,
+        nationality=patient_data['nationality'],
+        province=patient_data['province'],
+        locality=patient_data['locality'],
+        postal_code=patient_data['postalCode'],
+        address=patient_data['address'],
+        gender=patient_data['gender'],
         image_patient=None
     )
     db.session.add(new_patient)
@@ -59,29 +58,27 @@ def modify_image_patient(dni, imagePatient):
         db.session.commit()
 
 
-def modify_patient(dni, firstName, lastName, email, phoneNumber, date_birth, nationality, province, locality,
-                   postalCode, address, gender, imagePatient=None):
-    patient = Patient.query.filter_by(dni=dni).first()
+def modify_patient(patient_data):
+    patient = Patient.query.filter_by(dni=patient_data['dni']).first()
 
     try:
-        date_obj = datetime.strptime(date_birth, '%Y-%m-%d').date()
+        date_obj = datetime.strptime(patient_data['birthDate'], '%Y-%m-%d').date()
     except ValueError:
-        date_obj = datetime.strptime(date_birth, '%a, %d %b %Y %H:%M:%S %Z').date()
-
+        date_obj = datetime.strptime(patient_data['birthDate'], '%a, %d %b %Y %H:%M:%S %Z').date()
     if patient:
-        patient.first_name = firstName
-        patient.last_name = lastName
-        patient.email = email
-        patient.phone_number = phoneNumber
+        patient.first_name = patient_data['firstName']
+        patient.last_name = patient_data['lastName']
+        patient.email = patient_data['email']
+        patient.phone_number = patient_data['phone']
         patient.date_birth = date_obj
         patient.age = calculate_age(date_obj)
-        patient.nationality = nationality
-        patient.province = province
-        patient.locality = locality
-        patient.postal_code = postalCode
-        patient.address = address
-        patient.gender = gender
-        patient.image_patient = imagePatient
+        patient.nationality = patient_data['nationality']
+        patient.province = patient_data['province']
+        patient.locality = patient_data['locality']
+        patient.postal_code = patient_data['postalCode']
+        patient.address = patient_data['address']
+        patient.gender = patient_data['gender']
+        patient.image_patient = None
 
         db.session.commit()
 
@@ -140,20 +137,20 @@ def get_diagnostics_by_description(dni, description):
 
 
 # -------------------------------------------- Doctor Table functions --------------------------------------------
-def insert_doctor(dni, speciality, firstName, lastName, email, phoneNumber, dateBirth, gender):
+def insert_doctor(doctor_data):
     # Convertir la fecha de nacimiento de cadena a objeto datetime.date
-    date_birth = datetime.strptime(dateBirth, '%Y-%m-%d').date()
+    date_birth = datetime.strptime(doctor_data['dateBirth'], '%Y-%m-%d').date()
 
     new_doctor = Doctor(
-        dni=dni,
-        speciality=speciality,
-        first_name=firstName,
-        last_name=lastName,
-        email=email,
-        phone_number=phoneNumber,
+        dni=doctor_data['dni'],
+        speciality=doctor_data['speciality'],
+        first_name=doctor_data['firstName'],
+        last_name=doctor_data['lastName'],
+        email=doctor_data['email'],
+        phone_number=doctor_data['phoneNumber'],
         date_birth=date_birth,  # Usar el objeto de fecha
-        age=calculate_age(dateBirth),
-        gender=gender,
+        age=calculate_age(doctor_data['dateBirth']),
+        gender=doctor_data['gender'],
     )
     db.session.add(new_doctor)
     db.session.commit()
@@ -170,18 +167,18 @@ def delete_doctor(dni):
         print(f"Doctor with DNI {dni} not found")
 
 
-def modify_doctor(dni, speciality, firstName, lastName, email, phoneNumber, dateBirth, gender):
+def modify_doctor(doctor_data):
     doctor = Doctor.query.filter_by(dni=dni).first()
 
     if doctor:
-        doctor.speciality = speciality
-        doctor.first_name = firstName
-        doctor.last_name = lastName
-        doctor.email = email
-        doctor.phone_number = phoneNumber
-        doctor.date_birth = dateBirth
-        doctor.age = calculate_age(dateBirth)
-        doctor.gender = gender
+        doctor.speciality = doctor_data['speciality']
+        doctor.first_name = doctor_data['first_name']
+        doctor.last_name = doctor_data['last_name']
+        doctor.email = doctor_data['email']
+        doctor.phone_number = doctor_data['phone']
+        doctor.date_birth = doctor_data['phone']
+        doctor.age = calculate_age(doctor_data['dateBirth'])
+        doctor.gender = doctor_data['gender']
 
         db.session.commit()
 
@@ -225,14 +222,14 @@ def remove_doctors():
 
 
 # -------------------------------------------- Clinic Table functions --------------------------------------------
-def insert_clinic(name, phoneNumber, province, city, postalCode, address):
+def insert_clinic(clinic_data):
     new_clinic = Clinic(
-        name=name,
-        phone_number=phoneNumber,
-        province=province,
-        city=city,
-        postal_code=postalCode,
-        address=address,
+        name=clinic_data['name'],
+        phone_number=clinic_data['phoneNumber'],
+        province=clinic_data['province'],
+        city=clinic_data['city'],
+        postal_code=clinic_data['postalCode'],
+        address=clinic_data['address'],
     )
     db.session.add(new_clinic)
     db.session.commit()
@@ -249,16 +246,16 @@ def delete_clinic(name):
         print(f"Clinic with name {name} not found")
 
 
-def modify_clinic(name, phoneNumber, province, city, postalCode, address):
-    clinic = Clinic.query.filter_by(name=name).first()
+def modify_clinic(clinic_data):
+    clinic = Clinic.query.filter_by(name=clinic_data['name']).first()
 
     if clinic:
-        clinic.name = name
-        clinic.phone_number = phoneNumber
-        clinic.province = province
-        clinic.city = city
-        clinic.postal_code = postalCode
-        clinic.address = address
+        clinic.name = clinic_data['name']
+        clinic.phone_number = clinic_data['phoneNumber']
+        clinic.province = clinic_data['province']
+        clinic.city = clinic_data['city']
+        clinic.postal_code = clinic_data['postalCode']
+        clinic.address = clinic_data['address']
 
         db.session.commit()
 
