@@ -3,6 +3,7 @@ from .database import db
 from .models import *
 from sqlalchemy.orm import *
 
+# Insert a new patient into the database
 def insert_patient(patient_data):
     date_birth_obj = datetime.strptime(patient_data['birthDate'], "%Y-%m-%d").date()
 
@@ -26,7 +27,7 @@ def insert_patient(patient_data):
     db.session.add(new_patient)
     db.session.commit()
 
-
+# Delete a patient from the database by DNI
 def delete_patient(dni):
     patient = Patient.query.filter_by(dni=dni).first()
 
@@ -37,27 +38,26 @@ def delete_patient(dni):
     else:
         print(f"Patient with DNI {dni} not found")
 
-
-
+# Retrieve a patient from the database by DNI
 def get_patient(dni):
     patient = Patient.query.filter_by(dni=dni).first()
     return patient
 
-
+# Modify the password of a patient
 def modify_password(dni, newPassword):
     patient = Patient.query.filter_by(dni=dni).first()
     if patient:
         patient.password = newPassword
         db.session.commit()
 
-
+# Modify the image of a patient
 def modify_image_patient(dni, imagePatient):
     patient = Patient.query.filter_by(dni=dni).first()
     if patient:
         patient.image_patient = imagePatient
         db.session.commit()
 
-
+# Modify the details of a patient
 def modify_patient(patient_data):
     patient = Patient.query.filter_by(dni=patient_data['dni']).first()
 
@@ -83,21 +83,21 @@ def modify_patient(patient_data):
 
         db.session.commit()
 
-
+# Retrieve the password of a patient by DNI
 def get_password(dni):
     patient = Patient.query.filter_by(dni=dni).first()
     if patient:
         return patient.password
     return None  # Return None if no patient is found with the given DNI
 
-
+# Calculate the age of a patient based on their birth date
 def calculate_age(dateBirth):
     today = datetime.today()
     birth_date = dateBirth
 
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
-
+# Insert a new diagnostic into the database
 def insert_diagnostic(result, description, imageDiagnostic, dni, pdf_data):
     new_diagnostic = Diagnostic(
         res=result,
@@ -109,38 +109,28 @@ def insert_diagnostic(result, description, imageDiagnostic, dni, pdf_data):
     db.session.add(new_diagnostic)
     db.session.commit()
 
-
+# Retrieve all diagnostics for a patient by DNI
 def get_diagnostics(dni):
-    # testing = current_app.config.get('TESTING', False)
-
     diagnostics = Diagnostic.query.filter_by(dni=dni).all()
     return diagnostics
 
-
+# Retrieve diagnostics by code
 def get_diagnostics_by_code(cod):
-    # testing = current_app.config.get('TESTING', False)
-
     diagnostics = Diagnostic.query.filter_by(cod=cod).all()
     return diagnostics
 
-
+# Retrieve diagnostics by result for a patient
 def get_diagnostics_by_result(dni, result):
-    # testing = current_app.config.get('TESTING', False)
-
     diagnostics = Diagnostic.query.filter_by(dni=dni, result=result).all()
     return diagnostics
 
-
+# Retrieve diagnostics by description for a patient
 def get_diagnostics_by_description(dni, description):
-    # testing = current_app.config.get('TESTING', False)
-
     diagnostics = Diagnostic.query.filter_by(dni=dni, description=description).all()
     return diagnostics
 
-
-# -------------------------------------------- Doctor Table functions --------------------------------------------
+# Insert a new doctor into the database
 def insert_doctor(doctor_data):
-    # Convertir la fecha de nacimiento de cadena a objeto datetime.date
     date_birth = datetime.strptime(doctor_data['dateBirth'], '%Y-%m-%d').date()
 
     new_doctor = Doctor(
@@ -150,14 +140,14 @@ def insert_doctor(doctor_data):
         last_name=doctor_data['lastName'],
         email=doctor_data['email'],
         phone_number=doctor_data['phoneNumber'],
-        date_birth=date_birth,  # Usar el objeto de fecha
+        date_birth=date_birth,
         age=calculate_age(date_birth),
         gender=doctor_data['gender'],
     )
     db.session.add(new_doctor)
     db.session.commit()
 
-
+# Delete a doctor from the database by DNI
 def delete_doctor(dni):
     doctor = Doctor.query.filter_by(dni=dni).first()
 
@@ -168,7 +158,7 @@ def delete_doctor(dni):
     else:
         print(f"Doctor with DNI {dni} not found")
 
-
+# Modify the details of a doctor
 def modify_doctor(doctor_data):
     doctor = Doctor.query.filter_by(dni=dni).first()
 
@@ -184,40 +174,30 @@ def modify_doctor(doctor_data):
 
         db.session.commit()
 
-
+# Retrieve all doctors from the database
 def get_doctors():
-    # testing = current_app.config.get('TESTING', False)
-
     doctors = Doctor.query.all()
     return doctors
 
-
+# Retrieve doctors by speciality
 def get_doctors_by_speciality(doctor_speciality):
-    # testing = current_app.config.get('TESTING', False)
-
     doctors = Doctor.query.filter_by(speciality=doctor_speciality).all()
     return doctors
 
-    conn.close()
-
-
+# Retrieve the cities where a doctor works
 def get_cities_for_doctor(doctor_dni):
-    # Query to fetch the cities where the doctor works
     doctor = Doctor.query.options(joinedload(Doctor.clinics)).filter_by(dni=doctor_dni).first()
 
-    # I doctor not found, return an empty list
     if not doctor:
         print(f"No doctor found with DNI {doctor_dni}")
         return []
 
-    # Extract city names from related clinics
     city_list = [clinic.city for clinic in doctor.clinics]
 
-    # Print and return the list of cities
     print(f"City list for doctor {doctor_dni}: {city_list}")
     return city_list
 
-
+# Remove all doctors from the database
 def remove_doctors():
     Doctor.query.delete()
     db.session.commit()

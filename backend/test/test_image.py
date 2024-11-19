@@ -82,7 +82,7 @@ def test_image_upload_invalid_token(client):
     assert response.status_code == 401
     assert response.json == {'error' : 'Token not found'}
 
-# Verificar si la respuesta de carga de imagen es correcta. Es decir, si la URL recibida corresponde con el formato esperado.
+# Check if the image upload response is correct. That is, if the URL received corresponds to the expected format.
 def test_image_upload_url_format(client):
     client.post('/auth/register', json=register_data) #simulates the registration of a new user
     # User login
@@ -104,4 +104,4 @@ def test_image_upload_url_format(client):
 
     assert response.status_code == 200
     assert 'http://cloudinary.com' in response.get_json().get('image_url')
-    ''' Se asegura de que la URL de la imagen que se devuelve en la respuesta esté correctamente formada. Comprueba que la respuesta contiene un campo 'image_url' con una URL que contiene 'http://cloudinary.com', lo que indica que la imagen fue cargada correctamente.'''
+    ''' Ensures that the image URL returned in the response is properly formed. Checks that the response contains an 'image_url' field with a URL containing 'http://cloudinary.com', indicating that the image was successfully uploaded.'''

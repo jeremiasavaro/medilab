@@ -287,7 +287,7 @@ def test_change_password_incorrect(client):
     assert response.json == {'error' : 'Actual password entered isn\'t correct'}
 
 
-# tests for endpoint deleteAccound 
+# tests for endpoint deleteAccount
 def test_delete_account(client):
     client.post('/auth/register', json=register_data)
 

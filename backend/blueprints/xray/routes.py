@@ -31,7 +31,7 @@ def load_model(filename, model_type):
     try:
         # Download model from Hugging Face
         local_model_path = hf_hub_download(repo_id=repo_id, filename=filename)
-        
+
         # Load SVM model
         if model_type == 'svm':
             model = joblib.load(local_model_path)
@@ -40,7 +40,7 @@ def load_model(filename, model_type):
             model = tf.keras.models.load_model(local_model_path, custom_objects=get_custom_objects())
         return model
     except Exception as e:
-        raise RuntimeError(f"Error loading model '{filename}': {e}")    
+        raise RuntimeError(f"Error loading model '{filename}': {e}")
 
 # Load all models at application startup to be available for requests
 try:
@@ -64,7 +64,7 @@ def predict_image(model, image, model_type):
         disease_percentage = classes[0][0] * 100
         normal_percentage = classes[0][1] * 100
     else:
-        raise ValueError(f"Model type '{model_type}' not supported.")        
+        raise ValueError(f"Model type '{model_type}' not supported.")
 
     usado= "VGG16" if model_type == "keras" else "SVM"
     print(f"In {usado} Disease Percentage: {disease_percentage}, Normal Percentage: {normal_percentage}")
@@ -82,7 +82,7 @@ def xray_diagnosis():
     image = load_image(image_url)
     diseases_accepted = []
 
-    # Umbrales
+    # Thresholds
     primary_threshold = 70
     secondary_threshold = 85
 
@@ -91,7 +91,7 @@ def xray_diagnosis():
         primary_model_name = f"{disease}"
         secondary_model_name = f"{disease}_2"
 
-        # Chequeo primario
+        # Primary check
         primary_model = models[primary_model_name]
         model_type = models_info[primary_model_name][1]
         preprocess_function = preprocess_image_svm if model_type == "svm" else preprocess_image_h5
@@ -100,31 +100,31 @@ def xray_diagnosis():
 
         if primary_disease_percentage > primary_threshold:
             diseases_accepted.append((disease, primary_disease_percentage))
-            print(f"El modelo principal detectó enfermedad con un porcentaje de: {primary_disease_percentage}")
+            print(f"The primary model detected disease with a percentage of: {primary_disease_percentage}")
             print("")
         else:
-            # Chequeo secundario si el modelo principal no detecta enfermedad
+            # Secondary check if the primary model does not detect disease
             secondary_model = models[secondary_model_name]
             model_type_secondary = models_info[secondary_model_name][1]
             preprocess_function_secondary = preprocess_image_svm if model_type_secondary == "svm" else preprocess_image_h5
             processed_image_secondary = preprocess_function_secondary(image)
             secondary_disease_percentage, _ = predict_image(secondary_model, processed_image_secondary, model_type_secondary)
 
-            # Promedio si el modelo secundario detecta enfermedad con un porcentaje alto
+            # Average if the secondary model detects disease with a high percentage
             if secondary_disease_percentage > secondary_threshold:
                 avg_disease_percentage = (primary_disease_percentage + secondary_disease_percentage) / 2
                 if avg_disease_percentage > primary_threshold:
-                    print(f"El modelo secundario detectó enfermedad con promedio de modelo de {avg_disease_percentage}")
+                    print(f"The secondary model detected disease with an average model of {avg_disease_percentage}")
                     print("")
                     diseases_accepted.append((disease, avg_disease_percentage))
                 else:
-                    print(f"No se detectó enfermedad")
+                    print(f"No disease detected")
                     print("")
             else:
-                print(f"No se detectó enfermedad")
+                print(f"No disease detected")
                 print("")
 
-    # Generación de PDF si hay enfermedades detectadas
+    # PDF generation if diseases are detected
     encoded_token = request.headers.get('Authorization')
     decoded_token, error_response = decode_token(encoded_token)
     if error_response:
@@ -139,7 +139,7 @@ def xray_diagnosis():
     diagnosis_date = datetime.today()
 
     if diseases_accepted:
-        #This function is not working properly, change the form of generation pdf
+        # This function is not working properly, change the form of generation pdf
         pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, diseases_accepted)  # Disease percentages are included in diseases_accepted
         print("PDF buffer size:", len(pdf_buffer.getvalue()))
         for disease, percentage in diseases_accepted:
