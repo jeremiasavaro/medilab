@@ -16,7 +16,6 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   const { token, messageToken } = useToken();
   const { decodedToken, isExpired } = useJwt(token);
   const [content, setContent] = useState(xrayData[language]);
-  const [pdfBlob, setPdfBlob] = useState(null);
   const [isClosing, setIsClosing] = useState(false);  // Estado para controlar la animación de cierre
 
   useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
@@ -33,16 +32,15 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
           });
 
           if (!response.ok) {
-            throw new Error(`Failed to fetch diagnoses. Status: ${response.status} - ${response.statusText}`);
+            throw new Error('Failed to fetch diagnoses. Status: ${response.status} - ${response.statusText}');
           }
 
           const data = await response.json();
           console.log("Received data:", data);
-
           setMyDiagnoses(Array.isArray(data) ? data : []);
         } catch (error) {
           console.error('Error fetching my diagnoses:', error);
-          setMessage(`Error fetching diagnoses: ${error.message}`);
+          setMessage(Error ('fetching diagnoses: ${error.message}'));
           setMyDiagnoses([]);
         }
       };
@@ -51,16 +49,29 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
     }
   }, [isOpen, token, decodedToken]);
 
-  const handleDownloadClick = () => {
-    if (!pdfBlob) return;
+  const handleDownloadClick = (pdfBase64) => {
+    if (!pdfBase64) {
+        alert("No PDF data available for download.");
+        return;
+    }
 
-    const url = window.URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'diagnosis.pdf');
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
+    try {
+        const base64Data = pdfBase64.includes(',') ? pdfBase64.split(',')[1] : pdfBase64;
+        const byteCharacters = atob(base64Data);        const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "diagnosis.pdf");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error("Error decoding PDF:", error);
+        alert("Failed to process PDF download.");
+    }
   };
 
   const handleClose = () => {
@@ -74,7 +85,7 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   if (!isOpen && !isClosing) return null;  // Retorna null si no está abierto o en animación de cierre
 
   return (
-    <div className={`modal-overlay-diagnoses ${isClosing ? 'closing' : ''}`}>
+      <div className={`modal-overlay-diagnoses ${isClosing ? 'closing' : ''}`}>
       <div className="modal-content-diagnoses">
         <h1 className='h1-myDiagnoses'><b>Diagnoses of patient {firstName} {lastName} with DNI: {dni}</b></h1>
         <br />
@@ -94,7 +105,10 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
               <div className="diagnosis-info">
                 <p><b>Date:</b> {new Date(diagnosis.date_result).toLocaleDateString()}</p>
               </div>
-              <button className="download-button" onClick={handleDownloadClick}>
+              <button
+                className="download-button-myDiagnoses"
+                onClick={() => handleDownloadClick(diagnosis.pdf_data)}
+              >
                 <i className="fa-regular fa-file-pdf"></i> Download PDF
               </button>
             </div>
@@ -108,4 +122,4 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   );
 }
 
-export default MyDiagnoses;
+export default MyDiagnoses;

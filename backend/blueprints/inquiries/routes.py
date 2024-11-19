@@ -8,6 +8,7 @@ from db.functions_db import get_diagnostics
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import base64
 
 load_dotenv()
 
@@ -69,11 +70,12 @@ def get_diagnoses():
         return error_response
     dni = decoded_token.get('dni')
     diagnoses = get_diagnostics(dni)
+    diagnoses_sorted = sorted(diagnoses, key=lambda diagnostic: diagnostic.date_result, reverse=True)
     diagnoses_list = [{
         'image_diagnostic': diagnostic.image_diagnostic,
         'date_result': diagnostic.date_result,
-        'dni': diagnostic.dni
-    } for diagnostic in diagnoses]
+        'dni': diagnostic.dni,
+        'pdf_data': base64.b64encode(diagnostic.pdf_data).decode('utf-8') if diagnostic.pdf_data else None,
+    } for diagnostic in diagnoses_sorted]
     
-    print("Diagnoses List:", diagnoses_list)
     return jsonify(diagnoses_list)

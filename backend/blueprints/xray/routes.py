@@ -10,6 +10,7 @@ from tensorflow.keras.utils import get_custom_objects
 from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 import joblib
+from db.models import *
 
 load_dotenv()
 
@@ -140,10 +141,16 @@ def xray_diagnosis():
     if diseases_accepted:
         #This function is not working properly, change the form of generation pdf
         pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, diseases_accepted)  # Disease percentages are included in diseases_accepted
+        print("PDF buffer size:", len(pdf_buffer.getvalue()))
         for disease, percentage in diseases_accepted:
-            insert_diagnostic(disease, f"{percentage:.2f}%", image_url, dni)
+            insert_diagnostic(disease, f"{percentage:.2f}%", image_url, dni, pdf_buffer.getvalue())
     else:
         pdf_buffer = create_diagnosis_pdf(patient_name, diagnosis_date, [])
-        insert_diagnostic("healthy", "healthy", image_url, dni)
-
+        print("PDF buffer size:", len(pdf_buffer.getvalue()))
+        insert_diagnostic("healthy", "healthy", image_url, dni, pdf_buffer.getvalue())
+    diagnostic = Diagnostic.query.filter_by(dni=dni).first()
+    if diagnostic and diagnostic.pdf_data:
+        print("PDF data saved to database. Size:", len(diagnostic.pdf_data))
+    else:
+        print("No PDF data saved for this diagnosis.")
     return send_file(pdf_buffer, as_attachment=True, download_name=f"{dni}-{diagnosis_date}-{patient_name}.pdf", mimetype='application/pdf')

@@ -98,12 +98,13 @@ def calculate_age(dateBirth):
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
 
-def insert_diagnostic(result, description, imageDiagnostic, dni):
+def insert_diagnostic(result, description, imageDiagnostic, dni, pdf_data):
     new_diagnostic = Diagnostic(
         res=result,
         description=description,
         image_diagnostic=imageDiagnostic,
         dni=dni,
+        pdf_data=pdf_data,
     )
     db.session.add(new_diagnostic)
     db.session.commit()

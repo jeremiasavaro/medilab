@@ -9,6 +9,7 @@ class Diagnostic(db.Model):
     date_result = db.Column(db.Date, default=datetime.utcnow)
     image_diagnostic = db.Column(db.String(255), nullable=False)
     dni = db.Column(db.Integer, db.ForeignKey('patient.dni', ondelete="CASCADE"), nullable=False)
+    pdf_data = db.Column(db.LargeBinary, nullable=True)
 
     patient = db.relationship(
         'Patient', 
