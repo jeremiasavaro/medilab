@@ -25,6 +25,7 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
       const fetchMyDiagnoses = async () => {
         try {
           const response = await fetch('http://127.0.0.1:5000/inquiries/my_diagnoses', {
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token,
@@ -39,9 +40,9 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
           console.log("Received data:", data);
           setMyDiagnoses(Array.isArray(data) ? data : []);
         } catch (error) {
-          console.error('Error fetching my diagnoses:', error);
-          setMessage(Error ('fetching diagnoses: ${error.message}'));
-          setMyDiagnoses([]);
+            console.error('Error fetching my diagnoses:', error);
+            setMessage(Error ('fetching diagnoses: ${error.message}'));
+            setMyDiagnoses([]);
         }
       };
 
