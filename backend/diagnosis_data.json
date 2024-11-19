@@ -21,7 +21,7 @@
     },
     "healthy": {
         "title": "Diagnosis: Healthy",
-        "description": "The patient does not present signs of significant pulmonary disease. Regular monitoring and healthy lifestyle choices are recommended.",
+        "description": "The patient does not present signs of significant disease. Regular monitoring and healthy lifestyle choices are recommended.",
         "treatment": "No medical intervention is required at this time. Maintain a healthy lifestyle and attend regular check-ups."
     },
     "edema": {
