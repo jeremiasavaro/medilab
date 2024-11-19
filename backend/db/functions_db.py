@@ -150,7 +150,7 @@ def insert_doctor(doctor_data):
         email=doctor_data['email'],
         phone_number=doctor_data['phoneNumber'],
         date_birth=date_birth,  # Usar el objeto de fecha
-        age=calculate_age(doctor_data['dateBirth']),
+        age=calculate_age(date_birth),
         gender=doctor_data['gender'],
     )
     db.session.add(new_doctor)
@@ -220,85 +220,3 @@ def get_cities_for_doctor(doctor_dni):
 def remove_doctors():
     Doctor.query.delete()
     db.session.commit()
-
-
-# -------------------------------------------- Clinic Table functions --------------------------------------------
-def insert_clinic(clinic_data):
-    new_clinic = Clinic(
-        name=clinic_data['name'],
-        phone_number=clinic_data['phoneNumber'],
-        province=clinic_data['province'],
-        city=clinic_data['city'],
-        postal_code=clinic_data['postalCode'],
-        address=clinic_data['address'],
-    )
-    db.session.add(new_clinic)
-    db.session.commit()
-
-
-def delete_clinic(name):
-    clinic = Clinic.query.filter_by(name=name).first()
-
-    if clinic:
-        db.session.delete(clinic)
-        db.session.commit()
-        print(f"Clinic with name {name} successfully removed")
-    else:
-        print(f"Clinic with name {name} not found")
-
-
-def modify_clinic(clinic_data):
-    clinic = Clinic.query.filter_by(name=clinic_data['name']).first()
-
-    if clinic:
-        clinic.name = clinic_data['name']
-        clinic.phone_number = clinic_data['phoneNumber']
-        clinic.province = clinic_data['province']
-        clinic.city = clinic_data['city']
-        clinic.postal_code = clinic_data['postalCode']
-        clinic.address = clinic_data['address']
-
-        db.session.commit()
-
-
-def get_all_clinics():
-    # testing = current_app.config.get('TESTING', False)
-
-    doctors = Doctor.query.all()
-    return doctors
-
-
-def get_clinics_by_city(cityname):
-    # testing = current_app.config.get('TESTING', False)
-
-    doctors = Doctor.query.filter_by(name=cityname).all()
-    return doctors
-
-
-# -------------------------------------------- WorksAt Table functions --------------------------------------------
-def insert_WorksAt(doctordni, clinicname):
-    clinic = Clinic.query.filter_by(name=clinicname).first()
-
-    if clinic is None:
-        print("Clinic not found.")
-        return
-
-    new_worksat = WorksAt(clinic_number=clinic.clinic_number, doctor_dni=doctordni)
-    db.session.add(new_worksat)
-    db.session.commit()
-    print(f"Doctor {doctordni} is now assigned to clinic '{clinicname}'.")
-
-
-def delete_working_doctor(doctordni, clinicname):
-    clinic = Clinic.query.filter_by(name=clinicname).first()
-
-    if clinic is None:
-        print(f"Clinic '{clinicname}' not found.")
-        return
-
-    worksat_entry = WorksAt.query.filter_by(doctor_dni=doctordni, clinic_number=clinic.clinic_number).first()
-
-    if worksat_entry:
-        db.session.delete(worksat_entry)
-        db.session.commit()
-        print(f"Doctor {doctordni} successfully removed from clinic '{clinicname}'.")

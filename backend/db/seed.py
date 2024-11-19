@@ -1,5 +1,3 @@
-import sqlite3
-
 from app import app
 from .functions_db import insert_doctor, remove_doctors
 
