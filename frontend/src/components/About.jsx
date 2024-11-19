@@ -1,5 +1,3 @@
-// src/components/About.jsx
-
 import React, { useState, useEffect } from 'react';
 import aboutBg from "../assets/img/about.jpg";
 import texts from "../assets/components-data/aboutData.json";
