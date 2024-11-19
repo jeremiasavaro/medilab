@@ -3,7 +3,7 @@ import "../assets/css/myDiagnoses.css";
 import { useJwt } from "react-jwt";
 import { useToken } from '../hooks/useToken';
 import { useObtainData } from '../hooks/useObtainData';
-import xrayData from '../assets/components-data/xrayServiceData.json';
+import mydiagnosesData from '../assets/components-data/mydiagnosesData.json';
 
 const MyDiagnoses = ({ isOpen, onClose, language }) => {
   const [myDiagnoses, setMyDiagnoses] = useState([]);
@@ -15,10 +15,14 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   const [email, setEmail] = useState('');
   const { token, messageToken } = useToken();
   const { decodedToken, isExpired } = useJwt(token);
-  const [content, setContent] = useState(xrayData[language]);
+  const [content, setContent] = useState(mydiagnosesData[language]);
   const [isClosing, setIsClosing] = useState(false);  // Estado para controlar la animación de cierre
 
   useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
+
+  useEffect(() => {
+    setContent(mydiagnosesData[language]);
+  }, [language]);
 
   useEffect(() => {
     if (token && decodedToken && isOpen) {
@@ -57,12 +61,19 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
     }
 
     try {
+        // Extract base64 data
         const base64Data = pdfBase64.includes(',') ? pdfBase64.split(',')[1] : pdfBase64;
-        const byteCharacters = atob(base64Data);        const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+        // Decode base64 to binary
+        const byteCharacters = atob(base64Data);
+        // Convert binary to array of character codes
+        const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+        // Create Uint8Array from character codes
         const byteArray = new Uint8Array(byteNumbers);
+        // Create Blob object from Uint8Array
         const blob = new Blob([byteArray], { type: "application/pdf" });
-
+        // Create URL for Blob object
         const url = window.URL.createObjectURL(blob);
+        // Create and click download link
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", "diagnosis.pdf");
@@ -76,11 +87,11 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   };
 
   const handleClose = () => {
-    setIsClosing(true);  // Activa la animación de salida
+    setIsClosing(true);  // Activates the exit animation
     setTimeout(() => {
-      setIsClosing(false);  // Resetea el estado después de la animación
-      onClose();            // Llama a la función de cierre
-    }, 300);  // Tiempo en milisegundos de la animación de salida
+      setIsClosing(false);  // Resets the state after the animation
+      onClose(); // Calls the close function
+    }, 300);  // Time in milliseconds for the exit animation
   };
 
   if (!isOpen && !isClosing) return null;  // Retorna null si no está abierto o en animación de cierre
@@ -88,7 +99,7 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   return (
       <div className={`modal-overlay-diagnoses ${isClosing ? 'closing' : ''}`}>
       <div className="modal-content-diagnoses">
-        <h1 className='h1-myDiagnoses'><b>Diagnoses of patient {firstName} {lastName} with DNI: {dni}</b></h1>
+        <h1 className='h1-myDiagnoses'><b>{content.title}</b></h1>
         <br />
         {message && <p className="message">{message}</p>}
         <div className="diagnoses-grid">
@@ -104,23 +115,23 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
                 </div>
               )}
               <div className="diagnosis-info">
-                <p><b>Date:</b> {new Date(diagnosis.date_result).toLocaleDateString()}</p>
+                <p><b>{content.date}:</b> {new Date(diagnosis.date_result).toLocaleDateString()}</p>
               </div>
               <button
                 className="download-button-myDiagnoses"
                 onClick={() => handleDownloadClick(diagnosis.pdf_data)}
               >
-                <i className="fa-regular fa-file-pdf"></i> Download PDF
+                <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
               </button>
             </div>
           ))}
         </div>
         <div className="modal-buttons">
-          <button type="button" onClick={handleClose}>Back</button>
+          <button type="button" onClick={handleClose}>{content.back}</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default MyDiagnoses;
+export default MyDiagnoses;

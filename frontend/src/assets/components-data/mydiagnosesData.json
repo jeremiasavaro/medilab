@@ -1,0 +1,14 @@
+{
+  "en": {
+    "title": "My diagnoses",
+    "date": "Date",
+    "downloadPDF": "Download PDF",
+    "back": "Back"
+  },
+  "es": {
+    "title": "Mis diagnósticos",
+    "date": "Fecha",
+    "downloadPDF": "Descargar PDF",
+    "back": "Volver"
+  }
+}
