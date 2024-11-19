@@ -33,15 +33,22 @@ import ServicesSection from './components/ServicesSection';
 import XrayService from './components/XrayService';
 
 function App() {
+  // State to manage the current view
   const [view, setView] = useState("home");
+  // State to manage the current language
   const [language, setLanguage] = useState('en');
+  // State to manage the login status
   const [isLogged, setIsLogged] = useState(false);
+  // State to manage the transition status
   const [isTransitioning, setIsTransitioning] = useState("null");
 
+  // Toggle login state
   const toggleLoginState = () => setIsLogged(!isLogged);
+  // Toggle form view
   const toggleForm = (formName) => setView(formName);
 
   useEffect(() => {
+    // Initialize various libraries and setups
     initializeAOS();
     initializeGLightbox();
     initializePureCounter();
@@ -54,7 +61,8 @@ function App() {
       document.removeEventListener('scroll', setupNavMenuScrollspy);
     };
   }, []);
-  
+
+  // Render the current view based on the state
   const renderView = () => {
     switch (view) {
       case "login":

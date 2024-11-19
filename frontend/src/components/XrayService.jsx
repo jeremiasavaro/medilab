@@ -9,7 +9,7 @@ import { useToken } from '../hooks/useToken';
 import { useGetDoctors } from '../hooks/useGetDoctors';
 import Spinner from './Spinner';
 
-// Componente de tabla de doctores
+// Component to display the table of doctors
 const DoctorTable = ({ doctors, content, tableRef }) => (
   <div ref={tableRef}>
     <hr className="divider" />
@@ -40,6 +40,7 @@ const DoctorTable = ({ doctors, content, tableRef }) => (
 );
 
 const XrayService = ({ setView, language, setIsTransitioning, isTransitioning }) => {
+  // State to manage component data
   const [state, setState] = useState({
     message: '',
     openSection: '',
@@ -56,8 +57,9 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
   const tableRef = useRef(null);
   const { token, messageToken } = useToken();
   const { decodedToken, isExpired } = useJwt(token);
-  const { doctors, mesaggeDoctors } = useGetDoctors();
+  const { doctors, messageDoctors } = useGetDoctors();
 
+  // Update content when language changes
   useEffect(() => {
     setState((prev) => ({
       ...prev,
@@ -66,6 +68,7 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
     }));
   }, [language]);
 
+  // Handle file upload
   const handleFileUpload = async (file) => {
     if (!file) return;
     const formData = new FormData();
@@ -89,6 +92,7 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
     }
   };
 
+  // Handle file input change
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setState((prev) => ({ ...prev, selectedFile: file }));
@@ -97,8 +101,9 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
 
   let timer;
 
+  // Handle scan button click
   const handleScanClick = async () => {
-    if (!state.imageUrl) return console.log('No hay imagen cargada.');
+    if (!state.imageUrl) return console.log('No image uploaded.');
     setState((prev) => ({ ...prev, isScanning: true }));
     const formData = new FormData();
     formData.append('image_url', state.imageUrl);
@@ -116,7 +121,7 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
         const blob = await response.blob();
         setState((prev) => ({ ...prev, pdfBlob: blob }));
       } catch (error) {
-        console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+        console.error('Error sending the image to the backend or receiving the PDF:', error);
         setState((prev) => ({ ...prev, isScanning: false }));
       } finally {
         setState((prev) => ({ ...prev, isScanning: false }));
@@ -125,6 +130,7 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
     }
   };
 
+  // Handle PDF download
   const handleDownloadClick = () => {
     if (!state.pdfBlob) return;
     const url = window.URL.createObjectURL(state.pdfBlob);
@@ -142,46 +148,49 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
     }, 0);
   };
 
+  // Open overlay section
   const openOverlaySection = (sectionName) => setState((prev) => ({ ...prev, openSection: sectionName }));
+  // Close overlay section
   const closeOverlaySection = () => setState((prev) => ({ ...prev, openSection: '' }));
 
   const { content, data } = state;
 
+  // Handle view transition out
   const handleTransitionOut = (targetView) => {
     setIsTransitioning("out");
     setTimeout(() => {
       setIsTransitioning("null");
-      setView(targetView); 
-    }, 1500); 
+      setView(targetView);
+    }, 1500);
   };
 
   return (
     <section id="xray-section" className="contentXray">
       <div className={isTransitioning=="out" ? "transitionOut-active" : "contentXray"}>
-      <header className="xray-header-container">
-        <div className="xray-header-content">
-          <div className="xray-header-left">
-            <button
-              onClick={() => setView('home')}
-              aria-label="Go back"
-              className="xray-header-back-button"
-            >
-              <IoMdArrowBack className="header-icon" />
-            </button>
-            <h1 className="xray-header-title">Medilab</h1>
-          </div>
+        <header className="xray-header-container">
+          <div className="xray-header-content">
+            <div className="xray-header-left">
+              <button
+                onClick={() => setView('home')}
+                aria-label="Go back"
+                className="xray-header-back-button"
+              >
+                <IoMdArrowBack className="header-icon" />
+              </button>
+              <h1 className="xray-header-title">Medilab</h1>
+            </div>
 
-          <div className="xray-header-right">
-            <button
-              onClick={() => openOverlaySection('info')}
-              aria-label="Show information"
-              className="xray-header-info-button"
-            >
-              <IoInformationCircle className="header-icon" />
-            </button>
+            <div className="xray-header-right">
+              <button
+                onClick={() => openOverlaySection('info')}
+                aria-label="Show information"
+                className="xray-header-info-button"
+              >
+                <IoInformationCircle className="header-icon" />
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
         <div className="xrayServices-container">
           <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
 
@@ -224,6 +233,7 @@ const XrayService = ({ setView, language, setIsTransitioning, isTransitioning })
   );
 };
 
+// Overlay section component
 const OverlaySection = ({ content, closeOverlaySection }) => (
   <div className="overlay-section active">
     <div className="overlay-content">

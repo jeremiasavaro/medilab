@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import heroBg from '../assets/img/hero-bg.jpg';
 import texts from "../assets/components-data/heroData.json";
 
+// Card component to display individual service information
 function Card({ title, description, aosdelay, classIcon }) {
   return (
     <div className="col-xl-4 d-flex align-items-stretch">
@@ -15,23 +16,26 @@ function Card({ title, description, aosdelay, classIcon }) {
 }
 
 function HeroSection({ setView, language, setIsTransitioning }) {
-  // Usados para cambiar el idioma del contenido
+  // State to hold the content based on the selected language
   const [content, setContent] = useState(texts[language]);
 
+  // Handle view transition
   const handleTransitionIn = (targetView) => {
     setIsTransitioning("in");
     setTimeout(() => {
       setIsTransitioning("out");
-      setView(targetView); 
-    }, 1500); 
+      setView(targetView);
+    }, 1500);
   };
 
-  // Dependiendo del idioma, se muestra un texto u otro
+  // Update content when language changes
   useEffect(() => {
-    setContent(texts[language]); 
+    setContent(texts[language]);
   }, [language]);
+
   return (
     <section id="hero" className="hero section light-background">
+      {/* Background image */}
       <img src={heroBg} alt="" data-aos="fade-in" />
 
       <div className="container position-relative">
@@ -46,6 +50,7 @@ function HeroSection({ setView, language, setIsTransitioning }) {
               <h3>{content.xrayServiceTitle}</h3>
               <p>{content.xrayServiceDescription}</p>
               <div className="text-center">
+                {/* Link to X-ray service */}
                 <a href="#xrayService" onClick={() => handleTransitionIn("xrayService")} className="more-btn">
                   <span>{content.accessService}</span>
                   <i className="bi bi-chevron-right"></i>
@@ -57,6 +62,7 @@ function HeroSection({ setView, language, setIsTransitioning }) {
           <div className="col-lg-8 d-flex align-items-stretch">
             <div className="d-flex flex-column justify-content-center">
               <div className="row gy-4">
+                {/* Display service cards */}
                 <Card title={content.reliabilityTitle} description={content.reliabilityDescription} aosdelay={"300"} classIcon={"bi bi-clipboard-data"}/>
                 <Card title={content.rapidDiagnosisTitle} description={content.rapidDiagnosisDescription} aosdelay={"400"} classIcon={"bi bi-gem"}/>
                 <Card title={content.friendlyInterfaceTitle} description={content.friendlyInterfaceDescription} aosdelay={"500"} classIcon={"bi bi-inboxes"}/>

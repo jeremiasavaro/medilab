@@ -3,23 +3,27 @@ import GLightbox from 'glightbox';
 import PureCounter from '@srexi/purecounterjs';
 import Swiper from 'swiper';
 
+// Initialize AOS (Animate On Scroll) library
 export const initializeAOS = () => {
   AOS.init({
-    duration: 600,
-    easing: 'ease-in-out',
-    once: true,
-    mirror: false,
+    duration: 600, // Animation duration
+    easing: 'ease-in-out', // Animation easing
+    once: true, // Whether animation should happen only once
+    mirror: false, // Whether elements should animate out while scrolling past them
   });
 };
 
+// Initialize GLightbox library for lightbox functionality
 export const initializeGLightbox = () => {
   GLightbox({ selector: '.glightbox' });
 };
 
+// Initialize PureCounter library for animated counters
 export const initializePureCounter = () => {
   new PureCounter();
 };
 
+// Initialize Swiper library for carousels/sliders
 export const initializeSwiper = () => {
   document.querySelectorAll(".init-swiper").forEach((swiperElement) => {
     const config = JSON.parse(swiperElement.querySelector(".swiper-config").innerHTML.trim());
@@ -27,6 +31,7 @@ export const initializeSwiper = () => {
   });
 };
 
+// Setup scroll-to-top button functionality
 export const setupScrollToTop = () => {
   const scrollTop = document.querySelector('.scroll-top');
   if (scrollTop) {
@@ -37,6 +42,7 @@ export const setupScrollToTop = () => {
   }
 };
 
+// Setup mobile navigation toggle functionality
 export const setupMobileNavToggle = () => {
   const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
   if (mobileNavToggleBtn) {
@@ -48,6 +54,7 @@ export const setupMobileNavToggle = () => {
   }
 };
 
+// Setup scrollspy for navigation menu
 export const setupNavMenuScrollspy = () => {
   const navmenulinks = document.querySelectorAll('.navmenu a');
   navmenulinks.forEach(navmenulink => {

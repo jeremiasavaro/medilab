@@ -2,13 +2,17 @@ import React, { useState, useEffect } from "react";
 import texts from "../assets/components-data/headerData.json";
 
 function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTransitioning, setIsTransitioning }) {
+  // State to hold the content based on the selected language
   const [content, setContent] = useState(texts[language]);
+  // State to manage dropdown visibility
   const [dropdownOpen, setDropdownOpen] = useState({ language: false, account: false });
 
+  // Update content when language changes
   useEffect(() => {
     setContent(texts[language]);
   }, [language]);
 
+  // Toggle dropdown visibility
   const toggleDropdown = (dropdown) => {
     setDropdownOpen((prevState) => ({
       ...prevState,
@@ -16,14 +20,16 @@ function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTrans
     }));
   };
 
+  // Handle view transition
   const handleTransitionIn = (targetView) => {
     setIsTransitioning("in");
     setTimeout(() => {
       setIsTransitioning("out");
-      setView(targetView); 
-    }, 1500); 
+      setView(targetView);
+    }, 1500);
   };
 
+  // Handle user logout
   const handleLogout = () => {
     setIsLogged(false);
     setView("home");
@@ -31,12 +37,14 @@ function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTrans
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Handle language change
   const handleChangeLanguage = (lang) => {
     setLanguage(lang);
     setDropdownOpen({ ...dropdownOpen, language: false });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Dropdown menu component
   const DropdownMenu = ({ title, items, dropdown }) => (
     <li className="dropdown">
       <a href="#" className="active" onClick={() => toggleDropdown(dropdown)}>
@@ -57,6 +65,7 @@ function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTrans
     </li>
   );
 
+  // Language dropdown items
   const languageItems = [
     {
       href: "#english",
@@ -70,6 +79,7 @@ function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTrans
     },
   ];
 
+  // Account dropdown items based on login status
   const accountItems = isLogged
     ? [
         {
@@ -99,7 +109,7 @@ function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTrans
           action: () => handleTransitionIn("register"),
         },
       ];
-  
+
   return (
     <div>
       <header id="header" className={`header ${isTransitioning=="in" ? "header-transitionIn" : ""} sticky-top`}>

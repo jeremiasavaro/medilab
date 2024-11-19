@@ -10,6 +10,7 @@ import MyDiagnoses from './MyDiagnoses';
 import { useObtainData } from "../hooks/useObtainData";
 
 const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransitioning }) => {
+  // Initial component state
   const [state, setState] = useState({
     firstName: '',
     lastName: '',
@@ -33,17 +34,20 @@ const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransit
     content: accountData[language],
   });
 
+  // Get the token and decode it
   const { token } = useToken();
   const { decodedToken, isExpired } = useJwt(token || '');
 
+  // Handle the transition out
   const handleTransitionOut = (targetView) => {
     setIsTransitioning("out");
     setTimeout(() => {
       setIsTransitioning("null");
-      setView(targetView); 
-    }, 1500); 
+      setView(targetView);
+    }, 1500);
   };
 
+  // Update content when language changes
   useEffect(() => {
     setState((prev) => ({
       ...prev,
@@ -51,6 +55,7 @@ const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransit
     }));
   }, [language]);
 
+  // Obtain user data
   useObtainData(token, decodedToken, isExpired,
     (firstName) => setState((prev) => ({ ...prev, firstName })),
     (lastName) => setState((prev) => ({ ...prev, lastName })),
@@ -68,6 +73,7 @@ const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransit
     (message) => setState((prev) => ({ ...prev, message }))
   );
 
+  // Handle file change
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     setState((prev) => ({ ...prev, selectedFile: file }));
@@ -92,10 +98,12 @@ const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransit
     }
   };
 
+  // Handle account form submission
   const handleAccount = async (e) => {
     e.preventDefault();
   };
 
+  // Form group component
   const FormGroup = ({ label, value, onChange, type = "text", options }) => (
     <div className="form-group">
       <label>{label}</label>
@@ -114,6 +122,7 @@ const Account = ({ setView, setIsLogged, language, setIsTransitioning, isTransit
     </div>
   );
 
+  // Sidebar item component
   const SidebarItem = ({ icon, label, onClick, className = "" }) => (
     <li onClick={onClick} className={className}>
       <i className={icon}></i> {label}

@@ -1,31 +1,36 @@
 import { useState, useEffect } from 'react';
 
 export const useGetDoctors = () => {
+  // State to store doctors data
+  const [doctors, setDoctors] = useState([]);
+  // State to store message related to doctors
+  const [mesaggeDoctors, setMessageDoctors] = useState('');
+  // State to manage loading status
+  const [loading, setLoading] = useState(true);
 
-    const [doctors, setDoctors] = useState([]);
-    const [mesaggeDoctors, setMessageDoctors] = useState('');
-    const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    // Function to fetch doctors data from the server
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/inquiries/doctors');
+        const data = await response.json();
+        console.log('Doctors data:', data);
+        setDoctors(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+        setLoading(false);
+      }
+    };
 
-    useEffect(() => {
-        const fetchDoctors = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/inquiries/doctors'); 
-            const data = await response.json();
-            console.log('Doctors data:', data);
-            setDoctors(data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching doctors:', error);
-            setLoading(false);
-        }
-        };
+    fetchDoctors();
+  }, []);
 
-        fetchDoctors();
-    }, []);
+  // Return loading message if data is still being fetched
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    return { doctors, mesaggeDoctors };
+  // Return doctors data and message
+  return { doctors, mesaggeDoctors };
 };

@@ -5,18 +5,21 @@ import confirmModData from '../assets/components-data/confirmModificationsData.j
 const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone, birthDate,
     nationality, province, locality, postalCode, gender, confirmed, notConfirmed, setConfirmModifications, language }) => {
 
+    // State variables for form input and messages
     const [currentPassword, setCurrentPassword] = useState('');
     const [message, setMessage] = useState('');
-    // Usados para cambiar el idioma del contenido
+    // State to hold the content based on the selected language
     const [content, setContent] = useState(confirmModData[language]);
 
-    // Dependiendo del idioma, se muestra un texto u otro
+    // Update content when language changes
     useEffect(() => {
         setContent(confirmModData[language]);
     }, [language]);
 
+    // Return null if modifications are not confirmed
     if (!notConfirmed) return null;
 
+    // Handle form submission for confirming modifications
     const handleConfirmModifications = async (e) => {
       e.preventDefault();
 
@@ -30,17 +33,17 @@ const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone,
             body: JSON.stringify({currentPassword, firstName, lastName, address, email, dni, phone, birthDate,
                 nationality, province, locality, postalCode, gender,}),
             });
-    
+
             const data = await response.json();
-    
+
             if (response.ok) {
                 setMessage(data.message);
-                setTimeout(() => confirmed(), 2000); 
+                setTimeout(() => confirmed(), 2000); // Confirm modifications after 2 seconds
             } else {
                 setMessage(data.error);
             }
         } catch (error) {
-            setMessage('Error en la modificacion de datos');
+            setMessage('Error in data modification');
         }
     };
 
@@ -70,5 +73,5 @@ const ConfirmModifications = ({ firstName, lastName, address, email, dni, phone,
       </div>
     );
   };
-  
+
   export default ConfirmModifications;

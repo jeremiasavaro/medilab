@@ -9,6 +9,7 @@ import pic7 from "../assets/img/gallery/gallery-7.jpg";
 import pic8 from "../assets/img/gallery/gallery-8.jpg";
 import galleryData from '../assets/components-data/galleryData.json';
 
+// Array of gallery images
 const galleryImages = [
   { src: pic1 },
   { src: pic2 },
@@ -21,11 +22,10 @@ const galleryImages = [
 ];
 
 const Gallery = ({ language }) => {
-
-  // Usados para cambiar el idioma del contenido
+  // State to hold the content based on the selected language
   const [content, setContent] = useState(galleryData[language]);
 
-  // Dependiendo del idioma, se muestra un texto u otro
+  // Update content when language changes
   useEffect(() => {
     setContent(galleryData[language]);
   }, [language]);
@@ -33,11 +33,13 @@ const Gallery = ({ language }) => {
   return (
     <section id="gallery" className="gallery section">
       <div className="container section-title" data-aos="fade-up">
+        {/* Section title and introduction */}
         <h2>{content.sectionTitle}</h2>
         <p>{content.sectionIntroduction}</p>
       </div>
       <div className="container-fluid" data-aos="fade-up" data-aos-delay="100">
         <div className="row g-0">
+          {/* Display gallery images */}
           {galleryImages.map((image, index) => (
             <div className="col-lg-3 col-md-4" key={index}>
               <div className="gallery-item">

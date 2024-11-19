@@ -3,6 +3,7 @@ import '../assets/css/Register.css';
 import registerData from '../assets/components-data/registerData.json';
 
 const Register = ({ setView, language, setIsTransitioning, isTransitioning }) => {
+  // Initial state for the form
   const initialFormState = {
     firstName: '',
     lastName: '',
@@ -20,29 +21,37 @@ const Register = ({ setView, language, setIsTransitioning, isTransitioning }) =>
     gender: '',
   };
 
+  // State to manage form data
   const [formData, setFormData] = useState(initialFormState);
+  // State to manage messages
   const [message, setMessage] = useState('');
+  // State to hold the content based on the selected language
   const [content, setContent] = useState(registerData[language]);
-  
-  const inputRefs = useRef({}); // Store references dynamically for each field
 
+  // Store references dynamically for each field
+  const inputRefs = useRef({});
+
+  // Handle view transition out
   const handleTransitionOut = (targetView) => {
     setIsTransitioning("out");
     setTimeout(() => {
       setIsTransitioning("null");
-      setView(targetView); 
-    }, 1500); 
+      setView(targetView);
+    }, 1500);
   };
 
+  // Update content when language changes
   useEffect(() => {
     setContent(registerData[language]);
   }, [language]);
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  // Handle form submission for registration
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -59,10 +68,11 @@ const Register = ({ setView, language, setIsTransitioning, isTransitioning }) =>
       setMessage(response.ok ? data.message : data.error);
       if (response.ok) setView('login');
     } catch {
-      setMessage('Error en la conexión');
+      setMessage('Connection error');
     }
   };
 
+  // Handle key press for form navigation
   const handleKeyPress = (e, nextField) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -70,6 +80,7 @@ const Register = ({ setView, language, setIsTransitioning, isTransitioning }) =>
     }
   };
 
+  // Render input field
   const renderInput = (name, type, label, nextField) => (
     <div className="input-group">
       <label htmlFor={name}>{label}</label>
@@ -87,7 +98,7 @@ const Register = ({ setView, language, setIsTransitioning, isTransitioning }) =>
 
   return (
     <div className="gen">
-      <div className={isTransitioning=="out" ? "transitionOut-active" : "gen"}>
+      <div className={isTransitioning == "out" ? "transitionOut-active" : "gen"}>
         <div className="register-container">
           <h2><b>{content.createAccount}</b></h2>
           <form className="horizontal-form" onSubmit={handleRegister}>
@@ -105,12 +116,12 @@ const Register = ({ setView, language, setIsTransitioning, isTransitioning }) =>
             <div className="input-group">
               <label htmlFor="gender">{content.gender}</label>
               <select
-                  id="gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  ref={(el) => (inputRefs.current.gender = el)}
-                  onKeyDown={(e) => handleKeyPress(e, "password")}
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                ref={(el) => (inputRefs.current.gender = el)}
+                onKeyDown={(e) => handleKeyPress(e, "password")}
               >
                 <option value="">{content.select}</option>
                 <option value="Male">{content.male}</option>
