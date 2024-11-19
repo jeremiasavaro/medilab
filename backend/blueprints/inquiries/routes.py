@@ -1,8 +1,15 @@
+import os
 from flask import jsonify, request
 from utils import *
+from dotenv import load_dotenv
 from db.models import *
 from .__init__ import inquiries
 from db.functions_db import get_diagnostics
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+load_dotenv()
 
 # Endpoint used for sending a contact message
 @inquiries.route('/contact', methods=['POST'])
@@ -13,9 +20,31 @@ def contact():
         if not data.get(field):
             return make_response({'error': 'Data missing'}, 400)
 
-    # Save contact data to the database
-    # TODO: Implement database saving logic
+    # Format the email body
+    email_body = f"Name: {data['firstName']} {data['lastName']}\n"
+    email_body += f"Email: {data['email']}\n"
+    email_body += f"Message: {data['userMessage']}\n"
+
+    send_email(data['subject'], email_body, os.getenv('EMAIL_TO'))
     return make_response({'message': 'Contact message sent successfully'}, 200)
+
+
+# Function used for sending an email
+def send_email(subject, body, to):
+    # Create the email message with the mail origin and destination
+    msg = MIMEMultipart()
+    msg['From'] = os.getenv('EMAIL_FROM')
+    msg['To'] = to
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Send the email using the SMTP server
+    with smtplib.SMTP(os.getenv('SMTP_SERVER'), int(os.getenv('SMTP_PORT'))) as server:
+        server.starttls()
+        server.login(os.getenv('SMTP_USERNAME'), os.getenv('SMTP_PASSWORD'))
+        server.sendmail(os.getenv('EMAIL_FROM'), to, msg.as_string())
+
 
 # Endpoint used for obtaining the doctors table
 @inquiries.route('/doctors', methods=['GET'])
