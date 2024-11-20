@@ -196,6 +196,7 @@ function Header({ setView, isLogged, setIsLogged, language, setLanguage, isTrans
           </div>
         </div>
       </header>
+      <div style={{ height: 116}} />  {/* Placeholder to prevent content from being hidden behind the header */}
     </div>
   );
 }
