@@ -85,6 +85,7 @@ def xray_diagnosis():
     # Thresholds
     primary_threshold = 70
     secondary_threshold = 85
+    avg_treshold = 77.5
 
 
     for disease in ["pneumonia", "tuberculosis", "covid"]:
@@ -113,7 +114,7 @@ def xray_diagnosis():
             # Average if the secondary model detects disease with a high percentage
             if secondary_disease_percentage > secondary_threshold:
                 avg_disease_percentage = (primary_disease_percentage + secondary_disease_percentage) / 2
-                if avg_disease_percentage > primary_threshold:
+                if avg_disease_percentage > avg_treshold:
                     print(f"The secondary model detected disease with an average model of {avg_disease_percentage}")
                     print("")
                     diseases_accepted.append((disease, avg_disease_percentage))
