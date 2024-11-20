@@ -184,7 +184,7 @@ const Contact = ({ setView, isLogged, language }) => {
                   ></textarea>
                 </div>
                 <div className="col-md-12 text-center">
-                  <button type="submit">{content.sendMessage}</button>
+                  <button type="submit" className="modern-button">{content.sendMessage}</button>
                 </div>
               </div>
             </form>
