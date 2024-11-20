@@ -56,7 +56,8 @@ def get_doctors():
         'first_name': doctor.first_name,
         'last_name': doctor.last_name,
         'speciality': doctor.speciality,
-        'email': doctor.email
+        'email': doctor.email,
+        'gender': doctor.gender
     } for doctor in doctors]
     
     return jsonify(doctors_list)
