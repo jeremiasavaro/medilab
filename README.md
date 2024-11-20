@@ -59,6 +59,7 @@ This project aims to develop a web application in the field of medicine, special
    flask db init
    flask db migrate
    flask db upgrade
+   python3 -m db.seed
    ```
 
 6. Run the Flask application:
