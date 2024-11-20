@@ -118,9 +118,9 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
           <button
             onClick={handleClose}
             aria-label="Go back"
-            className="xray-header-back-button"
+            className="xray-header-back-button-diagnoses"
           >
-            <IoMdArrowBack className="header-icon" />
+            <IoMdArrowBack className="header-icon-diagnoses" />
           </button>
           <h1 className="h1-myDiagnoses">{content.title}</h1>
         </div>

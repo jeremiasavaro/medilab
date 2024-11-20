@@ -8,7 +8,7 @@
     margin-bottom: 20px;
 }
 
-.xray-header-back-button {
+.xray-header-back-button-diagnoses {
     position: absolute;
     left: 0; /* Posiciona el botón a la izquierda */
     top: 50%; /* Centra verticalmente respecto al contenedor */
@@ -22,7 +22,7 @@
     justify-content: center;
 }
 
-.header-icon {
+.header-icon-diagnoses {
     font-size: 24px; /* Tamaño de la flecha */
     color: #0580df; /* Color de la flecha */
     transition: transform 0.2s ease-in-out;
@@ -209,12 +209,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.download-button:hover {
+.download-button-myDiagnoses:hover {
     background-color: #036bb5;
     transform: translateY(-2px);
 }
 
-.download-button i {
+.download-button-myDiagnoses i {
     margin-right: 5px;
 }
 
@@ -270,7 +270,7 @@
 }
 
 .modal-overlay-diagnoses.closing .modal-content-diagnoses {
-    animation: fadeOut 0.3s ease-in-out forwards;
+    animation: fadeOut 0.3s ease-in-out forwards;
 }
 
 /* Clase adicional para el estado de cierre */

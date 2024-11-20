@@ -4,7 +4,7 @@ export const useGetDoctors = () => {
   // State to store doctors data
   const [doctors, setDoctors] = useState([]);
   // State to store message related to doctors
-  const [mesaggeDoctors, setMessageDoctors] = useState('');
+  const [messageDoctors, setMessageDoctors] = useState('');
   // State to manage loading status
   const [loading, setLoading] = useState(true);
 
@@ -32,5 +32,5 @@ export const useGetDoctors = () => {
   }
 
   // Return doctors data and message
-  return { doctors, mesaggeDoctors };
+  return { doctors, messageDoctors };
 };
