@@ -145,21 +145,21 @@ const Contact = ({ setView, isLogged, language }) => {
                 <ContentForm
                   divClass={"col-md-6"}
                   inp={"text"}
-                  val={isLogged ? firstName : ''}
+                  val={firstName}
                   handleChange={(e) => setFirstName(e.target.value)}
                   ph={content.firstName}
                 />
                 <ContentForm
                   divClass={"col-md-6"}
                   inp={"text"}
-                  val={isLogged ? lastName : ''}
+                  val={lastName}
                   handleChange={(e) => setLastName(e.target.value)}
                   ph={content.lastName}
                 />
                 <ContentForm
                   divClass={"col-md-12"}
                   inp={"email"}
-                  val={isLogged ? email : ''}
+                  val={email}
                   handleChange={(e) => setEmail(e.target.value)}
                   ph={content.userEmail}
                   name={"email"}
@@ -167,7 +167,7 @@ const Contact = ({ setView, isLogged, language }) => {
                 <ContentForm
                   divClass={"col-md-12"}
                   inp={"text"}
-                  val={isLogged ? subject : ''}
+                  val={subject}
                   handleChange={(e) => setSubject(e.target.value)}
                   ph={content.subject}
                   name={"subject"}
