@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Documentación del Modelo de IA con VGG16</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        h1, h2 { color: #333; }
+        h1 { border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+        pre { background: #333; color: #f8f8f2; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+        a { color: #007BFF; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Documentación del Modelo de IA para Diagnóstico Médico con VGG16</h1>
+
+    <h2 id="introducción">Introducción</h2>
+    <p>Este proyecto utiliza una red neuronal convolucional basada en la arquitectura VGG16 preentrenada para la clasificación de imágenes de rayos X de tórax en dos categorías: <strong>normal</strong> y <strong>enfermedad</strong>.
+    La finalidad es apoyar en diagnósticos médicos automatizados, ofreciendo una herramienta efectiva y precisa.</p>
+
+    <h2>Tabla de Contenidos</h2>
+    <ul>
+        <li><a href="#introducción">Introducción</a></li>
+        <li><a href="#preprocesamiento-de-imágenes">Preprocesamiento de Imágenes</a></li>
+        <li><a href="#división-de-datos">División de Datos</a></li>
+        <li><a href="#aumentación-de-datos">Aumentación de Datos</a></li>
+        <li><a href="#entrenamiento-y-evaluación">Entrenamiento y Evaluación</a></li>
+        <li><a href="#conclusión">Conclusión</a></li>
+    </ul>
+
+    <h2 id="preprocesamiento-de-imágenes">Preprocesamiento de Imágenes</h2>
+    <p><strong>1. Lectura y Redimensionamiento:</strong> Las imágenes fueron cargadas desde subcarpetas (NORMAL, ENFERMEDAD). Se redimensionaron a 224x224 píxeles, el tamaño requerido por la arquitectura VGG16.</p>
+    <pre><code>for i in os.listdir(ruta_train):
+    for j in os.listdir(ruta_train + i):
+        img = cv2.imread(ruta_train + i + '/' + j, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            continue
+
+        resized = cv2.resize(img, (224, 224))
+        resized = resized / 255.0
+        resized = np.stack((resized,)*3, axis=-1)
+        train_x.append(resized)
+        train_y.append([0, 1] if i == 'NORMAL' else [1, 0])</code></pre>
+    <p><strong>2. Normalización:</strong> Se dividió cada pixel entre 255 para normalizar los valores en un rango de 0 a 1.</p>
+    <p><strong>3. Conversión de escala de grises a RGB:</strong> Se replicaron los valores en los 3 canales (RGB), adaptándolos al input requerido por VGG16.</p>
+
+    <h2 id="división-de-datos">División de Datos</h2>
+    <p>Los datos se dividieron en un 80% para entrenamiento y un 20% para validación mediante <code>train_test_split</code>.</p>
+    <pre><code>x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, test_size=0.2, random_state=42)</code></pre>
+
+    <h2 id="aumentación-de-datos">Aumentación de Datos</h2>
+    <p>Para mejorar la robustez del modelo, se implementó aumentación de datos mediante <code>ImageDataGenerator</code>. Estas transformaciones incluyen:</p>
+    <ul>
+        <li>Rotaciones aleatorias hasta 20 grados</li>
+        <li>Zoom aleatorio hasta un 15%</li>
+        <li>Desplazamientos horizontales y verticales hasta un 20%</li>
+        <li>Volteos horizontales</li>
+    </ul>
+    <pre><code>datagen = ImageDataGenerator(
+    rotation_range=20,
+    zoom_range=0.15,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    horizontal_flip=True
+)</code></pre>
+    <h2 id="entrenamiento-y-evaluación">Entrenamiento y Evaluación</h2>
+    <p>El modelo se entrenó en dos fases:</p>
+    <ul>
+        <li><strong>Entrenamiento Inicial:</strong> Se congelaron las capas convolucionales de VGG16, permitiendo el ajuste de las capas añadidas específicamente para este problema.</li>
+        <li><strong>Fine-Tuning:</strong> Tras un entrenamiento inicial, se habilitaron todas las capas del modelo para un ajuste completo.</li>
+        <li><strong>Evaluación:</strong> Luego de cada fase, se evaluó el modelo con los datos de validación para medir su precisión.</li>
+    </ul>
+    <pre><code># Entrenamiento inicial
+history = model.fit(
+    datagen.flow(x_train, y_train, batch_size=batch_size),
+    validation_data=(x_val, y_val),
+    epochs=epochs,
+    steps_per_epoch=len(x_train) // batch_size,
+    verbose=1
+)
+
+# Evaluación inicial
+val_loss, val_acc = model.evaluate(x_val, y_val, verbose=2)
+print(f"Validation accuracy: {val_acc}")
+
+# Fine-Tuning
+base_model.trainable = True
+model.compile(loss='categorical_crossentropy', optimizer=tf.keras.optimizers.Adam(1e-5), metrics=['accuracy'])
+history_finetune = model.fit(
+    datagen.flow(x_train, y_train, batch_size=batch_size),
+    validation_data=(x_val, y_val),
+    epochs=5,
+    steps_per_epoch=len(x_train) // batch_size,
+    verbose=1
+)
+
+# Evaluación final
+val_loss, val_acc = model.evaluate(x_val, y_val, verbose=2)
+print(f"Validation accuracy after fine-tuning: {val_acc}")
+
+# Guardar el modelo
+model.save('modelo_vgg16_finetuned.keras')</code></pre>
+
+    <h2 id="conclusión">Conclusión</h2>
+    <p>Este modelo utiliza redes convolucionales, técnicas de fine-tuning y aumentación de datos, para abordar el desafío de clasificar imágenes médicas de manera precisa y eficiente. En esta documentación, se describe el flujo del desarrollo, desde la preparación de los datos hasta la evaluación del modelo entrenado.
+Este enfoque inicial establece una base para la integración de herramientas de inteligencia artificial en el campo del diagnóstico médico, con potencial para ser optimizado y ampliado en futuras investigaciones.</p>
+</body>
+</html>
