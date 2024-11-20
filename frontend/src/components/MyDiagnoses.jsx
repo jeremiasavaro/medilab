@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../assets/css/myDiagnoses.css";
 import { useJwt } from "react-jwt";
+import { IoMdArrowBack } from 'react-icons/io';
 import { useToken } from '../hooks/useToken';
 import { useObtainData } from '../hooks/useObtainData';
 import mydiagnosesData from '../assets/components-data/mydiagnosesData.json';
@@ -24,6 +25,7 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   const [content, setContent] = useState(mydiagnosesData[language]);
   // State to control the closing animation
   const [isClosing, setIsClosing] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
 
   // Fetch user data using custom hook
   useObtainData(token, decodedToken, isExpired, setFirstName, setLastName, setEmail, setDni, setMessageData);
@@ -112,8 +114,16 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
   return (
     <div className={`modal-overlay-diagnoses ${isClosing ? 'closing' : ''}`}>
       <div className="modal-content-diagnoses">
-        <h1 className='h1-myDiagnoses'><b>{content.title}</b></h1>
-        <br />
+        <div className="header-container">
+          <button
+            onClick={handleClose}
+            aria-label="Go back"
+            className="xray-header-back-button"
+          >
+            <IoMdArrowBack className="header-icon" />
+          </button>
+          <h1 className="h1-myDiagnoses">{content.title}</h1>
+        </div>
         {message && <p className="message">{message}</p>}
         <div className="diagnoses-grid">
           {myDiagnoses.map((diagnosis, index) => (
@@ -139,12 +149,10 @@ const MyDiagnoses = ({ isOpen, onClose, language }) => {
             </div>
           ))}
         </div>
-        <div className="modal-buttons">
-          <button type="button" onClick={handleClose}>{content.back}</button>
-        </div>
       </div>
     </div>
-  );
+  )
+
 }
 
 export default MyDiagnoses;

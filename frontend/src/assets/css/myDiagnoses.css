@@ -1,5 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+.header-container {
+    position: relative;
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra el título horizontalmente */
+    margin-bottom: 20px;
+}
+
+.xray-header-back-button {
+    position: absolute;
+    left: 0; /* Posiciona el botón a la izquierda */
+    top: 50%; /* Centra verticalmente respecto al contenedor */
+    transform: translateY(-50%); /* Ajusta el centrado exacto */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-icon {
+    font-size: 24px; /* Tamaño de la flecha */
+    color: #0580df; /* Color de la flecha */
+    transition: transform 0.2s ease-in-out;
+}
+
+.h1-myDiagnoses {
+    color: #333; /* Color del título */
+    font-size: 42px; /* Tamaño del título */
+    font-weight: 700;
+    margin: 0; /* Sin márgenes para evitar desplazamientos */
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    text-align: center; /* Asegura que el texto esté centrado */
+}
+
 .modal-overlay-diagnoses {
     position: fixed;
     top: 0;
@@ -10,10 +48,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Poppins', sans-serif;
-    color: white;
     overflow: auto;
-    backdrop-filter: blur(3px);  /* Más desenfoque */
+    backdrop-filter: blur(3px); /* Desenfoque */
 }
 
 .modal-content-diagnoses {
@@ -22,13 +58,47 @@
     border-radius: 16px;
     width: 850px;
     max-width: 60%;
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);  /* Sombra más profunda */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
     text-align: center;
     max-height: 80%;
     overflow-y: auto;
-    color: #333;
-    animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out; /* Animación de entrada */
 }
+
+.modal-overlay-diagnoses.closing .modal-content-diagnoses {
+    animation: fadeOut 0.3s ease-in-out forwards; /* Animación de salida */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+  
+  .modal-overlay-diagnoses.closing {
+    opacity: 0; /* La opacidad se desvanece */
+  }
+  
+  .modal-content-diagnoses.closing {
+    transform: scale(0.9); /* Disminuye el tamaño del modal */
+    opacity: 0; /* También se desvanece */
+  }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.9); }
@@ -47,14 +117,7 @@
     font-family: 'Poppins', sans-serif;
     display: inline-block;
     text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Sombra más suave */
-    background-image: linear-gradient(45deg, #0580df, #36d9e4); /* Degradado en el fondo */
-    -webkit-background-clip: text; /* Aplica el degradado solo al texto */
-    color: transparent; /* Hace el texto transparente para ver el fondo */
     transition: transform 0.3s ease-in-out, color 0.3s ease; /* Añade transición suave */
-}
-
-.h1-myDiagnoses:hover {
-    transform: scale(1.05); /* Efecto de aumento cuando pasa el mouse */
 }
 
 .h1-myDiagnoses::after {
@@ -208,4 +271,35 @@
 
 .modal-overlay-diagnoses.closing .modal-content-diagnoses {
     animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+/* Clase adicional para el estado de cierre */
+.modal-overlay-diagnoses.closing {
+    animation: fadeOutOverlay 0.4s ease-in-out forwards; /* Animación para la superposición */
+}
+
+.modal-content-diagnoses.closing {
+    animation: fadeOutContent 0.4s ease-in-out forwards; /* Animación para el contenido */
+}
+
+/* Animación de desvanecimiento para la superposición */
+@keyframes fadeOutOverlay {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Animación de desvanecimiento para el contenido */
+@keyframes fadeOutContent {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
 }
