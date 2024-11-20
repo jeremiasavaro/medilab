@@ -44,6 +44,9 @@ A lo largo del desarrollo de este proyecto, se realizaron múltiples análisis y
   - [Guardar el modelo entrenado](#guardar-el-modelo-entrenado)
   - [Aclaraciones importantes](#aclaraciones-importantes)
   - [Conclusión](#conclusión)
+  - [Contacto](#contacto)
+    - [Documentation Links](#documentation-links)
+    - [Contact Information](#contact-information)
 
 <!-- /TOC -->
 
@@ -362,8 +365,34 @@ Este enfoque inicial proporciona una herramienta útil para el diagnóstico méd
 
 Este trabajo representa un paso hacia aplicaciones de inteligencia artificial que apoyan a los profesionales de la salud en la detección temprana de enfermedades.
 
----
-
-Gracias por leer esta documentación.
+**Gracias por leer esta documentación.**
 
 [⬆ Back to top](#top)
+
+---
+
+## Contacto
+
+### Documentation Links
+
+- [Main README](../../../README.html)
+  *Guide of Features, Installation, Documentation Links and Contact Information.*
+- [Datasets and Acknowledgements](../datasets/datasets_sources_and_aknowledgements.html)
+   *Learn about the datasets used for training our models and the organizations or individuals who contributed.*
+
+### Contact Information
+
+For any questions, suggestions, or inquiries, feel free to reach out to us at:
+
+**Email:**
+
+- [ccornejomateo@gmail.com](mailto:ccornejomateo@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [maximarquez2004@gmail.com](mailto:maximarquez2004@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [jeremiasavaro7@gmail.com](mailto:jeremiasavaro7@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [marcelo395juarez@gmail.com](mailto:marcelo395juarez@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [fede.dalio1@gmail.com](mailto:fede.dalio1@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [matiaspellizzari0@gmail.com](mailto:matiaspellizzari0@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+
+**GitHub:**
+
+- [Medilab Project](https://github.com/jeremiasavaro/medilab)

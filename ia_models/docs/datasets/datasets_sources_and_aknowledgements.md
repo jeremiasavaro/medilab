@@ -53,3 +53,29 @@ We are currently focusing on the following datasets for artificial intelligence 
 - **Citation**: Wang X, Peng Y, Lu L, Lu Z, Bagheri M, Summers RM. "ChestX-ray8: Hospital-scale Chest X-ray Database and Benchmarks on Weakly-Supervised Classification and Localization of Common Thorax Diseases." IEEE CVPR 2017.
 - **Published Date**: 2017
 - **Direct Download Link**: [Dataset on Kaggle](https://www.kaggle.com/datasets/nih-chest-xrays/data/data)
+
+## Contacto
+
+### Documentation Links
+
+- [Main README](../../../README.html)
+  *Guide of Medilab app, Features and Installation.*
+- [AI documentation](../models/SVM_DOCUMENTATION.html)
+  *Explore the details of our AI models, including training processes and performance metrics.*
+
+### Contact Information
+
+For any questions, suggestions, or inquiries, feel free to reach out to us at:
+
+**Email:**
+
+- [ccornejomateo@gmail.com](mailto:ccornejomateo@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [maximarquez2004@gmail.com](mailto:maximarquez2004@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [jeremiasavaro7@gmail.com](mailto:jeremiasavaro7@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [marcelo395juarez@gmail.com](mailto:marcelo395juarez@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [fede.dalio1@gmail.com](mailto:fede.dalio1@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+- [matiaspellizzari0@gmail.com](mailto:matiaspellizzari0@gmail.com?subject=Inquiry%20about%20Medilab&body=Hello%20team,)
+
+**GitHub:**
+
+- [Medilab Project](https://github.com/jeremiasavaro/medilab)

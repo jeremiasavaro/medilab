@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-      <title>datasets_sources_and_aknowledgements</title>
+      <title>README</title>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -24,68 +24,101 @@
     
       <div class="crossnote markdown-preview  ">
       
-<h1 id="datasets-sources-for-the-ai-project">Datasets Sources for the AI Project </h1>
-<p>We are currently focusing on the following datasets for artificial intelligence training. They are all cited with their respective sources and with thanks to the entities that provide said data.</p>
-<p><em>CC BY licenses allow copying, distributing, displaying and modifying the work –even for commercial purposes– as long as the work of the original author is recognized.</em></p>
-<h2 id="1-pediatric-chest-x-ray-images-pneumonianormal">1. Pediatric Chest X-ray Images (Pneumonia/Normal) </h2>
+<h1 id="medilab">Medilab </h1>
+<h2 id="overview">Overview </h2>
+<p>This project aims to develop a web application in the field of medicine, specialized in the analysis and diagnosis of X-ray images. The application will use artificial intelligence to process and evaluate medical images, providing fast and accurate diagnoses that can assist patients. health professionals in clinical decision making.</p>
+<h2 id="features">Features </h2>
 <ul>
-<li><strong>Link</strong>: <a href="https://data.mendeley.com/datasets/rscbjbr9sj/2">Dataset on Mendeley</a></li>
-<li><strong>Description</strong>: This dataset contains 5,863 chest X-ray images of pediatric patients (ages one to five) from Guangzhou Women and Children’s Medical Center, organized into two categories: Pneumonia and Normal. The images have been evaluated and classified by expert physicians to ensure quality and accuracy.</li>
-<li><strong>License</strong>: CC BY 4.0</li>
-<li><strong>Acknowledgments</strong>: We thank the Guangzhou Women and Children’s Medical Center (China) for providing the X-ray images and the authors of the study for their contribution to medical research.</li>
-<li><strong>Citation</strong>: Original article: <a href="http://www.cell.com/cell/fulltext/S0092-8674(18)30154-5">Article in Cell</a>.</li>
-<li><strong>Published Date</strong>: January 6, 2018</li>
-<li><strong>Direct Download Link</strong>: <a href="https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia">Dataset on Kaggle</a></li>
-</ul>
-<hr>
-<h2 id="2-tuberculosis-tb-chest-x-ray-database">2. Tuberculosis (TB) Chest X-ray Database </h2>
+<li>
+<p><strong>AI-Driven Backend:</strong></p>
 <ul>
-<li><strong>Link</strong>: <a href="https://tbportals.niaid.nih.gov/download-data">Dataset on NIAID TB Portal</a></li>
-<li><strong>Description</strong>: This dataset contains 700 publicly accessible chest X-ray images of TB positive cases, along with 3,500 normal images. An additional 2,800 TB images can be downloaded from the NIAID TB portal by signing an agreement. The dataset is a result of collaboration between Qatar University, the University of Dhaka (Bangladesh), and other institutions.</li>
-<li><strong>License</strong>: The dataset is available for use with appropriate citation and credit.</li>
-<li><strong>Acknowledgments</strong>: We thank the research team from Qatar University, the University of Dhaka, and collaborating institutions for creating and sharing this dataset.</li>
-<li><strong>Contribution</strong>: This dataset is valuable for research on tuberculosis detection and can be used to advance scholarly work on TB.</li>
-<li><strong>References</strong>:
-<ul>
-<li><a href="https://www.nlm.nih.gov">National Library of Medicine (NLM) Dataset</a> - Includes the Montgomery and Shenzhen datasets.</li>
-<li><a href="http://tuberculosis.by/">Belarus Dataset</a> - Collected for a drug resistance study.</li>
-<li><a href="https://tbportals.niaid.nih.gov/download-data">NIAID TB Dataset</a> - Contains about 3,000 TB positive images.</li>
-<li><a href="https://www.kaggle.com/c/rsna-pneumonia-detection-challenge/data">RSNA CXR Dataset</a> - Includes 30,000 chest X-ray images, with 10,000 normal.</li>
+<li>A RESTful JSON API built with Python and Flask handles backend logic, processes requests from the frontend, and communicates with the AI engine.</li>
 </ul>
 </li>
-<li><strong>Direct Download Link</strong>: <a href="https://www.kaggle.com/datasets/tawsifurrahman/tuberculosis-tb-chest-xray-dataset">Dataset on Kaggle</a></li>
-</ul>
-<hr>
-<h2 id="3-x-ray-database-pneumonia-and-norm">3. X-ray Database: Pneumonia and Norm </h2>
+<li>
+<p><strong>Dynamic Frontend:</strong></p>
 <ul>
-<li><strong>Description</strong>: X-rays of patients with pneumonia and normal chest radiographs, taken in frontal and lateral projections using Apollo DRF (VILLA SISTEMI MEDICALI).</li>
-<li><strong>License</strong>: Creative Commons Attribution 4.0 International.</li>
-<li><strong>Publisher</strong>: Zenodo</li>
-<li><strong>Citation</strong>: Udodov Vladimir D., Kurazhov Aleksey P., Zorkaltsev Maxim A., &amp; Zavadovskaya Vera D. (2021). X-ray database: pneumonia and norm [Dataset]. Zenodo. <a href="https://doi.org/10.5281/zenodo.5732746">DOI</a></li>
-<li><strong>Published Date</strong>: November 28, 2021</li>
-<li><strong>Direct Download Link</strong>: <a href="https://zenodo.org/records/5732746">Dataset on Zenodo</a></li>
-<li><strong>References</strong>: Siberian State Medical University, a public medical school in Tomsk, Russia.</li>
+<li>The frontend is developed using React, providing a responsive and interactive user interface. It communicates with the backend to fetch AI-powered insights and present them to the user.</li>
 </ul>
-<hr>
-<h2 id="4-nih-chest-x-rays">4. NIH Chest X-rays </h2>
+</li>
+<li>
+<p><strong>AI Engine:</strong></p>
 <ul>
-<li><strong>Link</strong>: <a href="https://nihcc.app.box.com/v/ChestXray-NIHCC/folder/36938765345">Dataset on NIH</a></li>
-<li><strong>Description</strong>: This dataset contains 112,120 chest X-ray images from 30,805 unique patients, with labels extracted using Natural Language Processing from radiological reports. The dataset includes images labeled with 15 different classes (14 diseases and one for "No findings"). It is primarily used for weakly-supervised learning and does not include the original radiology reports.</li>
-<li><strong>License</strong>: CC0 Public Domain</li>
-<li><strong>Acknowledgments</strong>: We thank the National Institutes of Health Clinical Center (NIH Clinical Center) and the National Library of Medicine for providing this valuable dataset to the scientific community.</li>
-<li><strong>Citation</strong>: Wang X, Peng Y, Lu L, Lu Z, Bagheri M, Summers RM. "ChestX-ray8: Hospital-scale Chest X-ray Database and Benchmarks on Weakly-Supervised Classification and Localization of Common Thorax Diseases." IEEE CVPR 2017.</li>
-<li><strong>Published Date</strong>: 2017</li>
-<li><strong>Direct Download Link</strong>: <a href="https://www.kaggle.com/datasets/nih-chest-xrays/data/data">Dataset on Kaggle</a></li>
+<li>TensorFlow</li>
+<li>Keras</li>
+<li>numPY</li>
 </ul>
-<h2 id="contacto">Contacto </h2>
-<h3 id="documentation-links">Documentation Links </h3>
+</li>
+</ul>
+<h2 id="installation-guide">Installation Guide </h2>
+<h3 id="prerequisites">Prerequisites </h3>
 <ul>
-<li><a href="../../../README.html">Main README</a><br>
-<em>Guide of Medilab app, Features and Installation.</em></li>
-<li><a href="../models/SVM_DOCUMENTATION.html">AI documentation</a><br>
+<li><strong>Python 3.7+</strong></li>
+<li><strong>Node.js &amp; npm</strong></li>
+<li><strong>Pipenv or virtualenv (optional but recommended)</strong></li>
+</ul>
+<h3 id="backend-setup">Backend Setup </h3>
+<ol>
+<li>
+<p>Clone the repository:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token function">git</span> clone https://github.com/jeremiasavaro/medilab.git
+<span class="token builtin class-name">cd</span> medilab/backend
+</code></pre></li>
+<li>
+<p>Create a virtual environment and activate it:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code>pipenv <span class="token function">install</span>
+pipenv shell
+</code></pre></li>
+<li>
+<p>Navigate to the backend directory:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token builtin class-name">cd</span> medilab/backend
+</code></pre></li>
+<li>
+<p>Install the required dependencies:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code>pip <span class="token function">install</span> <span class="token parameter variable">-r</span> requirements.txt
+</code></pre></li>
+<li>
+<p>Apply the migration to initialize the database:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code>flask db init
+flask db migrate
+flask db upgrade
+</code></pre></li>
+<li>
+<p>Run the Flask application:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code>flask run
+</code></pre></li>
+</ol>
+<h3 id="frontend-setup">Frontend Setup </h3>
+<ol>
+<li>
+<p>Navigate to the frontend directory:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token builtin class-name">cd</span> medilab/frontend
+</code></pre></li>
+<li>
+<p>Install the required dependencies:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token function">npm</span> <span class="token function">install</span>
+</code></pre></li>
+<li>
+<p>Install serve</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> serve
+</code></pre></li>
+<li>
+<p>Create the build:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token function">npm</span> run build
+</code></pre></li>
+<li>
+<p>Run the build</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code>serve <span class="token parameter variable">-s</span> build
+</code></pre></li>
+</ol>
+<h2 id="documentation-links">Documentation Links </h2>
+<ul>
+<li><a href="ia_models/docs/models/SVM_DOCUMENTATION.html">AI documentation</a><br>
 <em>Explore the details of our AI models, including training processes and performance metrics.</em></li>
+<li><a href="ia_models/docs/datasets/datasets_sources_and_aknowledgements.html">Datasets and Acknowledgements</a><br>
+<em>Learn about the datasets used for training our models and the organizations or individuals who contributed.</em></li>
 </ul>
-<h3 id="contact-information">Contact Information </h3>
+<h2 id="contact-information">Contact Information </h2>
 <p>For any questions, suggestions, or inquiries, feel free to reach out to us at:</p>
 <p><strong>Email:</strong></p>
 <ul>
