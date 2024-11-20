@@ -42,7 +42,7 @@
   min-width: 200px;
 }
 
-button {
+.button-register {
   width: 100%;
   padding: 12px;
   border: none;
@@ -54,7 +54,7 @@ button {
   font-weight: 700;
 }
 
-button:hover {
+.button-register:hover {
   background-color: #0056b3;
 }
 

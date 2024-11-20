@@ -131,7 +131,7 @@ const Register = ({ setView, language, setIsTransitioning, isTransitioning }) =>
             </div>
             {renderInput("password", "password", content.password, "repPassword")}
             {renderInput("repPassword", "password", content.confirmPassword, null)}
-            <button type="submit">{content.register}</button>
+            <button className="button-register" type="submit">{content.register}</button>
           </form>
           <br></br>
           <p>{content.alreadyHaveAccount}{' '}
