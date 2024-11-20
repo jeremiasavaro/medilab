@@ -33,14 +33,22 @@ import ServicesSection from './components/ServicesSection';
 import XrayService from './components/XrayService';
 
 function App() {
+  // State to manage the current view
   const [view, setView] = useState("home");
+  // State to manage the current language
   const [language, setLanguage] = useState('en');
+  // State to manage the login status
   const [isLogged, setIsLogged] = useState(false);
+  // State to manage the transition status
+  const [isTransitioning, setIsTransitioning] = useState("null");
 
+  // Toggle login state
   const toggleLoginState = () => setIsLogged(!isLogged);
+  // Toggle form view
   const toggleForm = (formName) => setView(formName);
 
   useEffect(() => {
+    // Initialize various libraries and setups
     initializeAOS();
     initializeGLightbox();
     initializePureCounter();
@@ -54,25 +62,24 @@ function App() {
     };
   }, []);
 
+  // Render the current view based on the state
   const renderView = () => {
     switch (view) {
       case "login":
-        return <Login setView={setView} setIsLogged={setIsLogged} language={language} />;
+        return <Login setView={setView} setIsLogged={setIsLogged} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "register":
-        return <Register setView={setView} language={language} />;
+        return <Register setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "xrayService":
-        return isLogged ? <XrayService setView={setView} language={language}/> : <Alert setView={setView} language={language}/>;
+        return isLogged ? <XrayService setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/> : <Alert setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "account":
-        return <Account setView={setView} setIsLogged={setIsLogged} language={language}/>;
-      case "Alert":
-        return <Alert setView={setView} language={language} />;
+        return <Account setView={setView} setIsLogged={setIsLogged} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>;
       case "home":
       default:
         return (
-          <div>
+          <div className={isTransitioning=="in" ? "transitionIn-active" : ""}>
             <main className="main">
-              <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} />
-              <HeroSection setView={setView} language={language} />
+              <Header setView={setView} isLogged={isLogged} setIsLogged={setIsLogged} setLanguage={setLanguage} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning} />
+              <HeroSection setView={setView} language={language} setIsTransitioning={setIsTransitioning} isTransitioning={isTransitioning}/>
               <About language={language}/>
               <ServicesSection language={language}/>
               <Doctors language={language}/>

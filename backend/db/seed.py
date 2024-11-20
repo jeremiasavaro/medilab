@@ -1,5 +1,3 @@
-import sqlite3
-
 from app import app
 from .functions_db import insert_doctor, remove_doctors
 
@@ -26,7 +24,7 @@ doctors = [
 with app.app_context():
     remove_doctors()
     for doctor in doctors:
-        # Convertir la tupla en un diccionario con las claves correctas
+        # Convert the tuple to a dictionary with the correct keys
         doctor_data = {
             'dni': doctor[0],
             'speciality': doctor[1],

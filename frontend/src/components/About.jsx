@@ -1,21 +1,19 @@
-// src/components/About.jsx
-
 import React, { useState, useEffect } from 'react';
 import aboutBg from "../assets/img/about.jpg";
 import texts from "../assets/components-data/aboutData.json";
 
 function About({language}) {
-  // Usados para cambiar el idioma del contenido
+  // Used to change the language of the content
   const [content, setContent] = useState(texts[language]);
 
-  // Dependiendo del idioma, se muestra un texto u otro
+  // Depending on the language, one text or another is displayed
   useEffect(() => {
     setContent(texts[language]); 
   }, [language]);
 
-  // Función para abrir el video en una nueva ventana
+  // Function to open the video in a new window
   const openVideo = () => {
-    const videoId = 'LV4YF0JtVpA'; // ID del video de YouTube
+    const videoId = 'LV4YF0JtVpA'; // YouTube video ID
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     window.open(url, '_blank');
   };

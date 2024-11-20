@@ -1,121 +1,305 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+.header-container {
+    position: relative;
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra el título horizontalmente */
+    margin-bottom: 20px;
+}
+
+.xray-header-back-button-diagnoses {
+    position: absolute;
+    left: 0; /* Posiciona el botón a la izquierda */
+    top: 50%; /* Centra verticalmente respecto al contenedor */
+    transform: translateY(-50%); /* Ajusta el centrado exacto */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-icon-diagnoses {
+    font-size: 24px; /* Tamaño de la flecha */
+    color: #0580df; /* Color de la flecha */
+    transition: transform 0.2s ease-in-out;
+}
+
+.h1-myDiagnoses {
+    color: #333; /* Color del título */
+    font-size: 42px; /* Tamaño del título */
+    font-weight: 700;
+    margin: 0; /* Sin márgenes para evitar desplazamientos */
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    text-align: center; /* Asegura que el texto esté centrado */
+}
+
 .modal-overlay-diagnoses {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Poppins', sans-serif;
-    color: white;
-    overflow: auto; /* Permite el desplazamiento */
+    overflow: auto;
+    backdrop-filter: blur(3px); /* Desenfoque */
 }
 
 .modal-content-diagnoses {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 900px;
-    max-width: 60%; 
-    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    padding: 35px;
+    border-radius: 16px;
+    width: 850px;
+    max-width: 60%;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
     text-align: center;
-    max-height: 80%; /* Limita la altura máxima */
-    overflow-y: auto; /* Permite el desplazamiento vertical */
+    max-height: 80%;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-in-out; /* Animación de entrada */
+}
+
+.modal-overlay-diagnoses.closing .modal-content-diagnoses {
+    animation: fadeOut 0.3s ease-in-out forwards; /* Animación de salida */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+  
+  .modal-overlay-diagnoses.closing {
+    opacity: 0; /* La opacidad se desvanece */
+  }
+  
+  .modal-content-diagnoses.closing {
+    transform: scale(0.9); /* Disminuye el tamaño del modal */
+    opacity: 0; /* También se desvanece */
+  }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+.h1-myDiagnoses {
+    color: #333; /* Color oscuro para mejor contraste */
+    font-size: 42px; /* Aumenta el tamaño para que sea más llamativo */
+    font-weight: 700; /* Font weight más ligero */
+    margin-bottom: 20px; /* Espaciado inferior reducido */
+    letter-spacing: 2px; /* Mayor espacio entre letras para mejorar la legibilidad */
+    text-transform: uppercase;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Sombra más suave */
+    transition: transform 0.3s ease-in-out, color 0.3s ease; /* Añade transición suave */
+}
+
+.h1-myDiagnoses::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -8px;
+    width: 90px;
+    height: 5px;
+    background-color: #ffffff; /* Línea blanca debajo del título */
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    transition: width 0.3s ease; /* Transición suave en el grosor de la línea */
+}
+
+.h1-myDiagnoses:hover::after {
+    width: 120px; /* Expande la línea cuando el título es hover */
 }
 
 .diagnoses-grid {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    justify-content: center;
+    align-items: center;
 }
 
 .diagnosis-card {
     display: flex;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    align-items: center; /* Centra verticalmente los elementos en el card */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    background: linear-gradient(to right, #f9f9f9, #eef5ff);  /* Fondo degradado */
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 780px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 4px solid #0580df;
+}
+
+.diagnosis-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .diagnosis-image {
     flex-shrink: 0;
-    margin-right: 20px; /* Añade espacio a la derecha de la imagen */
-    padding-top: 45px;
+    margin-right: 20px;
+    padding-top: 50px;
+    padding-left: 10px;
 }
 
 .diagnosis-image img {
-    width: 100px; /* Tamaño de la imagen */
+    width: 100px;
     height: 100px;
-    border-radius: 2px; /* Bordes redondeados */
-    object-fit: cover; /* Asegura que la imagen mantenga su proporción */
+    border-radius: 10px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 .diagnosis-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centra el texto verticalmente en el card */
     text-align: left;
+    flex-grow: 1;
+    color: #444;
+    margin-left: 15px;
 }
+
 
 .diagnosis-info p {
-    color: black;
-    margin: 5px 0;
+    margin: 8px 0;
+    font-size: 16px;
+    color: #555;
 }
 
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Para los inputs de una sola columna, como el textarea */
-.form-group.full-width {
-    grid-column: span 2; /* Hace que ocupe las dos columnas */
-}
-
-.modal-buttons {
+.download-button-myDiagnoses {
+    background-color: #0580df;
+    color: #fff;
+    border: none;
+    width: 160px;
+    border-radius: 6px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: auto;
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    font-family: 'Poppins', sans-serif;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.download-button-myDiagnoses:hover {
+    background-color: #036bb5;
+    transform: translateY(-2px);
+}
+
+.download-button-myDiagnoses i {
+    margin-right: 5px;
+}
+
+.download-button-myDiagnoses:hover {
+    background-color: #036bb5;
+    transform: translateY(-3px);
 }
 
 .modal-buttons button {
-    margin-right: 10px; 
+    background-color: #444;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.modal-buttons button:last-child {
-    margin-right: 0; 
+.modal-buttons button {
+    background-color: #555;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
 }
 
-.message{
+.modal-buttons button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}
+
+.modal-buttons button:hover {
+    background-color: #333;
+    transform: translateY(-3px);
+}
+
+.message {
     margin-top: 15px;
     color: #e74c3c;
-    width: 100%;
-    justify-content: center;
     text-align: center;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-.h1-myDiagnoses {
-    color: black;
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9); }
+}
+
+.modal-overlay-diagnoses.closing .modal-content-diagnoses {
+    animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+/* Clase adicional para el estado de cierre */
+.modal-overlay-diagnoses.closing {
+    animation: fadeOutOverlay 0.4s ease-in-out forwards; /* Animación para la superposición */
+}
+
+.modal-content-diagnoses.closing {
+    animation: fadeOutContent 0.4s ease-in-out forwards; /* Animación para el contenido */
+}
+
+/* Animación de desvanecimiento para la superposición */
+@keyframes fadeOutOverlay {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Animación de desvanecimiento para el contenido */
+@keyframes fadeOutContent {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
 }

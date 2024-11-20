@@ -4,36 +4,44 @@ import changePasswordData from "../assets/components-data/changePasswordData.jso
 import {useJwt} from "react-jwt";
 import { useToken } from '../hooks/useToken';
 
-function passwordInput({id, content, value, handleChange}) {
+// Password input component
+function PasswordInput({id, content, value, handleChange}) {
   return (
     <div className="form-group">
       <label htmlFor={id}>{content}</label>
-          <input
-            type="password"
-            id={id}
-            value={value}
-            onChange={handleChange}
-            required
-        />
+      <input
+        type="password"
+        id={id}
+        value={value}
+        onChange={handleChange}
+        required
+      />
     </div>
   );
 }
 
 const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language }) => {
-
+  // State variables for form inputs and messages
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [repNewPassword, setRepNewPassword] = useState('');
   const [message, setMessage] = useState('');
-  
+
+  // Get token and decode it
   const {token, messageToken} = useToken();
   const {decodedToken, isExpired } = useJwt(token || '');
-  
-  // Usados para cambiar el idioma del contenido
-  const [content, setContent] = useState(changePasswordData[language]);
 
+  // State to hold the content based on the selected language
+  const [content, setContent] = useState(changePasswordData[language]);
+  
+  useEffect(() => {
+    setContent(changePasswordData[language]);
+  }, [language]);
+
+  // Return null if modal is not open
   if (!isOpen) return null;
 
+  // Handle password change form submission
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (token && decodedToken) {
@@ -52,12 +60,12 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language 
 
         if (response.ok) {
           setMessage(data.message);
-          setTimeout(() => onClose(), 1000); // Cierra el modal después de 1 segundo para permitir que el mensaje se lea
+          setTimeout(() => onClose(), 1000); // Close the modal after 1 second to allow the message to be read
         } else {
           setMessage(data.error);
         }
       } catch (error) {
-        setMessage('Error en el cambio de contraseña');
+        setMessage('Error changing password');
       }
     }
   };
@@ -68,9 +76,9 @@ const ChangePassword = ({ isOpen, onClose, setChangePasswordModalOpen, language 
         <h1 className='h1-changePassword'><b>{content.title}</b></h1>
         <br></br>
         <form onSubmit={handleChangePassword}>
-          <passwordInput id={"currentPassword"} content={content.currentPassword} value={currentPassword} handleChange={(e) => setCurrentPassword(e.target.value)}/>
-          <passwordInput id={"newPassword"} content={content.newPassword} value={newPassword} handleChange={(e) => setNewPassword(e.target.value)}/>
-          <passwordInput id={"repNewPassword"} content={content.confirmPassword} value={repNewPassword} handleChange={(e) => setRepNewPassword(e.target.value)}/>
+          <PasswordInput id={"currentPassword"} content={content.currentPassword} value={currentPassword} handleChange={(e) => setCurrentPassword(e.target.value)}/>
+          <PasswordInput id={"newPassword"} content={content.newPassword} value={newPassword} handleChange={(e) => setNewPassword(e.target.value)}/>
+          <PasswordInput id={"repNewPassword"} content={content.confirmPassword} value={repNewPassword} handleChange={(e) => setRepNewPassword(e.target.value)}/>
           <div className="modal-buttons">
             <button type="button" onClick={onClose}>{content.cancel}</button>
             <button type="submit">{content.changePassword}</button>

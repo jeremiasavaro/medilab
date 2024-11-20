@@ -38,7 +38,8 @@
     "credits": {
         "title": "Acknowledgements",
         "content": "This project has been possible thanks to the collaborative effort of students and teachers from the National University of Río Cuarto, who have supported us at every stage of development."
-    }
+    },
+    "closeButton": "Close"
 },
   "es": {
     "aboutUs": {
@@ -80,6 +81,7 @@
     "credits": {
       "title": "Agradecimientos",
       "content": "Este proyecto ha sido posible gracias al esfuerzo colaborativo de estudiantes y docentes de la Universidad Nacional de Río Cuarto, quienes nos han apoyado en cada etapa del desarrollo."
-    }
+    },
+    "closeButton": "Cerrar"
   }
 }

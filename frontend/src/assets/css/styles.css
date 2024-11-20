@@ -214,9 +214,25 @@ html {
   --------------------------------------------------------------*/
   .header {
     color: var(--default-color);
-    transition: all 0.5s;
-    z-index: 997;
+    transition: all 300ms;
+    z-index: 1;
     background-color: var(--background-color);
+    position: fixed !important;
+    right: 0;
+    left: 0;
+    top: 0%;
+  }
+
+  .header-transitionIn {
+    opacity: 0;
+    transform: translateY(-100px);
+    transition: all 0.5s ease-in-out;
+  }  
+
+  .header-transitionOut {
+    opacity: 0;
+    transform: translateY(0px);
+    transition: all 0s ease-in;
   }
   
   .header .topbar {
@@ -320,7 +336,139 @@ html {
       order: 3;
     }
   }
-  
+
+/* Animación del círculo OUT */
+@keyframes circle-out-hesitate {
+  0% {
+    clip-path: circle(125%);
+  }
+  40% {
+    clip-path: circle(40%);
+  }
+  100% {
+    clip-path: circle(0%);
+  }
+}
+
+
+/* Clase que activa la transición OUT*/
+.transitionOut-active::before {
+  content: '';
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000; 
+  background-color: #1977cc; 
+  animation: 1.5s cubic-bezier(0.25, 1, 0.3, 1) circle-out-hesitate both;
+  pointer-events: none; 
+  -webkit-clip-path: circle(0%);
+  clip-path: circle(0%);
+}
+
+/* Asegura que el contenido de fondo sea visible durante la transición */
+.transitionOut-active {
+  position: relative;
+  z-index: 0,5;
+}
+
+
+/* Animación del círculo IN */
+@keyframes circle-in-hesitate {
+  0% {
+    clip-path: circle(0%);
+  }
+  40% {
+    clip-path: circle(40%);
+  }
+  100% {
+    clip-path: circle(125%);
+  }
+}
+
+/* Clase que activa la transición IN*/
+.transitionIn-active::before {
+  content: '';
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000; 
+  background-color: #1977cc;
+  animation: 1.5s cubic-bezier(0.25, 1, 0.3, 1) circle-in-hesitate both;
+  pointer-events: none; 
+  -webkit-clip-path: circle(0%);
+  clip-path: circle(0%);
+}
+
+/* Asegura que el contenido de fondo sea visible durante la transición */
+.transitionIn-active {
+  position: relative;
+  z-index: 0,5;
+}
+
+
+/* Animaciones para cuando se hacen en el componente Alert*/
+/* Clase que activa la transición OUT en Alert*/
+.transitionOut-activeAlt::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000; 
+  background-color: #1977cc;
+  animation: 1.5s cubic-bezier(0.25, 1, 0.3, 1) circle-out-hesitate both;
+  pointer-events: none; 
+  -webkit-clip-path: circle(0%);
+  clip-path: circle(0%);
+}
+
+.transitionOut-activeAlt {
+  position: relative;
+  z-index: 0,5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Clase que activa la transición IN en Alert*/
+.transitionIn-activeAlt::before {
+  content: '';
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000; 
+  background-color: #1977cc; 
+  animation: 1.5s cubic-bezier(0.25, 1, 0.3, 1) circle-in-hesitate both;
+  pointer-events: none; 
+  -webkit-clip-path: circle(0%);
+  clip-path: circle(0%);
+}
+
+.transitionIn-activeAlt {
+  position: relative;
+  z-index: 0,5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
   .scrolled .header {
     box-shadow: 0px 0 18px rgba(0, 0, 0, 0.1);
   }
@@ -1849,17 +1997,22 @@ html {
   .contact .php-email-form textarea::placeholder {
     color: color-mix(in srgb, var(--default-color), transparent 70%);
   }
-  
-  .contact .php-email-form button[type=submit] {
-    color: var(--contrast-color);
-    background: var(--accent-color);
+
+  .modern-button {
+    color: white;
+    background-color: #0580df;
     border: 0;
-    padding: 10px 36px;
-    transition: 0.4s;
-    border-radius: 50px;
+    padding: 12px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease;
   }
   
-  .contact .php-email-form button[type=submit]:hover {
-    background: color-mix(in srgb, var(--accent-color), transparent 20%);
+  .modern-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
   

@@ -3,13 +3,17 @@ import '../assets/fontawesome-free/css/all.min.css';
 import faqData from '../assets/components-data/faqData.json';
 
 function FAQ({ language }) {
+  // State to track the active FAQ index
   const [activeIndex, setActiveIndex] = useState(null);
+  // State to hold the content based on the selected language
   const [content, setContent] = useState(faqData[language]);
 
+  // Update content when language changes
   useEffect(() => {
     setContent(faqData[language]);
   }, [language]);
 
+  // Toggle the active FAQ item
   const toggleFAQ = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };

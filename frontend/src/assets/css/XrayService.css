@@ -8,29 +8,40 @@
 }
 
 body, html {
-  font-family: 'Roboto', sans-serif;
-  color: #f9f9f9;
-  background-size: cover; /* Ajusta la imagen para que cubra toda la pantalla */
-  background-position: center; /* Centra la imagen en la pantalla */
-  background-repeat: no-repeat; /* Evita que la imagen se repita */
-  height: 100vh; /* Asegura que cubra el 100% de la altura del viewport */
-  margin: 0; /* Elimina cualquier margen en la página */
+  font-family: 'Poppins', sans-serif;
+  height: 100%; 
+  margin: 0;
+  color: white;
+}
+
+body::before {
+  content: '';
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/xray.jpeg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+  z-index: -1;
 }
 
 /* Main container */
 .contentXray {
-  background-size: cover;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: background 0.3s ease-in-out;
-  top: 0;
-  left: 0;
-  width: calc(100%);
-  height: auto;
-  background-color: #ffffff;;
+  justify-content: flex-start; 
   align-items: center;
-  font-family: 'Poppins', sans-serif;
+  width: 100%;
+  height: 100%;
+  background: transparent; 
+  position: relative;
+  padding-top: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .xrayServices-container {
@@ -39,31 +50,94 @@ body, html {
   align-items: center;
   flex-direction: column;
   height: 60%;
-  margin-top: 100px;
+  margin-top: 160px;
 }
 
 /* Header */
-.title {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  background-color: #0580df;
-  color: #f9f9f9;
-  text-align: center;  /* Mantener el título centrado */
-  padding: 20px 0;
-  font-size: 26px;
-  font-family: 'Roboto', sans-serif;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 5;
+.xray-header-container {
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  width: 100%; /* Ocupa todo el ancho */
+  height: 80px; /* Ajusta el alto del encabezado */
+  background-color: #0580df; /* Fondo */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+  position: fixed; /* Encabezado fijo */
+  top: 0; /* Ubicación en la parte superior */
+  left: 0; /* Inicio en el borde izquierdo */
+  z-index: 1000; /* Superposición sobre otros elementos */
+}
+
+.xray-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
+  margin: 0 auto; 
+}
+
+.xray-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.xray-header-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-left: 12px;
+  margin-top: 25px;
+}
+
+.xray-header-icon {
+  width: 30px;
+  height: 30px;
+  color: #8ca2d3;
+}
+
+button.xray-back-button {
+  position: absolute;
+  left: 16px; /* Separación del borde izquierdo */
+  top: 16px; /* Separación del borde superior */
+}
+
+button.xray-info-button {
+  position: absolute;
+  right: 16px; /* Separación del borde derecho */
+  top: 16px; /* Separación del borde superior */
+}
+
+.xray-header-back-button,
+.xray-header-info-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  font-size: 25px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.xray-header-back-button:hover,
+.xray-header-info-button:hover {
+  background-color: #2176b8;
+}
+
+.xray-header-right {
+  position: relative;
 }
 
 /* Toggle buttons */
 .toggle-button {
   position: absolute;
-  left: 20px;  /* Coloca el botón "Info" a 20px del borde izquierdo */
-  top: 50%;    /* Centra verticalmente en relación con el encabezado */
-  transform: translateY(-50%); /* Ajuste para que esté perfectamente centrado verticalmente */
+  left: 20px;  
+  top: 50%;    
+  transform: translateY(-50%); 
   padding: 10px;
   background-color: #050404;
   color: white;
@@ -73,6 +147,26 @@ body, html {
   width: 100px;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Botones */
+.scan-button,
+.download-button {
+  width: 400px;
+  margin: 7px 0;
+  padding: 10px;
+  background-color: #0580df;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.scan-button:hover,
+.download-button:hover {
+  background-color: #005bb5;
 }
 
 .toggle-button:hover {
@@ -89,7 +183,7 @@ body, html {
   border: none;
   cursor: pointer;
   font-size: 16px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Overlay section */
@@ -152,19 +246,6 @@ body, html {
   background-color: #555;
 }
 
-/* Image upload button */
-.xray-file-upload {
-  padding: 10px 40px;
-  background-color: #0580df;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
-}
-
 /* Image container */
 .xray-pic-container {
   display: flex;
@@ -196,6 +277,7 @@ body, html {
 .doctor-table {
   width: 100%;
   border-collapse: collapse;
+  background-color: white;
 }
 
 .doctor-table th, .doctor-table td {
@@ -242,8 +324,8 @@ body, html {
   background-color: white;
   padding: 20px;
   max-width: 600px;
-  max-height: 80vh; /* Controla la altura máxima */
-  overflow-y: auto; /* Agrega desplazamiento vertical */
+  max-height: 80vh; 
+  overflow-y: auto; 
   border-radius: 8px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
   position: relative;

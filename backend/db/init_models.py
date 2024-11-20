@@ -1,9 +1,9 @@
 from database import db  # Importar la conexión a la base de datos
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()  # Crear la instancia de SQLAlchemy
+db = SQLAlchemy()  # Create the SQLAlchemy instance
 
 def register_models(app):
     with app.app_context():
-        db.create_all()  # Crea todas las tablas en la base de datos
+        db.create_all()  # Create all tables in the database
         print("Modelos registrados.")

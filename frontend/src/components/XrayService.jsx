@@ -1,19 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { IoMdArrowBack } from 'react-icons/io';
+import { IoInformationCircle } from 'react-icons/io5';
 import '../assets/css/XrayService.css';
 import { useJwt } from "react-jwt";
 import infoData from '../assets/components-data/infoData.json';
 import xrayData from '../assets/components-data/xrayServiceData.json';
 import { useToken } from '../hooks/useToken';
 import { useGetDoctors } from '../hooks/useGetDoctors';
+import Spinner from './Spinner';
 
-// Componente para el botón de retorno
-const BackButton = ({ onClick, label }) => (
-  <button className="buttonBack" onClick={onClick}>
-    <i className="fa-solid fa-right-to-bracket"></i> {label}
-  </button>
-);
-
-// Componente de tabla de doctores
+// Component to display the table of doctors
 const DoctorTable = ({ doctors, content, tableRef }) => (
   <div ref={tableRef}>
     <hr className="divider" />
@@ -43,7 +39,8 @@ const DoctorTable = ({ doctors, content, tableRef }) => (
   </div>
 );
 
-const XrayService = ({ setView, language }) => {
+const XrayService = ({ setView, language, setIsTransitioning, isTransitioning }) => {
+  // State to manage component data
   const [state, setState] = useState({
     message: '',
     openSection: '',
@@ -60,8 +57,9 @@ const XrayService = ({ setView, language }) => {
   const tableRef = useRef(null);
   const { token, messageToken } = useToken();
   const { decodedToken, isExpired } = useJwt(token);
-  const { doctors, mesaggeDoctors } = useGetDoctors();
+  const { doctors, messageDoctors } = useGetDoctors();
 
+  // Update content when language changes
   useEffect(() => {
     setState((prev) => ({
       ...prev,
@@ -70,6 +68,7 @@ const XrayService = ({ setView, language }) => {
     }));
   }, [language]);
 
+  // Handle file upload
   const handleFileUpload = async (file) => {
     if (!file) return;
     const formData = new FormData();
@@ -93,19 +92,26 @@ const XrayService = ({ setView, language }) => {
     }
   };
 
+  // Handle file input change
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setState((prev) => ({ ...prev, selectedFile: file }));
     handleFileUpload(file);
   };
 
+  let timer;
+
+  // Handle scan button click
   const handleScanClick = async () => {
-    if (!state.imageUrl) return console.log('No hay imagen cargada.');
+    if (!state.imageUrl) return console.log('No image uploaded.');
     setState((prev) => ({ ...prev, isScanning: true }));
     const formData = new FormData();
     formData.append('image_url', state.imageUrl);
     if (token && decodedToken) {
       try {
+        timer = setTimeout(() => {
+          setState((prev) => ({ ...prev, isScanning: false }));
+        }, 4000);
         const response = await fetch('http://localhost:5000/xray/xray_diagnosis', {
           headers: { 'Authorization': token },
           method: 'POST',
@@ -115,13 +121,16 @@ const XrayService = ({ setView, language }) => {
         const blob = await response.blob();
         setState((prev) => ({ ...prev, pdfBlob: blob }));
       } catch (error) {
-        console.error('Error enviando la imagen al backend o recibiendo el PDF:', error);
+        console.error('Error sending the image to the backend or receiving the PDF:', error);
+        setState((prev) => ({ ...prev, isScanning: false }));
       } finally {
         setState((prev) => ({ ...prev, isScanning: false }));
+        clearTimeout(timer);
       }
     }
   };
 
+  // Handle PDF download
   const handleDownloadClick = () => {
     if (!state.pdfBlob) return;
     const url = window.URL.createObjectURL(state.pdfBlob);
@@ -139,57 +148,92 @@ const XrayService = ({ setView, language }) => {
     }, 0);
   };
 
+  // Open overlay section
   const openOverlaySection = (sectionName) => setState((prev) => ({ ...prev, openSection: sectionName }));
+  // Close overlay section
   const closeOverlaySection = () => setState((prev) => ({ ...prev, openSection: '' }));
 
   const { content, data } = state;
 
+  // Handle view transition out
+  const handleTransitionOut = (targetView) => {
+    setIsTransitioning("out");
+    setTimeout(() => {
+      setIsTransitioning("null");
+      setView(targetView);
+    }, 1500);
+  };
+
   return (
     <section id="xray-section" className="contentXray">
-      <BackButton onClick={() => setView('home')} label={content.backButton} />
-      <header className="title">
-        {content.sectionTitle}
-        <button className="toggle-button" onClick={() => openOverlaySection('info')}>
-          <i className="bi-info-circle-fill"></i> {content.info}
-        </button>
-      </header>
-      <div className="xrayServices-container">
-        <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
-
-        {state.imageUrl && (
-          <>
-            <div className="xray-pic-container">
-              <img src={state.imageUrl} className="xray-pic" alt="Uploaded" />
-            </div>
-            <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
-              <i className="fa-solid fa-expand"></i> {state.isScanning ? content.scanning : content.startScanning}
-            </button>
-            {state.isScanning && <div className="loading">{content.processing}</div>}
-            <br />
-            {state.pdfBlob && (
-              <button className="download-button" onClick={handleDownloadClick}>
-                <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
+      <div className={isTransitioning=="out" ? "transitionOut-active" : "contentXray"}>
+        <header className="xray-header-container">
+          <div className="xray-header-content">
+            <div className="xray-header-left">
+              <button
+                onClick={() => setView('home')}
+                aria-label="Go back"
+                className="xray-header-back-button"
+              >
+                <IoMdArrowBack className="header-icon" />
               </button>
-            )}
-          </>
-        )}
+              <h1 className="xray-header-title">Medilab</h1>
+            </div>
 
-        {state.isUploadVisible && (
-          <label htmlFor="xray-upload" className="xray-file-upload">
-            {content.uploadXRay}
-          </label>
-        )}
+            <div className="xray-header-right">
+              <button
+                onClick={() => openOverlaySection('info')}
+                aria-label="Show information"
+                className="xray-header-info-button"
+              >
+                <IoInformationCircle className="header-icon" />
+              </button>
+            </div>
+          </div>
+        </header>
+        <div className="xrayServices-container">
+          <input id="xray-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
 
-        {doctors && state.showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
+          {state.imageUrl && (
+            <>
+              <div className="xray-pic-container">
+                <img src={state.imageUrl} className="xray-pic" alt="Uploaded" />
+              </div>
+              <button className="scan-button" onClick={handleScanClick} disabled={state.isScanning}>
+                <i className="fa-solid fa-expand"></i> {content.startScanning}
+              </button>
+              {state.isScanning && <Spinner content={content} />}
+              <br />
+              {state.pdfBlob && (
+                <button className="download-button" onClick={handleDownloadClick}>
+                  <i className="fa-regular fa-file-pdf"></i> {content.downloadPDF}
+                </button>
+              )}
+              <button className="download-button" onClick={() => document.getElementById('change-file-button').click()} >
+                {content.changeXRay}
+              </button>
+              <input id="change-file-button" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+            </>
+          )}
+
+          {state.isUploadVisible && (
+            <button className="download-button" onClick={() => document.getElementById('xray-upload').click()}>
+              {content.uploadXRay}
+            </button>
+          )}
+
+          {doctors && state.showTable && <DoctorTable doctors={doctors} content={content} tableRef={tableRef} />}
+        </div>
+
+        {state.openSection === 'info' && (
+          <OverlaySection content={data} closeOverlaySection={closeOverlaySection} />
+        )}
       </div>
-
-      {state.openSection === 'info' && (
-        <OverlaySection content={data} closeOverlaySection={closeOverlaySection} />
-      )}
     </section>
   );
 };
 
+// Overlay section component
 const OverlaySection = ({ content, closeOverlaySection }) => (
   <div className="overlay-section active">
     <div className="overlay-content">
