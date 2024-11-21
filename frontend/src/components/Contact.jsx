@@ -89,30 +89,26 @@ const Contact = ({ setView, isLogged, language }) => {
   // Handle form submission for contact
   const handleContact = async (e) => {
     e.preventDefault();
-    if (isLogged){
-      try {
-        // Send POST request to the server
-        const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json', // Indicate JSON format
-          },
-          body: JSON.stringify({ firstName, lastName, email, subject, userMessage }),
-        });
+    try {
+      // Send POST request to the server
+      const response = await fetch('http://127.0.0.1:5000/inquiries/contact', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json', // Indicate JSON format
+        },
+        body: JSON.stringify({ firstName, lastName, email, subject, userMessage }),
+      });
 
-        const data = await response.json(); // Parse server response as JSON
+      const data = await response.json(); // Parse server response as JSON
 
-        if (response.ok) {
-          setMessage(data.message);
-        } else {
-          setMessage(data.error);
-        }
-      } catch (error) {
-        setMessage('Connection error');
+      if (response.ok) {
+        setMessage(data.message);
+      } else {
+        setMessage(data.error);
       }
-    } else {
-      setView('Alert')
+    } catch (error) {
+      setMessage('Connection error');
     }
   }
 
